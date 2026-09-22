@@ -189,13 +189,6 @@ table tfoot td{font-weight:700; border-top:2px solid var(--border); border-botto
 .sectie-browser-row select{cursor:pointer;}
 .override-flag{font-size:10.5px; color:var(--blauw); font-weight:700; cursor:pointer; margin-left:6px;}
 
-#laadschermVideo{
-  max-width:min(90vw, 420px); max-height:70vh; width:auto; height:auto;
-  border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,.35);
-}
-.laadscherm-terugval{display:none; align-items:center; flex-direction:column; gap:18px;}
-#laadscherm.video-mislukt #laadschermVideo{display:none;}
-#laadscherm.video-mislukt .laadscherm-terugval{display:flex;}
 .laadscherm-merk{display:flex; align-items:center; gap:14px; color:#fff;}
 .laadscherm-titel{font-size:20px; font-weight:700; letter-spacing:.01em;}
 .laadscherm-spinner{

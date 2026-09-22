@@ -346,7 +346,12 @@ def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | 
     print(f"Calcu-Brief-tool draait op {adres}")
     print(f"  {len(bibliotheek.blokken)} tekstblokken · stoppen met Ctrl-C")
     if open_browser:
-        threading.Timer(0.4, lambda: webbrowser.open(adres)).start()
+        # Naar het laadscherm-filmpje, niet direct naar de tool: dat filmpje
+        # zelf regelt (scherm/splash.html) wanneer het naar "/" doorschakelt,
+        # zodra het is uitgespeeld. Op dit punt is de server al helemaal
+        # klaar (bibliotheek en calculatiegegevens zijn hierboven al geladen),
+        # dus er hoeft niet apart op "gereed" gewacht te worden.
+        threading.Timer(0.4, lambda: webbrowser.open(f"{adres}scherm/splash.html")).start()
 
     try:
         server.serve_forever()

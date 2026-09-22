@@ -16,34 +16,23 @@
 </head>
 <body>
 
+<!--
+  Het laadscherm-filmpje zelf speelt in scherm/splash.html, wat de browser
+  altijd als eerste opent (zie server.py:start) en pas naar hier ("/")
+  doorschakelt zodra het filmpje is afgelopen. Deze overlay dekt alleen nog
+  de veel kortere, eigen data-ophaal-stap van de tool zelf af (materiaal-
+  catalogus/YIMM/Panasonic/Daikin, /keuzes, de eerste /bereken-ronde) -- voor
+  wie rechtstreeks op "/" uitkomt (bijv. een herlaadde pagina) is er dus nog
+  altijd iets te zien in plaats van een lege pagina.
+-->
 <div id="laadscherm">
-  <video id="laadschermVideo" autoplay muted loop playsinline
-         onerror="document.getElementById('laadscherm').classList.add('video-mislukt')">
-    <source src="scherm/laadscherm.mp4" type="video/mp4">
-  </video>
-  <div class="laadscherm-terugval">
-    <div class="laadscherm-merk">
-      <span class="zwiep" style="width:40px;height:40px;"></span>
-      <div class="laadscherm-titel">Schilt Airconditioning</div>
-    </div>
-    <div class="laadscherm-spinner"></div>
+  <div class="laadscherm-merk">
+    <span class="zwiep" style="width:40px;height:40px;"></span>
+    <div class="laadscherm-titel">Schilt Airconditioning</div>
   </div>
+  <div class="laadscherm-spinner"></div>
   <div class="laadscherm-status" id="laadschermStatus">Bezig met opstarten…</div>
 </div>
-<script>
-  // Sommige browsers laten <video> bij een niet-afspeelbaar bestand stil
-  // hangen zonder een "error"-event (bijv. een ontbrekende codec i.p.v. een
-  // kapot bestand) -- vandaar naast onerror ook een tijdslimiet: geen
-  // "playing" binnen 2,5s betekent dat de video het niet gaat worden.
-  (function () {
-    var video = document.getElementById('laadschermVideo');
-    var gelukt = false;
-    video.addEventListener('playing', function () { gelukt = true; });
-    setTimeout(function () {
-      if (!gelukt) document.getElementById('laadscherm').classList.add('video-mislukt');
-    }, 2500);
-  })();
-</script>
 
 <header class="topbar">
   <div class="logo"><span class="zwiep"></span> Schilt Airconditioning — Calculatie &amp; Brief</div>

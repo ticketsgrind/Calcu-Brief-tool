@@ -36,18 +36,26 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
       - name: Bouw CalcuBriefTool.exe
+        # --onedir (niet --onefile): een onefile-.exe pakt zichzelf bij ELKE
+        # start opnieuw uit naar een tijdelijke map, wat met dit filmpje erbij
+        # (~7MB) een merkbare vertraging gaf voordat de browser zelfs maar
+        # opende. --onedir start meteen; de prijs is dat de download een map
+        # is in plaats van één los bestand.
         run: >
-          pyinstaller --onefile --noconsole --name CalcuBriefTool
+          pyinstaller --onedir --noconsole --name CalcuBriefTool
           --add-data "analyse;analyse"
           --add-data "config;config"
           --add-data "sjablonen;sjablonen"
           --add-data "data;data"
           --add-data "scherm;scherm"
           server.py
+      - name: Zip de map
+        shell: pwsh
+        run: Compress-Archive -Path dist/CalcuBriefTool -DestinationPath dist/CalcuBriefTool-windows.zip
       - uses: actions/upload-artifact@v4
         with:
           name: CalcuBriefTool-windows
-          path: dist/CalcuBriefTool.exe
+          path: dist/CalcuBriefTool-windows.zip
       - name: Publiceer op de Release-pagina
         shell: bash
         env:
@@ -56,8 +64,11 @@ jobs:
           gh release view app-download --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
             gh release create app-download --repo "$GITHUB_REPOSITORY" \
               --title "Calcu-Brief-tool — desktop-app" \
-              --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Downloaden en dubbelklikken; geen Python nodig."
-          gh release upload app-download dist/CalcuBriefTool.exe --repo "$GITHUB_REPOSITORY" --clobber
+              --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Uitpakken en CalcuBriefTool.exe (in de map) dubbelklikken; geen Python nodig."
+          # De vorige build publiceerde nog een los CalcuBriefTool.exe (--onefile);
+          # opruimen zodat er niet twee, verwarrend verschillende downloads naast elkaar staan.
+          gh release delete-asset app-download CalcuBriefTool.exe --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release upload app-download dist/CalcuBriefTool-windows.zip --repo "$GITHUB_REPOSITORY" --clobber
 
   macos:
     needs: windows  # voorkomt dat beide jobs tegelijk de release proberen aan te maken
@@ -69,8 +80,11 @@ jobs:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
       - name: Bouw CalcuBriefTool.app
+        # --onedir is hier al PyInstaller's eigen standaard (in tegenstelling
+        # tot Windows hierboven, waar --onefile expliciet aan moest staan);
+        # alleen hier ook expliciet genoemd zodat dat geen verrassing is.
         run: >
-          pyinstaller --windowed --name CalcuBriefTool
+          pyinstaller --onedir --windowed --name CalcuBriefTool
           --add-data "analyse:analyse"
           --add-data "config:config"
           --add-data "sjablonen:sjablonen"

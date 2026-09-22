@@ -30,15 +30,17 @@ CB.debounce = (fn, ms) => {
 };
 
 /* ------------------------------- laadscherm ------------------------------ */
-// Blijft zichtbaar tot beide stappen klaar zijn met hun eigen opstart (data
-// ophalen, /keuzes, de eerste /bereken-ronde) — zie de aanroep van
-// CB.laadscherm.verberg() onderaan index.html. Op localhost is die opstart
-// vaak binnen een paar honderd ms klaar, dus zonder ondergrens flitst het
-// laadscherm (en het filmpje erin) voorbij voor iemand het goed heeft
-// gezien; MINIMALE_DUUR_MS zorgt dat het minstens zo lang zichtbaar blijft.
+// Het laadscherm-filmpje zelf speelt in scherm/splash.html (altijd het
+// eerste dat opent, zie server.py:start); deze overlay op index.html is een
+// veel kortere, spinner-only terugval voor de eigen data-ophaal-stap van de
+// tool (en voor wie rechtstreeks op "/" uitkomt, bijv. door te herladen).
+// Blijft zichtbaar tot beide stappen klaar zijn (CB.calc.klaar/CB.brief.klaar)
+// — zie de aanroep van CB.laadscherm.verberg() onderaan index.html.
+// MINIMALE_DUUR_MS is klein: alleen om een flits-en-weg-effect te voorkomen,
+// niet om iets te laten zien (dat doet splash.html al).
 CB.laadscherm = {
   _vanaf: Date.now(),
-  MINIMALE_DUUR_MS: 3000,
+  MINIMALE_DUUR_MS: 300,
   zetStatus(tekst) {
     const el = document.getElementById('laadschermStatus');
     if (el) el.textContent = tekst;

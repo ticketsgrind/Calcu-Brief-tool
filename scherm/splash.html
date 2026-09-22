@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcu-Brief-tool</title>
+<style>
+  html, body{margin:0; height:100%; background:#414B4D; overflow:hidden;}
+  body{display:flex; align-items:center; justify-content:center;}
+  video{max-width:100vw; max-height:100vh; width:auto; height:auto;}
+</style>
+</head>
+<body>
+<!--
+  Dit is het eerste wat de browser opent (zie server.py:start): het volledige
+  laadscherm-filmpje, los van de tool zelf. De tool (index.html) doet daarna
+  zijn eigen, veel kortere data-ophalen — dit scherm bestaat alleen om het
+  filmpje helemaal te laten spelen voordat de tool in beeld komt, zoals
+  gevraagd. Bewust geen afhankelijkheid van gedeeld.js/calculatie.js: dit
+  bestand moet ook werken op het moment dat er verder nog niets anders is
+  geladen.
+-->
+<video id="v" autoplay muted playsinline>
+  <source src="laadscherm.mp4" type="video/mp4">
+</video>
+<script>
+  (function () {
+    var video = document.getElementById('v');
+    var onderweg = false;
+    function naarDeTool() {
+      if (onderweg) return;
+      onderweg = true;
+      location.replace('/');
+    }
+    video.addEventListener('ended', naarDeTool);
+    // Niet elke browser stuurt een "error"-event bij een niet-afspeelbaar
+    // bestand; deze noodrem zorgt dat het scherm hoe dan ook doorgaat.
+    video.addEventListener('error', function () { setTimeout(naarDeTool, 500); });
+    setTimeout(naarDeTool, 15000);
+  })();
+</script>
+</body>
+</html>

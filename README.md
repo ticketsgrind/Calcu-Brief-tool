@@ -13,10 +13,17 @@ Op de [Releases-pagina](https://github.com/ticketsgrind/Calcu-Brief-tool/release
 staat een op zichzelf staande app per platform — Python zit erin gebakken,
 er hoeft niets geïnstalleerd te worden:
 
-- **Windows:** `CalcuBriefTool.exe` downloaden, dubbelklikken.
+- **Windows:** `CalcuBriefTool-windows.zip` downloaden, uitpakken, en
+  `CalcuBriefTool.exe` **in die uitgepakte map** dubbelklikken (niet het
+  bestand er los uit halen — de map ernaast bevat wat de app nodig heeft).
+  Windows kan een SmartScreen-waarschuwing tonen ("Windows heeft de app
+  beschermd"); klik op **Meer info** → **Toch uitvoeren**.
 - **Mac:** `CalcuBriefTool-mac.zip` downloaden, uitpakken, `CalcuBriefTool.app`
   dubbelklikken (eerste keer rechtsklik → Open, vanwege de onbekende-
   ontwikkelaar-waarschuwing van macOS).
+
+Bij het opstarten speelt eerst het laadscherm-filmpje in de browser; zodra
+dat is afgelopen schakelt hij vanzelf door naar de tool zelf.
 
 Deze bestanden worden automatisch opnieuw gebouwd bij elke wijziging (zie
 `.github/workflows/build-app.yml`) — de link hierboven geeft altijd de
