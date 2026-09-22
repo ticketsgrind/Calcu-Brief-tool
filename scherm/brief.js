@@ -71,8 +71,21 @@ async function herbereken() {
 }
 const plannenHerberekening = CB.debounce(herbereken, 250);
 
+function briefBestandsnaam() {
+  // Zelfde patroon als CB.projectBestandsnaam() (scherm/gedeeld.js), maar met
+  // "Brief-" i.p.v. "Calculatie-" -- gebaseerd op de calculatie se
+  // klantnaam/projectnaam, niet op de server se achternaam/plaats/sa-nummer-
+  // patroon, zodat de twee bestandsnamen die bij hetzelfde project horen
+  // ook herkenbaar bij elkaar horen.
+  const meta = (CB.calc.staat && CB.calc.staat.meta) || {};
+  const delen = [meta.klantnaam, meta.projectnaam].map(CB.veiligeBestandsnaamdeel).filter(Boolean);
+  return (delen.length ? `Brief-${delen.join('-')}` : 'Brief') + '.docx';
+}
+
 async function vulVoorVanuitCalculatie() {
-  const resultaat = await CB.postJSON('/overdracht', { calculatie: CB.calc.staat });
+  // klanttype meesturen: bij een particuliere klant moet de verkoopprijs uit
+  // de calculatie met 21% btw erbij worden overgenomen (zie overdracht.py).
+  const resultaat = await CB.postJSON('/overdracht', { calculatie: CB.calc.staat, klanttype: antwoorden.klanttype });
   if (resultaat.fout) { CB.toast(resultaat.fout); return; }
   const overgenomen = resultaat.offerte || {};
   controleInfo = resultaat.overdracht || [];
@@ -132,11 +145,10 @@ function bouwSelect(veld, opties, { leegLabel } = {}) {
 
 function renderKlant() {
   const el = document.getElementById('briefKlant');
-  const zakelijk = veldWaarde('klanttype') === 'zakelijk';
   el.innerHTML = `
     <div class="grid cols-4">
       <div class="field"><label>Klanttype</label>${bouwSelect('klanttype', [['particulier','Particulier'],['zakelijk','Zakelijk']], { leegLabel: '— kies —' })}</div>
-      <div class="field" style="${zakelijk ? '' : 'display:none;'}"><label>Organisatie</label><input data-veld="organisatie" value="${veldWaarde('organisatie')}"></div>
+      <div class="field"><label>Organisatie <span class="muted" style="font-weight:400;">(alleen zakelijk)</span></label><input data-veld="organisatie" value="${veldWaarde('organisatie')}"> ${controleBadge('organisatie')}</div>
       <div class="field"><label>Aanspreekvorm</label>${bouwSelect('aanspreekvorm', [['de heer','De heer'],['mevrouw','Mevrouw'],['de heer en mevrouw','De heer en mevrouw'],['Fam.','Familie (Fam.)']], { leegLabel: '— kies —' })}</div>
       <div class="field"><label>Voorletters</label><input data-veld="voorletters" value="${veldWaarde('voorletters')}" placeholder="bijv. P."></div>
       <div class="field"><label>Achternaam</label><input data-veld="achternaam" value="${veldWaarde('achternaam')}"></div>
@@ -386,9 +398,7 @@ function bindFormulier() {
       return CB.toast(data.fout || 'Kan geen Word-bestand maken.');
     }
     const blob = await respons.blob();
-    const dispositie = respons.headers.get('Content-Disposition') || '';
-    const naamMatch = dispositie.match(/filename="([^"]+)"/);
-    const naam = naamMatch ? naamMatch[1] : 'brief.docx';
+    const naam = briefBestandsnaam();
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a'); a.href = url; a.download = naam;
     document.body.appendChild(a); a.click(); a.remove();
@@ -407,6 +417,7 @@ async function initBrief() {
 CB.brief = {
   get antwoorden() { return antwoorden; },
   heeftInhoud,
+  vulVoorVanuitCalculatie,
   vulAntwoorden(nieuw) {
     antwoorden = nieuw || {};
     if (antwoorden.installaties) {

@@ -52,6 +52,24 @@ offerte met de hand in YAML werd geschreven) — zonder systeemsoort matcht
 geen enkel blok in de sectie "systeemomschrijving" en blijft die
 installatieregel stilzwijgend zonder omschrijving.
 
+**De "Calculatie klaar → naar de brief"-knop past de overdracht meteen toe**
+(`btnNaarBrief` in `scherm/index.html`, roept `CB.brief.vulVoorVanuitCalculatie()`
+aan vóór `CB.naarStap('brief')`). Eerder was dat twee losse acties (tab
+wisselen, dan apart op "Vul voor vanuit de calculatie" klikken) en dat tweede
+knopje werd gemist — leek dan alsof calculatie en brief niet gekoppeld waren.
+De losse knop in de briefstap blijft bestaan om de overdracht later opnieuw
+toe te passen (bijv. na een wijziging in de calculatie, of na het alsnog
+instellen van klanttype voor de btw-berekening hieronder).
+
+**Btw bij overdracht.** De calculatie rekent altijd exclusief btw (er is geen
+klanttype-begrip in stap 1). `overdracht.zet_over()` krijgt daarom optioneel
+`klanttype` mee (door `scherm/brief.js` meegestuurd als de huidige waarde van
+`antwoorden.klanttype` op het moment van de klik) en telt er 21% bij op vóór
+het bedrag in `prijsregels` komt, maar alleen bij `klanttype == "particulier"`
+-- onbekend/leeg klanttype blijft exclusief, nooit een gok welke kant op.
+Wordt klanttype pas ná de eerste overdracht ingesteld, dan klopt het bedrag
+dus nog niet totdat de overdracht opnieuw wordt toegepast.
+
 ## `bibliotheek.velden()`: geen hardcoded keuzelijsten
 
 Facturering, betaling, condensafvoer, bediening, opstelling_buitenunit,

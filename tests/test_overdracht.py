@@ -68,6 +68,40 @@ class TestVerkoopprijs(unittest.TestCase):
         self.assertEqual(offerte["prijssoort"], "totaalprijs")
         self.assertEqual(status_van(overdracht, "prijsregels[0].bedrag").status, "direct")
 
+    def test_particuliere_klant_krijgt_21_procent_btw_erbij(self):
+        # De calculatie rekent altijd exclusief btw; de brief voor een
+        # particuliere klant moet het bedrag inclusief btw laten zien.
+        staat = rk.nieuwe_staat()
+        staat["materiaal"] = [{"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000}]
+        staat["marge"]["projectPrice"] = 3000
+        berekening = rk.bereken(staat, GEGEVENS)
+        verkoopprijs = berekening["marge"]["verkoopprijs"]
+
+        offerte, overdracht = zet_over(staat, berekening, klanttype="particulier")
+
+        self.assertEqual(offerte["prijsregels"], [{"bedrag": round(verkoopprijs * 1.21, 2)}])
+        self.assertEqual(status_van(overdracht, "prijsregels[0].bedrag").status, "direct")
+
+    def test_zakelijke_klant_blijft_exclusief_btw(self):
+        staat = rk.nieuwe_staat()
+        staat["materiaal"] = [{"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000}]
+        staat["marge"]["projectPrice"] = 3000
+        berekening = rk.bereken(staat, GEGEVENS)
+
+        offerte, _ = zet_over(staat, berekening, klanttype="zakelijk")
+
+        self.assertEqual(offerte["prijsregels"], [{"bedrag": round(berekening["marge"]["verkoopprijs"], 2)}])
+
+    def test_onbekend_klanttype_gokt_niet_en_blijft_exclusief(self):
+        staat = rk.nieuwe_staat()
+        staat["materiaal"] = [{"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000}]
+        staat["marge"]["projectPrice"] = 3000
+        berekening = rk.bereken(staat, GEGEVENS)
+
+        offerte, _ = zet_over(staat, berekening, klanttype=None)
+
+        self.assertEqual(offerte["prijsregels"], [{"bedrag": round(berekening["marge"]["verkoopprijs"], 2)}])
+
     def test_zonder_projectprice_geen_prijsregel(self):
         staat = rk.nieuwe_staat()
         offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))

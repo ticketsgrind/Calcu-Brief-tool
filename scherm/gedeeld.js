@@ -97,12 +97,15 @@ CB.huidigProject = () => ({
 
 CB.heeftInhoud = () => CB.calc.heeftInhoud() || CB.brief.heeftInhoud();
 
+// Deelt de sanitatie tussen het projectbestand en het Word-bestand (zie
+// scherm/brief.js) zodat beide dezelfde, voorspelbare naamgeving volgen.
+CB.veiligeBestandsnaamdeel = tekst => String(tekst || '').trim().replace(/[\\/:*?"<>|]+/g, '-');
+
 CB.projectBestandsnaam = () => {
   const meta = CB.calc.staat.meta || {};
-  const delen = [meta.klantnaam, meta.qnummer].filter(Boolean);
-  const kaal = delen.join('-') || 'calculatie-en-brief';
-  const veilig = kaal.toLowerCase().replace(/[^a-z0-9-]+/g, '-').replace(/^-+|-+$/g, '');
-  return (veilig || 'calculatie-en-brief') + '.json';
+  const delen = [meta.klantnaam, meta.projectnaam].map(CB.veiligeBestandsnaamdeel).filter(Boolean);
+  const naam = delen.length ? `Calculatie-${delen.join('-')}` : 'Calculatie';
+  return naam + '.json';
 };
 
 CB.bindOpslaanOpenen = () => {

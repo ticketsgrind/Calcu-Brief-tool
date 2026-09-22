@@ -245,7 +245,7 @@
   <div id="printArea" style="display:none;"></div>
 
   <div class="card" style="text-align:right;">
-    <button class="btn" id="btnNaarBrief" onclick="CB.naarStap('brief')">Calculatie klaar — verder naar de brief →</button>
+    <button class="btn" id="btnNaarBrief">Calculatie klaar — verder naar de brief →</button>
   </div>
 
   <div class="totals-panel no-print">
@@ -307,6 +307,14 @@
   document.addEventListener('DOMContentLoaded', () => {
     CB.bindStappen();
     CB.bindOpslaanOpenen();
+    // Eén klik doet allebei: de overdracht toepassen (nieuwe waarden uit de
+    // calculatie overnemen) én naar de briefstap gaan -- vroeger moest je
+    // daarna nog apart op "Vul voor vanuit de calculatie" klikken, wat
+    // makkelijk over het hoofd werd gezien (leek dan alsof niets overkwam).
+    document.getElementById('btnNaarBrief').addEventListener('click', async () => {
+      await CB.brief.vulVoorVanuitCalculatie();
+      CB.naarStap('brief');
+    });
     // Beide stappen laden hun eigen gegevens async (zie calculatie.js/brief.js
     // se DOMContentLoaded-handlers, die eerder in het bestand staan en dus
     // eerder draaien); pas als allebei klaar zijn is er een standaard-state

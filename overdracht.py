@@ -61,9 +61,21 @@ RAC_PAC_OPTIES = ["splitsystem", "multi-splitsystem"]
 ALLE_SYSTEEMSOORTEN = ["splitsystem", "multi-splitsystem", "vrf", "warmtepomp", "vloeistofkoelmachine"]
 
 
-def zet_over(calc_staat: dict[str, Any], berekening: dict[str, Any]) -> tuple[dict[str, Any], list[VeldOverdracht]]:
+BTW_PERCENTAGE_PARTICULIER = 0.21
+
+
+def zet_over(calc_staat: dict[str, Any], berekening: dict[str, Any],
+             klanttype: str | None = None) -> tuple[dict[str, Any], list[VeldOverdracht]]:
     """Bouwt een offerte-dict (brieventool-formaat) uit een calculatie-state
     en het bijbehorende resultaat van calculatie.rekenkern.bereken().
+
+    De calculatie rekent altijd exclusief btw (er is geen klanttype-begrip in
+    de calculatiestap); `klanttype` komt daarom apart van de briefkant mee,
+    zodat bij een particuliere klant de 21% btw bij de verkoopprijs wordt
+    opgeteld voordat die in de brief komt -- exact zoals de brief het bedrag
+    voor een particulier ook laat zien (btw_inclusief-tekst in teksten.yaml).
+    Onbekend/ontbrekend klanttype (bijv. nog niet gekozen) betekent: exclusief
+    laten, net als bij een zakelijke klant -- nooit een gok wélke kant op.
 
     Geeft (offerte, overdracht) terug: `offerte` is direct bruikbaar voor
     brieventool.samenstellen.stel_samen / brieventool.controle.ontbrekende_gegevens,
@@ -100,12 +112,17 @@ def zet_over(calc_staat: dict[str, Any], berekening: dict[str, Any]) -> tuple[di
     marge = berekening.get("marge") or {}
     verkoopprijs = marge.get("verkoopprijs")
     if verkoopprijs is not None:
+        particulier = klanttype == "particulier"
+        bedrag = verkoopprijs * (1 + BTW_PERCENTAGE_PARTICULIER) if particulier else verkoopprijs
         offerte["prijssoort"] = "totaalprijs"
-        offerte["prijsregels"] = [{"bedrag": round(verkoopprijs, 2)}]
-        overdracht.append(VeldOverdracht(
-            "prijsregels[0].bedrag", "direct",
+        offerte["prijsregels"] = [{"bedrag": round(bedrag, 2)}]
+        reden = (
+            "de verkoopprijs zoals berekend in stap 1 (calculatie), plus 21% btw voor "
+            "de particuliere klant -- wordt hier niet herberekend, alleen de btw is erbij opgeteld"
+            if particulier else
             "de verkoopprijs zoals berekend in stap 1 (calculatie) -- wordt hier niet herberekend"
-        ))
+        )
+        overdracht.append(VeldOverdracht("prijsregels[0].bedrag", "direct", reden))
 
     return offerte, overdracht
 

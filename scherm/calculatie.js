@@ -176,12 +176,18 @@ function zoekMateriaal(q) {
 }
 function materiaalRegelUitCatalogus(catalogusEntry) {
   const live = catalogusEntry.artikelcode ? catalogusItem(catalogusEntry.artikelcode) : null;
+  // Bron "projectbestelling" heeft in het bronbestand een prijs van 0 staan
+  // als plekhouder ("moet nog ingevuld worden"), geen echte nulprijs -- die
+  // zou anders als "bekend" meetellen in de totalen zonder dat er ooit een
+  // bedrag is ingevuld. Zie ook renderMateriaal(), die dit veld bewerkbaar
+  // maakt voor precies deze bron.
+  const prijs = live ? live.prijs : (catalogusEntry.bron === 'projectbestelling' ? null : catalogusEntry.prijs);
   return {
     id: newId(), sectie: catalogusEntry.sectie, row: catalogusEntry.row, bron: catalogusEntry.bron,
     artikelcode: catalogusEntry.artikelcode,
     omschrijving: live ? live.omschrijving : catalogusEntry.omschrijving,
     eenheid: live ? live.eenheid : catalogusEntry.eenheid,
-    prijs: live ? live.prijs : catalogusEntry.prijs,
+    prijs,
     per_meter_type: catalogusEntry.per_meter_type || null,
     leiding_categorie: catalogusEntry.leiding_categorie || null,
     montage_uur_per_eenheid: catalogusEntry.montage_uur_per_eenheid || null,
@@ -351,10 +357,13 @@ function renderSectieBrowser() {
   const wrap = document.getElementById('materiaalSectieBrowser');
   wrap.innerHTML = '';
   for (const sectie of MATERIAAL_SECTIES) {
-    const items = DATA.materiaal_catalogus.filter(c => c.sectie === sectie && !c.afgeleid_van);
+    // Regels zonder omschrijving zijn lege plekhouder-rijen uit het bronbestand
+    // (bijv. 30 van de 39 APPARATUUR-regels) -- niets om te kiezen, dus weg
+    // uit de lijst in plaats van als "(geen omschrijving)" te tonen.
+    const items = DATA.materiaal_catalogus.filter(c => c.sectie === sectie && !c.afgeleid_van && c.omschrijving);
     if (items.length === 0) continue;
     const options = items.map(c =>
-      `<option value="${c.row}">${(c.omschrijving || '(geen omschrijving)').replace(/"/g, '&quot;')} — ${c.prijs === null ? 'prijs onbekend' : eur(Number(c.prijs))}</option>`
+      `<option value="${c.row}">${c.omschrijving.replace(/"/g, '&quot;')} — ${c.prijs === null ? 'prijs onbekend' : eur(Number(c.prijs))}</option>`
     ).join('');
     const div = document.createElement('div');
     div.className = 'sectie-browser-row field';
@@ -393,12 +402,18 @@ function renderMateriaal() {
       const aantalCel = r.afgeleid
         ? `${r.aantal || 0} <div class="afgeleid-hint">automatisch</div>`
         : `<input type="number" min="0" step="1" class="num-input" data-id="${r.id}" data-field="aantal" value="${r.aantal||0}">`;
+      // Bron "projectbestelling" (o.a. alle APPARATUUR-regels: verdeelboxen,
+      // headers, T-stukken, ...) heeft nooit een cataloguswaarde -- de prijs
+      // is hier altijd iets dat de invuller er zelf bij moet zetten.
+      const prijsCel = (r.bron === 'projectbestelling' && !r.afgeleid)
+        ? `<input type="number" min="0" step="0.01" class="price-input" data-id="${r.id}" data-field="prijs" placeholder="prijs invullen" value="${r.prijs===null?'':r.prijs}">`
+        : (r.prijs === null ? `<span class="badge onbekend">onbekend</span>` : eur(Number(r.prijs)));
       tr.innerHTML = `
         <td>${r.omschrijving || ''}${r.artikelcode ? `<div class="hint">${r.artikelcode}</div>` : ''}</td>
         <td class="muted">${materiaalRegelLabel(r)}</td>
         <td class="right">${aantalCel}</td>
         <td>${r.eenheid || ''}</td>
-        <td class="right prijs-cell">${r.prijs === null ? `<span class="badge onbekend">onbekend</span>` : eur(Number(r.prijs))}</td>
+        <td class="right prijs-cell">${prijsCel}</td>
         <td class="right">${onvolledig ? '<span class="badge onbekend">nog geen prijs</span>' : eur(totaal || 0)}</td>
         <td>${r.afgeleid ? '' : `<button class="icon-btn no-print" data-id="${r.id}" data-action="verwijder-materiaal" title="Verwijderen">✕</button>`}</td>`;
       tbody.appendChild(tr);
@@ -688,7 +703,11 @@ function bindMateriaal() {
     const id = e.target.dataset.id, field = e.target.dataset.field;
     if (!id || !field) return;
     const regel = state.materiaal.find(r => r.id === id);
-    if (regel) { regel[field] = field === 'aantal' ? nonNegatief(e.target.value) : e.target.value; renderAll(); }
+    if (!regel) return;
+    if (field === 'aantal') regel.aantal = nonNegatief(e.target.value);
+    else if (field === 'prijs') regel.prijs = e.target.value === '' ? null : nonNegatief(e.target.value);
+    else regel[field] = e.target.value;
+    renderAll();
   });
   document.getElementById('materiaalSecties').addEventListener('click', e => {
     if (e.target.dataset.action === 'verwijder-materiaal') {

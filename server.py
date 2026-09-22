@@ -123,7 +123,7 @@ class Bediening(BaseHTTPRequestHandler):
         staat = gegevens.get("calculatie") or {}
         try:
             berekening = rk.bereken(staat, self.server.calc_gegevens)
-            offerte, overdracht = zet_over(staat, berekening)
+            offerte, overdracht = zet_over(staat, berekening, gegevens.get("klanttype"))
         except (KeyError, TypeError, ValueError) as fout:
             return self._antwoord(400, {"fout": f"kan de overdracht niet maken: {fout}"})
         return self._antwoord(200, {
