@@ -1,0 +1,51 @@
+# Particuliere offerte, één wandunit. Nagebouwd naar uitgewerkt-4.
+klanttype: particulier
+documentsoort: offerte
+installatietype: airconditioning
+
+aanspreekvorm: de heer
+voorletters: J.
+achternaam: Jansen
+straat_huisnummer: Dorpsstraat 12
+postcode: 4231DJ
+plaats: Meerkerk
+
+briefdatum: 2026-08-26
+projectnummer: Q.1077218.6.01
+opsteller_initialen: LH
+sa_nummer: 35923
+ondertekenaar: nick_vervoorn
+
+aanleiding: aanvraag
+datum_aanleiding: 12 augustus
+locatieaanduiding: uw woning
+
+model_binnenunit: wand
+opstelling_buitenunit: muursteun
+condensafvoer: natuurlijk_verloop
+bediening: infrarood
+winterregeling: true
+technische_specificaties: zie_bijlage
+
+installaties:
+  - ruimte: de woonkamer
+    aantal_systemen: 1
+    systeemsoort: splitsystem
+    montagewijze: wandmontage
+    merk: Panasonic
+    type_binnendeel: KIT-TZ35CKE
+    aantal_binnendelen: 1
+
+systeemsoort: splitsystem
+prijssoort: totaalprijs
+prijsregels:
+  - bedrag: 3900
+
+facturering: vijftig_vijftig
+betaling: termijnen_particulier
+condenspomp_meerprijs: true
+onderhoud_alinea: true
+documentatie_bijgevoegd: true
+
+werk_inclusief: [demontage, montage, bekabeling, transport, inbedrijfstelling]
+werk_exclusief: [bouwkundig, sparingen, betonboringen, elektra_stopcontact, plakplaat, beplating]

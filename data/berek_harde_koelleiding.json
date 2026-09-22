@@ -1,0 +1,56 @@
+[
+ {
+  "omschrijving": "Leidingwerk 2-pijps hard 8pk  (22,4kW)",
+  "pk": "8pk",
+  "diameters": "3/8 - 3/4",
+  "prijs_per_m": 23.32903703703704
+ },
+ {
+  "omschrijving": "Leidingwerk 2-pijps hard 10pk (28,0kW)",
+  "pk": "10pk",
+  "diameters": "3/8 - 7/8",
+  "prijs_per_m": 26.015
+ },
+ {
+  "omschrijving": "Leidingwerk 2-pijps hard 10/12pk (28,0 / 33,5kW)",
+  "pk": "10/12pk",
+  "diameters": "1/2 - 7/8",
+  "prijs_per_m": 26.387875
+ },
+ {
+  "omschrijving": "Leidingwerk 2-pijps hard 12/14/16pk (33,5 / 40,0 / 45,0kW)",
+  "pk": "12/14/16pk",
+  "diameters": "1/2 - 1 1/8",
+  "prijs_per_m": 28.181874999999998
+ },
+ {
+  "omschrijving": "Leidingwerk 2-pijps hard 18pk (50,0kW)",
+  "pk": "18pk",
+  "diameters": "5/8 - 1 1/8",
+  "prijs_per_m": 29.04
+ },
+ {
+  "omschrijving": "Leidingwerk 3-pijps hard 8pk  (22,4kW)",
+  "pk": "8pk",
+  "diameters": "3/8 - 5/8 - 3/4",
+  "prijs_per_m": 35.364037037037036
+ },
+ {
+  "omschrijving": "Leidingwerk 3-pijps hard 10pk  (28,0kW)",
+  "pk": "10pk",
+  "diameters": "3/8 - 3/4 - 7/8",
+  "prijs_per_m": 38.54003703703704
+ },
+ {
+  "omschrijving": "Leidingwerk 3-pijps hard 12pk (33,5kW)",
+  "pk": "12pk",
+  "diameters": "1/2 - 3/4 - 1 1/8",
+  "prijs_per_m": 40.70691203703704
+ },
+ {
+  "omschrijving": "Leidingwerk 3-pijps hard 14/16pk (40,0 / 45,0kW)",
+  "pk": "14/16pk",
+  "diameters": "1/2 - 7/8 - 1 1/8",
+  "prijs_per_m": 43.392875000000004
+ }
+]

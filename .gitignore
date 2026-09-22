@@ -1,0 +1,11 @@
+# Word-tijdelijke bestanden
+~$*
+
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+.DS_Store
+uit/
+node_modules/

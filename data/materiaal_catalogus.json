@@ -1,0 +1,2469 @@
+[
+ {
+  "sectie": "APPARATUUR",
+  "row": 31,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "CENTRALE REGELAAR",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null,
+  "servicemonteur_trigger": "centrale_regelaar"
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 33,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "T-STUKKEN (KOPPELING BUITENDELEN)",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 34,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "VERDEELBOXEN",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null,
+  "instellingen_koppeling": "verdeelboxen"
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 35,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "HEADERS",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 36,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Y-JOINTS",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 37,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 38,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 39,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 40,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 41,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 42,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 43,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 44,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 45,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 46,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 47,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 48,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 49,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 50,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 51,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 53,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "TOEBEHOREN LEVERANCIER: FRONTPANELEN / PLENUMS",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 54,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "BEDIENINGEN",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 55,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "INTERFACES / HULPSCHAKELING",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 56,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "TOEBEHOREN EXTERN: LUCHTVERDELING / SLANGEN / REGELKLEPPEN / ROOSTERS",
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 57,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 58,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 59,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 60,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 61,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 62,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 63,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 64,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 65,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 66,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 67,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 68,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 69,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 70,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "APPARATUUR",
+  "row": 71,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": null,
+  "eenheid": "ST",
+  "prijs": 0,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 74,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "BIGFOOT Frame standaard (1000 x 1200)",
+  "eenheid": "ST",
+  "prijs": 322.11,
+  "opmerking": "Enkel VRF buitendeel"
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 75,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "BIGFOOT Frame standaard + verlengset (1000 x 1200 + 1000 x 1200)",
+  "eenheid": "ST",
+  "prijs": 490.17,
+  "opmerking": "Voor 2st. VRF buitendelen",
+  "hardcoded_formule": "322.11+168.06"
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 76,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "BIGFOOT Frame XL (1200 x 1500)",
+  "eenheid": "ST",
+  "prijs": 343.65,
+  "opmerking": "Enkel VRF buitendeel breed "
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 77,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "BIGFOOT Frame XL + verlengset (1200 x 1500 + 1200 x 1500)",
+  "eenheid": "ST",
+  "prijs": 619.15,
+  "opmerking": "Voor 2st. VRF buitendeel breed",
+  "hardcoded_formule": "343.65+275.5"
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 78,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302030014",
+  "omschrijving": "Aircobase balk recycled Heavy Duty 1,5m",
+  "eenheid": "ST",
+  "prijs": 29.99,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 79,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000019",
+  "omschrijving": "Premium opstelbalk - 60cm incl.bouten",
+  "eenheid": "ST",
+  "prijs": 10.18,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 80,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006327000006",
+  "omschrijving": "Big foot balk RF1000 1000x160x95",
+  "eenheid": "ST",
+  "prijs": 9.74,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 81,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040024",
+  "omschrijving": "BlueDiamond rubberen montagevoeten",
+  "eenheid": "ST",
+  "prijs": 23.88,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 82,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000017",
+  "omschrijving": "ILP bloc high 0,60 x 019 x 0,20m incl.",
+  "eenheid": "ST",
+  "prijs": 24.58,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 83,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000026",
+  "omschrijving": "Prem. balk hoog 1,00 x 0,19 x 0,20m",
+  "eenheid": "ST",
+  "prijs": 43.5,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 84,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302030019",
+  "omschrijving": "MPC-consoleset zonder geluidd. l=560",
+  "eenheid": "ST",
+  "prijs": 42.21,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 85,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302030015",
+  "omschrijving": "Rodigas MS207 wandbeugel met aluminium",
+  "eenheid": "ST",
+  "prijs": 32.48,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 86,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006301030045",
+  "omschrijving": "Trillingsdemper M12 30x40 VRF",
+  "eenheid": "ST",
+  "prijs": 11.06,
+  "opmerking": null
+ },
+ {
+  "sectie": "BALKEN/VOETEN/MUURSTEUN",
+  "row": 87,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000003",
+  "omschrijving": "Trillingsdempers Cilindrisch M8 40x30mm",
+  "eenheid": "ST",
+  "prijs": 1.31,
+  "opmerking": null,
+  "afgeleid_van": [
+   {
+    "row": 84,
+    "factor": 4
+   },
+   {
+    "row": 85,
+    "factor": 4
+   }
+  ]
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 93,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 2-pijps hard 8pk  (22,4kW)",
+  "eenheid": "M",
+  "prijs": 23.32903703703704,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_2pijps_hard_8pk",
+  "leiding_categorie": "hard_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 94,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 2-pijps hard 10pk (28,0kW)",
+  "eenheid": "M",
+  "prijs": 26.015,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_2pijps_hard_10pk",
+  "leiding_categorie": "hard_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 95,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 2-pijps hard 10/12pk (28,0 / 33,5kW)",
+  "eenheid": "M",
+  "prijs": 26.387875,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_2pijps_hard_10_12pk",
+  "leiding_categorie": "hard_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 96,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 2-pijps hard 12/14/16pk (33,5 / 40,0 / 45,0kW)",
+  "eenheid": "M",
+  "prijs": 28.181874999999998,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_2pijps_hard_12_14_16pk",
+  "leiding_categorie": "hard_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 97,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 2-pijps hard 18pk (50,0kW)",
+  "eenheid": "M",
+  "prijs": 29.04,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_2pijps_hard_18pk",
+  "leiding_categorie": "hard_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 98,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 3-pijps hard 8pk  (22,4kW)",
+  "eenheid": "M",
+  "prijs": 35.364037037037036,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_3pijps_hard_8pk",
+  "leiding_categorie": "hard_3pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 99,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 3-pijps hard 10pk  (28,0kW)",
+  "eenheid": "M",
+  "prijs": 38.54003703703704,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_3pijps_hard_10pk",
+  "leiding_categorie": "hard_3pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 100,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 3-pijps hard 12pk (33,5kW)",
+  "eenheid": "M",
+  "prijs": 40.70691203703704,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_3pijps_hard_12pk",
+  "leiding_categorie": "hard_3pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 101,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "Leidingwerk 3-pijps hard 14/16pk (40,0 / 45,0kW)",
+  "eenheid": "M",
+  "prijs": 43.392875000000004,
+  "opmerking": null,
+  "per_meter_type": "koelleiding_3pijps_hard_14_16pk",
+  "leiding_categorie": "hard_3pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 102,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000016",
+  "omschrijving": "Aircopipe P2525 1/4 x 5/8",
+  "eenheid": "M",
+  "prijs": 7.25,
+  "opmerking": "Tot 7,1 kW (split)",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 103,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000002",
+  "omschrijving": "Aircopipe PB2325 1/4 x 3/8 zwart",
+  "eenheid": "M",
+  "prijs": 4.48,
+  "opmerking": "Tot 3,5 kW (split)",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 104,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000027",
+  "omschrijving": "Aircopipe PB2425 1/4 x 1/2 zwart",
+  "eenheid": "M",
+  "prijs": 5.77,
+  "opmerking": "Tot 5,6kW (split / VRF)",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 105,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000005",
+  "omschrijving": "Aircopipe PB3525 3/8 x 5/8 zwart",
+  "eenheid": "M",
+  "prijs": 8.16,
+  "opmerking": "Vanaf 6,0kW (split / VRF)",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 106,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Koelleiding 3/8 x 3/4 gecombineerd",
+  "eenheid": "M",
+  "prijs": 13.776,
+  "opmerking": null,
+  "hardcoded_formule": "344.4/25",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 107,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Koelleiding 1/2 x 7/8 (2x single)",
+  "eenheid": "M",
+  "prijs": 19.096,
+  "opmerking": null,
+  "hardcoded_formule": "131.04/25+346.36/25",
+  "leiding_categorie": "zacht_2pijps"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 108,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000012",
+  "omschrijving": "Audio cable 1x2x1.23 mm 91002",
+  "eenheid": "M",
+  "prijs": 1.4,
+  "opmerking": "Uitlopend"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 109,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000039",
+  "omschrijving": "Datakabel Cca 2x16AWG halogeenvrij grijs",
+  "eenheid": "M",
+  "prijs": 2.12,
+  "opmerking": "Verwacht beschikbaar vanaf 1-10-2026 (in bestelling)"
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 110,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006301000058",
+  "omschrijving": "Doorz. PVC slang 6x10",
+  "eenheid": "M",
+  "prijs": 0.47,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 111,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006301000059",
+  "omschrijving": "Gewapende PVC slang 10X 16X 3.0 transp.",
+  "eenheid": "M",
+  "prijs": 1.06,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 112,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000132",
+  "omschrijving": "halogeenvrij CCA 2x0,75 kabel",
+  "eenheid": "M",
+  "prijs": 0.56,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 113,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000133",
+  "omschrijving": "Huishoudkabel Eca Zwart - 3x1,50mm²",
+  "eenheid": "M",
+  "prijs": 0.95,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 114,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000034",
+  "omschrijving": "Stuurstroomkabel Cca 3x2,5 mm2",
+  "eenheid": "M",
+  "prijs": 1.5,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 115,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000037",
+  "omschrijving": "Stuurstroomkabel Cca 5x2,5 mm2",
+  "eenheid": "M",
+  "prijs": 2.51,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 116,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000036",
+  "omschrijving": "Stuurstroomkabel grijs 5x1,0 mm2",
+  "eenheid": "M",
+  "prijs": 1.27,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 117,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000035",
+  "omschrijving": "Stuurstroomkabel LSOH Cca 4x1,5 mm2",
+  "eenheid": "M",
+  "prijs": 1.36,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 118,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000130",
+  "omschrijving": "Stuurstroomkabel YSLY-JZ 5x1,5",
+  "eenheid": "M",
+  "prijs": 1.48,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 119,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006399000038",
+  "omschrijving": "Stuurstroomkabel CPR S1 D1 A1 4x1,5 mm2",
+  "eenheid": "M",
+  "prijs": 1.6,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 120,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000360",
+  "omschrijving": "Voedingskabel YMvK - Dca - 3x2,50mm²-50m",
+  "eenheid": "M",
+  "prijs": 1.68,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 121,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000391",
+  "omschrijving": "DRAK VULT DCA-S2 5G6 MT",
+  "eenheid": "M",
+  "prijs": 7.31,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 122,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000131",
+  "omschrijving": "Voedingskabel/1000 Dca 5G 2,5mm2 grijs",
+  "eenheid": "M",
+  "prijs": 2.51,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 123,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "KABELGOOT 200 MM INCL. BEUGEL",
+  "eenheid": "M",
+  "prijs": 36.49333333333333,
+  "opmerking": null,
+  "per_meter_type": "kabelgoot_per_m",
+  "montage_uur_per_eenheid": 0.25
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 124,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "CONDENSAFVOERLEIDING INCL. BEUGEL",
+  "eenheid": "M",
+  "prijs": 2.8291666666666666,
+  "opmerking": null,
+  "per_meter_type": "condensafvoerleiding_per_m",
+  "montage_uur_per_eenheid": 0.25
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 125,
+  "bron": "per-meter-berekening",
+  "artikelcode": null,
+  "omschrijving": "PVC DAKLEIDING",
+  "eenheid": "M",
+  "prijs": 13.870000000000001,
+  "opmerking": null,
+  "per_meter_type": "pvc_dakleiding_per_m",
+  "montage_uur_per_eenheid": 0.25
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 126,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000055",
+  "omschrijving": "WaTech lijmsifon universeel 32mm",
+  "eenheid": "ST",
+  "prijs": 3,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 127,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000056",
+  "omschrijving": "WaTech lijmsifon universeel 40mm",
+  "eenheid": "ST",
+  "prijs": 7.64,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 128,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000057",
+  "omschrijving": "WaTech lijmsifon universeel 50mm",
+  "eenheid": "ST",
+  "prijs": 15.41,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 129,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000135",
+  "omschrijving": "Aansluitsnoer met stekker 3G1,5 mm²-W 3M",
+  "eenheid": "ST",
+  "prijs": 6.18,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 130,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000134",
+  "omschrijving": "Aansluitsnoer met stekker 3G1,5 mm²-Z 3M",
+  "eenheid": "ST",
+  "prijs": 6.18,
+  "opmerking": null
+ },
+ {
+  "sectie": "LEIDINGEN/KABELS/SIFON",
+  "row": 131,
+  "bron": "voorraad",
+  "artikelcode": "BN0440007302010074",
+  "omschrijving": "Aansluitkabel VMvL Eca wit 3x1,50mm -100",
+  "eenheid": "M",
+  "prijs": 0.95,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 137,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040013",
+  "omschrijving": "Aspen Heavy-duty condenstankpomp 10m 4,0",
+  "eenheid": "ST",
+  "prijs": 245.04,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 138,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040003",
+  "omschrijving": "Aspen pomp heavy duty 6m, 4,0l",
+  "eenheid": "ST",
+  "prijs": 149.95,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 139,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040018",
+  "omschrijving": "Aspen pomp Mini Aqua Silent+",
+  "eenheid": "ST",
+  "prijs": 91.43,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 140,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040023",
+  "omschrijving": "Aspen pomp Mini Lime Silent+ (losse pomp",
+  "eenheid": "ST",
+  "prijs": 89.03,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 141,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040020",
+  "omschrijving": "Aspen pomp Mini Lime Silent+Inoac goot",
+  "eenheid": "ST",
+  "prijs": 101.66,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 142,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040028",
+  "omschrijving": "Aspen pomp Mini Orange Silent+",
+  "eenheid": "ST",
+  "prijs": 68,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 143,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040021",
+  "omschrijving": "Aspen tankpomp MAX Hi-Flow 1,7L",
+  "eenheid": "ST",
+  "prijs": 58.29,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 144,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040027",
+  "omschrijving": "BlueDiamond MicroBlue pomp res. X85-001",
+  "eenheid": "ST",
+  "prijs": 87.27,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 145,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040022",
+  "omschrijving": "MaxiBlue pomp condenspomp met temp. sens",
+  "eenheid": "ST",
+  "prijs": 134.93,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 146,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040017",
+  "omschrijving": "Mega Blue pomp reservoir X87-813",
+  "eenheid": "ST",
+  "prijs": 194.73,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 147,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040012",
+  "omschrijving": "Mega Blue pomp sensor (temperatuur)",
+  "eenheid": "ST",
+  "prijs": 165.35,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 148,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040026",
+  "omschrijving": "MicroBlue pomp sensor (temp.) X85-005",
+  "eenheid": "ST",
+  "prijs": 97.36,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 149,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040025",
+  "omschrijving": "MiniBlue condenspomp+koelsign 8 l/u",
+  "eenheid": "ST",
+  "prijs": 95.46,
+  "opmerking": null
+ },
+ {
+  "sectie": "POMPEN",
+  "row": 150,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302040019",
+  "omschrijving": "MiniBlue pomp sensor (temperatuur)",
+  "eenheid": "ST",
+  "prijs": 98.18,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 156,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010005",
+  "omschrijving": "Inoac Leidinggoot CD-75",
+  "eenheid": "M",
+  "prijs": 4.92,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 157,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010007",
+  "omschrijving": "Inoac Muur afdekkap NW-75",
+  "eenheid": "ST",
+  "prijs": 4.35,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 158,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010026",
+  "omschrijving": "Inoac plafond/wand-eindstuk NA75",
+  "eenheid": "ST",
+  "prijs": 3.77,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 159,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010034",
+  "omschrijving": "Inoac plafond/wand-rozet NK75",
+  "eenheid": "ST",
+  "prijs": 1.66,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 160,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010036",
+  "omschrijving": "Inoac verbindingssok NS75",
+  "eenheid": "ST",
+  "prijs": 1.43,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 161,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010009",
+  "omschrijving": "Inoac Platte lange bocht 90° NE-75",
+  "eenheid": "ST",
+  "prijs": 4.04,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 162,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010033",
+  "omschrijving": "Inoac platte korte bocht 90° NH75",
+  "eenheid": "ST",
+  "prijs": 2.88,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 163,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010025",
+  "omschrijving": "Inoac platte bocht 45° NM75",
+  "eenheid": "ST",
+  "prijs": 2.77,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 164,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010028",
+  "omschrijving": "Inoac st. korte buiten bocht 90° NL75",
+  "eenheid": "ST",
+  "prijs": 3.33,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 165,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010027",
+  "omschrijving": "Inoac stijgende buiten bocht 90° NC75",
+  "eenheid": "ST",
+  "prijs": 3.77,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 166,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010029",
+  "omschrijving": "Inoac stijgende bocht 45° NU75",
+  "eenheid": "ST",
+  "prijs": 2.53,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 167,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010035",
+  "omschrijving": "Inoac stijgende S-buiten bocht NZK75",
+  "eenheid": "ST",
+  "prijs": 6.86,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 168,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010030",
+  "omschrijving": "Inoac verstelb. bocht hor./vert. NCX75",
+  "eenheid": "ST",
+  "prijs": 5.32,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 169,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010031",
+  "omschrijving": "Inoac verstelb. platte bocht 45-90° NX75",
+  "eenheid": "ST",
+  "prijs": 3.77,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 170,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010038",
+  "omschrijving": "Inoac verstelb. st. bocht 45-90° NZ75",
+  "eenheid": "ST",
+  "prijs": 4.2,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 171,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010037",
+  "omschrijving": "Inoac T-stuk incl. 2x verloop 60 NT75",
+  "eenheid": "ST",
+  "prijs": 10.63,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 173,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010001",
+  "omschrijving": "Inoac CD-75W Leidinggoot wit",
+  "eenheid": "M",
+  "prijs": 3.97,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 174,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010002",
+  "omschrijving": "Inoac Muur afdekkap wit NW-75W",
+  "eenheid": "ST",
+  "prijs": 4.28,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 175,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010040",
+  "omschrijving": "Inoac plafond/wand eindstuk NA75-W",
+  "eenheid": "ST",
+  "prijs": 3.91,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 176,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010045",
+  "omschrijving": "Inoac verbindingssok NS75-W",
+  "eenheid": "ST",
+  "prijs": 1.54,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 177,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010003",
+  "omschrijving": "Inoac Platte lange bocht 90° NE-75W",
+  "eenheid": "ST",
+  "prijs": 4.42,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 178,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010041",
+  "omschrijving": "Inoac platte korte bocht 90° NH75-W",
+  "eenheid": "ST",
+  "prijs": 3.1,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 179,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010042",
+  "omschrijving": "Inoac platte bocht 45° NM75-W",
+  "eenheid": "ST",
+  "prijs": 2.99,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 180,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010039",
+  "omschrijving": "Inoac stijgende buiten bocht 90° NC75-W",
+  "eenheid": "ST",
+  "prijs": 4.05,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 181,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010047",
+  "omschrijving": "Inoac stijgende S-buiten bocht NZK75-W",
+  "eenheid": "ST",
+  "prijs": 7.4,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 182,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010049",
+  "omschrijving": "Inoac verstelb. bocht hor./vert. NCX75-W",
+  "eenheid": "ST",
+  "prijs": 5.32,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 183,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010044",
+  "omschrijving": "Inoac verstelb. pl. bocht 45-90° NX75-W",
+  "eenheid": "ST",
+  "prijs": 4.05,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 184,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010048",
+  "omschrijving": "Inoac verstelb. st. bocht 45-90° NZ75W",
+  "eenheid": "ST",
+  "prijs": 4.2,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 185,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010043",
+  "omschrijving": "Inoac T-stuk incl. 2 x verloop 60 NT75-W",
+  "eenheid": "ST",
+  "prijs": 11.45,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 187,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010006",
+  "omschrijving": "Inoac Leidinggoot CD-100",
+  "eenheid": "M",
+  "prijs": 7.5,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 188,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010008",
+  "omschrijving": "Inoac Muur afdekkap NW-100",
+  "eenheid": "ST",
+  "prijs": 7.43,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 189,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010032",
+  "omschrijving": "Inoac plafond/wand-eindstuk NA100",
+  "eenheid": "ST",
+  "prijs": 4.87,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 190,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010013",
+  "omschrijving": "Inoac verbindingssok NS100",
+  "eenheid": "ST",
+  "prijs": 2.97,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 191,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010010",
+  "omschrijving": "Inoac Platte lange bocht 90° NE-100",
+  "eenheid": "ST",
+  "prijs": 6.86,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 192,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010012",
+  "omschrijving": "Inoac platte korte bocht 90° NH100",
+  "eenheid": "ST",
+  "prijs": 4.65,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 193,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010004",
+  "omschrijving": "Inoac platte bocht 45° NM100",
+  "eenheid": "ST",
+  "prijs": 4.76,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 194,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010015",
+  "omschrijving": "Inoac stijgende korte bocht 90° NL100",
+  "eenheid": "ST",
+  "prijs": 4.61,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 195,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010016",
+  "omschrijving": "Inoac stijgende buiten bocht 90° NC100",
+  "eenheid": "ST",
+  "prijs": 6.43,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 196,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010014",
+  "omschrijving": "Inoac stijgende bocht 45° NU100",
+  "eenheid": "ST",
+  "prijs": 3.55,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 197,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010011",
+  "omschrijving": "Inoac verstelb. bocht hor./vert. NCX100",
+  "eenheid": "ST",
+  "prijs": 6.86,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 198,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010017",
+  "omschrijving": "Inoac verstelb. pl. bocht 45-90° NX100",
+  "eenheid": "ST",
+  "prijs": 7.19,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 200,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010050",
+  "omschrijving": "Inoac leidinggoot 99x68mm CD-100W",
+  "eenheid": "M",
+  "prijs": 16.64,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 201,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010052",
+  "omschrijving": "Inoac muur afdekkap NW100W",
+  "eenheid": "ST",
+  "prijs": 7.49,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 202,
+  "bron": "voorraad",
+  "artikelcode": "BN044000630201054",
+  "omschrijving": "Inoac plafond/wand eindstuk NA100W",
+  "eenheid": "ST",
+  "prijs": 5.08,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 203,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010051",
+  "omschrijving": "Inoac verbindingssok NS100W",
+  "eenheid": "ST",
+  "prijs": 3.03,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 204,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010053",
+  "omschrijving": "Inoac platte bocht 90gr. NE100W",
+  "eenheid": "ST",
+  "prijs": 7.16,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 205,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010055",
+  "omschrijving": "Inoac stijgende lange bocht NC100W",
+  "eenheid": "ST",
+  "prijs": 6.68,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 206,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010056",
+  "omschrijving": "Inoac NT-100W T-stuk incl.2x verl. 60/75",
+  "eenheid": "ST",
+  "prijs": 13.37,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 207,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010046",
+  "omschrijving": "Inoac stijgende bocht 45°",
+  "eenheid": "ST",
+  "prijs": 2.73,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 209,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010072",
+  "omschrijving": "Inoac goot 2 m 99x68mm CD-75BK",
+  "eenheid": "M",
+  "prijs": 5.44,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 210,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010069",
+  "omschrijving": "Inoac muur afdekkap NW-75BK",
+  "eenheid": "ST",
+  "prijs": 4.33,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 211,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010071",
+  "omschrijving": "Inoac plafond/wand eindstuk NA-75BK",
+  "eenheid": "ST",
+  "prijs": 4.22,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 212,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010070",
+  "omschrijving": "Inoac verbindingssok NS-75BK",
+  "eenheid": "ST",
+  "prijs": 1.61,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 213,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010067",
+  "omschrijving": "Inoac lange bocht 90gr. NE-75BK",
+  "eenheid": "ST",
+  "prijs": 4.49,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 214,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010068",
+  "omschrijving": "Inoac stijg. buitenbocht 90 gr. NC-75BK",
+  "eenheid": "ST",
+  "prijs": 4.22,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 215,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010073",
+  "omschrijving": "Inoac NT-75BK T-stuk incl. 2x verloop 60",
+  "eenheid": "ST",
+  "prijs": 12,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 217,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010066",
+  "omschrijving": "Inoac goot 2 m 99x68mm CD-100BK",
+  "eenheid": "M",
+  "prijs": 8.78,
+  "opmerking": "Per 2 meter calculeren"
+ },
+ {
+  "sectie": "INOAC",
+  "row": 218,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010061",
+  "omschrijving": "Inoac muur afdekkap NW-100BK",
+  "eenheid": "ST",
+  "prijs": 8.12,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 219,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010063",
+  "omschrijving": "Inoac plafond/wand eindstuk NA-100BK",
+  "eenheid": "ST",
+  "prijs": 5.5,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 220,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010062",
+  "omschrijving": "Inoac verbindingssok NS-100BK",
+  "eenheid": "ST",
+  "prijs": 3.29,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 221,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010060",
+  "omschrijving": "Inoac platte bocht 90gr. NE-100BK",
+  "eenheid": "ST",
+  "prijs": 7.75,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 222,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010064",
+  "omschrijving": "Inoac stijgende lange bocht NC-100BK",
+  "eenheid": "ST",
+  "prijs": 7.24,
+  "opmerking": null
+ },
+ {
+  "sectie": "INOAC",
+  "row": 223,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302010065",
+  "omschrijving": "Inoac NT-100BK T-Stuk incl.2xverl 60/75",
+  "eenheid": "ST",
+  "prijs": 14.45,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 229,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006300000202",
+  "omschrijving": "Danfoss flare/soldeer FA-7 (7/8)",
+  "eenheid": "ST",
+  "prijs": 15.3,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 230,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006321000010",
+  "omschrijving": "Danfoss flare/soldeer FSA 22 1/4",
+  "eenheid": "ST",
+  "prijs": 2.67,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 231,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006321000011",
+  "omschrijving": "Danfoss flare/soldeer FSA 33 3/8",
+  "eenheid": "ST",
+  "prijs": 3.62,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 232,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006321000012",
+  "omschrijving": "Danfoss flare/soldeer FSA 44 1/2",
+  "eenheid": "ST",
+  "prijs": 4.46,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 233,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006321000013",
+  "omschrijving": "Danfoss flare/soldeer FSA 516 5/8",
+  "eenheid": "ST",
+  "prijs": 5.49,
+  "opmerking": null
+ },
+ {
+  "sectie": "SOLDEER",
+  "row": 234,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006302060005",
+  "omschrijving": "Danfoss flare/soldeer FSA 66 3/4\"",
+  "eenheid": "ST",
+  "prijs": 9.3,
+  "opmerking": null
+ },
+ {
+  "sectie": "WERKSCHAKELAAR",
+  "row": 240,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000028",
+  "omschrijving": "Sontheimer werkschakelaar 3P/16A 230V",
+  "eenheid": "ST",
+  "prijs": 15.02,
+  "opmerking": null
+ },
+ {
+  "sectie": "WERKSCHAKELAAR",
+  "row": 241,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000003",
+  "omschrijving": "Sontheimer werkschakelaar 4P/25A 230/400",
+  "eenheid": "ST",
+  "prijs": 18.75,
+  "opmerking": null
+ },
+ {
+  "sectie": "WERKSCHAKELAAR",
+  "row": 242,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006328000007",
+  "omschrijving": "Sontheimer werkschakelaar 4P/63A 400V",
+  "eenheid": "ST",
+  "prijs": 62.85,
+  "opmerking": null
+ },
+ {
+  "sectie": "KOUDE MIDDEL",
+  "row": 248,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006309000032",
+  "omschrijving": "Koudemiddel R32",
+  "eenheid": "KG",
+  "prijs": 24.55,
+  "opmerking": null
+ },
+ {
+  "sectie": "KOUDE MIDDEL",
+  "row": 249,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006309000410",
+  "omschrijving": "Koudemiddel R410A",
+  "eenheid": "KG",
+  "prijs": 50.23,
+  "opmerking": null
+ },
+ {
+  "sectie": "KOUDE MIDDEL",
+  "row": 250,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Afvoer koude middel",
+  "eenheid": "KG",
+  "prijs": 9.2,
+  "opmerking": null
+ },
+ {
+  "sectie": "DAKDOORVOERING",
+  "row": 256,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006301010017",
+  "omschrijving": "Alum. plakplaat 125mm EW",
+  "eenheid": "ST",
+  "prijs": 16.88,
+  "opmerking": null
+ },
+ {
+  "sectie": "DAKDOORVOERING",
+  "row": 257,
+  "bron": "voorraad",
+  "artikelcode": "BN0440006301000021",
+  "omschrijving": "PVC bocht grijs 45 gr. SN4 125 mm mof/sp",
+  "eenheid": "ST",
+  "prijs": 6.89,
+  "opmerking": null
+ },
+ {
+  "sectie": "DAKDOORVOERING",
+  "row": 258,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Aircoexit Dakdoorvoer aluminium SINGLE 120mm",
+  "eenheid": "ST",
+  "prijs": 40.02,
+  "opmerking": null
+ },
+ {
+  "sectie": "DAKDOORVOERING",
+  "row": 259,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Aircoexit Dakdoorvoer aluminium DUO 120mm",
+  "eenheid": "ST",
+  "prijs": 42.92,
+  "opmerking": null
+ },
+ {
+  "sectie": "DAKDOORVOERING",
+  "row": 260,
+  "bron": "projectbestelling",
+  "artikelcode": null,
+  "omschrijving": "Aircoexit Dakdoorvoer aluminium VRF 150x200mm",
+  "eenheid": "ST",
+  "prijs": 82.57,
+  "opmerking": null
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 266,
+  "bron": "voorraad",
+  "artikelcode": "BN0440007018000200",
+  "omschrijving": "Sendz. dichte regelklep SDSD Ø 200",
+  "eenheid": "ST",
+  "prijs": 10.26,
+  "opmerking": "Schilt lijn",
+  "montage_uur_per_eenheid": 0.25,
+  "afgeleid_van": [
+   {
+    "row": 270,
+    "factor": 1
+   }
+  ]
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 267,
+  "bron": "voorraad",
+  "artikelcode": "BN0440005063100203",
+  "omschrijving": "Sonodec 25 D=203 mm",
+  "eenheid": "M",
+  "prijs": 4.33,
+  "opmerking": "Schilt lijn",
+  "montage_uur_per_eenheid": 0.25,
+  "afgeleid_van": [
+   {
+    "row": 266,
+    "factor": 4
+   }
+  ]
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 268,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008006590590",
+  "omschrijving": "Airco box afm. 590x590 aansl. 200",
+  "eenheid": "ST",
+  "prijs": 10.79,
+  "opmerking": "Schilt lijn",
+  "afgeleid_van": [
+   {
+    "row": 269,
+    "factor": 1
+   },
+   {
+    "row": 274,
+    "factor": 1
+   },
+   {
+    "row": 275,
+    "factor": 1
+   },
+   {
+    "row": 276,
+    "factor": 1
+   },
+   {
+    "row": 277,
+    "factor": 1
+   }
+  ]
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 269,
+  "bron": "voorraad",
+  "artikelcode": "BN0440005900000045",
+  "omschrijving": "Rooster SQL-PM 600 595x595 RAL 9010",
+  "eenheid": "ST",
+  "prijs": 9.57,
+  "opmerking": "Schilt lijn",
+  "montage_uur_per_eenheid": 1
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 270,
+  "bron": "voorraad",
+  "artikelcode": "BN0440001401600595",
+  "omschrijving": "Frontrooster FD-Q-Z 600 plaat 595",
+  "eenheid": "ST",
+  "prijs": 60.59,
+  "opmerking": "Trox",
+  "montage_uur_per_eenheid": 1
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 271,
+  "bron": "voorraad",
+  "artikelcode": "BN0440001450600000",
+  "omschrijving": "Plenum -Q-Z-H 600 (AK004-ZL)",
+  "eenheid": "ST",
+  "prijs": 35.07,
+  "opmerking": "Trox",
+  "afgeleid_van": [
+   {
+    "row": 270,
+    "factor": 1
+   }
+  ]
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 272,
+  "bron": "voorraad",
+  "artikelcode": "BN0440001806600595",
+  "omschrijving": "Plafondrooster DLQL-T-A-V 600 pl. 593",
+  "eenheid": "ST",
+  "prijs": 46.19,
+  "opmerking": "Trox",
+  "montage_uur_per_eenheid": 1
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 273,
+  "bron": "voorraad",
+  "artikelcode": "BN0440001452600000",
+  "omschrijving": "Plenum -Q-A-H 600 (AK004-AL)",
+  "eenheid": "ST",
+  "prijs": 36.46,
+  "opmerking": "Trox",
+  "afgeleid_van": [
+   {
+    "row": 272,
+    "factor": 1
+   }
+  ]
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 274,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008001000300",
+  "omschrijving": "Rooster SWR-PM 300 595x595 RAL 9010",
+  "eenheid": "ST",
+  "prijs": 7.08,
+  "opmerking": "inclusief AircoBox plenum, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 275,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008001000400",
+  "omschrijving": "Rooster SWR-PM 400 595x595 RAL 9010",
+  "eenheid": "ST",
+  "prijs": 7.82,
+  "opmerking": "inclusief AircoBox plenum, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 276,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008001000500",
+  "omschrijving": "Rooster SWR-PM 500 595x595 RAL 9010",
+  "eenheid": "ST",
+  "prijs": 7.77,
+  "opmerking": "inclusief AircoBox plenum, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 277,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008001000600",
+  "omschrijving": "Rooster SWR-PM 600 595x595 RAL 9010",
+  "eenheid": "ST",
+  "prijs": 8.14,
+  "opmerking": "inclusief AircoBox plenum, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 278,
+  "bron": "voorraad",
+  "artikelcode": "BN0440005900000124",
+  "omschrijving": "Rooster SQL-PM 600 595x595 m. zwart dk",
+  "eenheid": "ST",
+  "prijs": 20,
+  "opmerking": "RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 279,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110425075",
+  "omschrijving": "Kanaalrooster SKR-R 425x75 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 14.6,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 280,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110525075",
+  "omschrijving": "Kanaalrooster SKR-R 525x75 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 16.89,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 281,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110625075",
+  "omschrijving": "Kanaalrooster SKR-R 625x75 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 22.04,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 282,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110825075",
+  "omschrijving": "Kanaalrooster SKR-R 825x75 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 26.92,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 283,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008111025075",
+  "omschrijving": "Kanaalrooster SKR-R 1025x75 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 34.17,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 284,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110425125",
+  "omschrijving": "Kanaalrooster SKR-R 425x125 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 16.29,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 285,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110525125",
+  "omschrijving": "Kanaalrooster SKR-R 525x125 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 18.85,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 286,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110625125",
+  "omschrijving": "Kanaalrooster SKR-R 625x125 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 24.48,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 287,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008110825125",
+  "omschrijving": "Kanaalrooster SKR-R 825x125 rond.kan.",
+  "eenheid": "ST",
+  "prijs": 29.77,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 288,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008100425125",
+  "omschrijving": "Kanaalrooster SKR 425x125 recht.kan.",
+  "eenheid": "ST",
+  "prijs": 13.57,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 289,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008100525125",
+  "omschrijving": "Kanaalrooster SKR 525x125 recht.kan.",
+  "eenheid": "ST",
+  "prijs": 16.89,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 290,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008100625125",
+  "omschrijving": "Kanaalrooster SKR 625x125 recht.kan.",
+  "eenheid": "ST",
+  "prijs": 21.63,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 291,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008100825125",
+  "omschrijving": "Kanaalrooster SKR 825x125 recht.kan.",
+  "eenheid": "ST",
+  "prijs": 26.14,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 292,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008101025125",
+  "omschrijving": "Kanaalrooster SKR 1025x125 recht.kan.",
+  "eenheid": "ST",
+  "prijs": 33.65,
+  "opmerking": "incl. luchthapper en volumeregelaar, verzinkt"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 293,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200325125",
+  "omschrijving": "Wandrooster SLR 325x125",
+  "eenheid": "ST",
+  "prijs": 18.96,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 294,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200425125",
+  "omschrijving": "Wandrooster SLR 425x125",
+  "eenheid": "ST",
+  "prijs": 22.53,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 295,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200525125",
+  "omschrijving": "Wandrooster SLR 525x125",
+  "eenheid": "ST",
+  "prijs": 28,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 296,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200625125",
+  "omschrijving": "Wandrooster SLR 625x125",
+  "eenheid": "ST",
+  "prijs": 29.14,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 297,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200825125",
+  "omschrijving": "Wandrooster SLR 825x125",
+  "eenheid": "ST",
+  "prijs": 33.87,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 298,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200425225",
+  "omschrijving": "Wandrooster SLR 425x225",
+  "eenheid": "ST",
+  "prijs": 23.96,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 299,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200625225",
+  "omschrijving": "Wandrooster SLR 625x225",
+  "eenheid": "ST",
+  "prijs": 33.5,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 300,
+  "bron": "voorraad",
+  "artikelcode": "BN0440008200825225",
+  "omschrijving": "Wandrooster SLR 825x225",
+  "eenheid": "ST",
+  "prijs": 40.65,
+  "opmerking": "incl. volumeregelaar en inbouwframe, verdekte montage, RAL9010"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 301,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/080x1000",
+  "eenheid": "ST",
+  "prijs": 28.5,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 302,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/100x1000",
+  "eenheid": "ST",
+  "prijs": 31,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 303,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/125x1000",
+  "eenheid": "ST",
+  "prijs": 35.5,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 304,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/160x1000",
+  "eenheid": "ST",
+  "prijs": 42.5,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 305,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/200x1000",
+  "eenheid": "ST",
+  "prijs": 49.5,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 306,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/250x1000",
+  "eenheid": "ST",
+  "prijs": 58,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 307,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/315x1000",
+  "eenheid": "ST",
+  "prijs": 67,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 308,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon25/400x1000",
+  "eenheid": "ST",
+  "prijs": 82,
+  "opmerking": "25mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 309,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/080x1000",
+  "eenheid": "ST",
+  "prijs": 31,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 310,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/100x1000",
+  "eenheid": "ST",
+  "prijs": 35,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 311,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/125x1000",
+  "eenheid": "ST",
+  "prijs": 38.5,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 312,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/160x1000",
+  "eenheid": "ST",
+  "prijs": 46,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 313,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/200x1000",
+  "eenheid": "ST",
+  "prijs": 54,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 314,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/250x1000",
+  "eenheid": "ST",
+  "prijs": 63,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 315,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/315x1000",
+  "eenheid": "ST",
+  "prijs": 70,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ },
+ {
+  "sectie": "TOEBEHOREN LUCHTVERDELING",
+  "row": 316,
+  "bron": "leverancier:ST",
+  "artikelcode": null,
+  "omschrijving": "Aero-Aluphon50/400x1000",
+  "eenheid": "ST",
+  "prijs": 85,
+  "opmerking": "50mm isolatiemantel, L=1000mm"
+ }
+]

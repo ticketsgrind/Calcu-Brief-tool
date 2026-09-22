@@ -1,0 +1,21 @@
+{
+ "soort_installaties": [
+  "VRF",
+  "Single split",
+  "Multi split",
+  "Overig"
+ ],
+ "soort_binnendeel": [
+  "Kanaalunit",
+  "Casetteunit",
+  "Plafondonderbouw",
+  "Wandunit",
+  "Vloerunit",
+  "Overig"
+ ],
+ "moeilijkheid": [
+  "Makkelijk",
+  "Standaard",
+  "Moeilijk"
+ ]
+}

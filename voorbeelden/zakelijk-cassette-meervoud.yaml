@@ -1,0 +1,68 @@
+# Zakelijke offerte, drie cassette-units op twee buitenunits, twee prijsposities.
+klanttype: zakelijk
+documentsoort: offerte
+installatietype: airconditioning
+
+organisatie: Voorbeeld Vastgoed B.V.
+aanspreekvorm: de heer
+voorletters: A.
+achternaam: De Wit
+straat_huisnummer: Energieweg 29
+postcode: 4231DJ
+plaats: Meerkerk
+
+briefdatum: 2026-08-26
+projectnummer: Q.1080000.6.01
+opsteller_initialen: RdJ
+sa_nummer: 35950
+ondertekenaar: john_van_de_weetering
+
+aanleiding: onderhoud
+adviseur: John van de Weetering
+datum_aanleiding: 18 augustus
+locatieaanduiding: uw vestiging te Meerkerk
+plaats_project: Meerkerk
+
+model_binnenunit: cassette
+opstelling_buitenunit: plat_dak
+condensafvoer: riolering_derden
+bediening: bedraad
+winterregeling: true
+storingscontact: true
+technische_specificaties: zie_bijlage
+
+aantal_binnenunits: 3
+aantal_buitenunits: 2
+
+installaties:
+  - ruimte: de kantoren op de eerste verdieping
+    aantal_systemen: 2
+    systeemsoort: splitsystem
+    montagewijze: plafondinbouwmontage
+    merk: Panasonic
+    type_binnendeel: KIT-71PU3Z5
+  - ruimte: de vergaderruimte
+    aantal_systemen: 1
+    systeemsoort: splitsystem
+    montagewijze: plafondinbouwmontage
+    merk: Panasonic
+    type_binnendeel: KIT-50PU3Z5
+
+systeemsoort: splitsystem
+prijssoort: totaalprijs
+prijsregels:
+  - positie: pos. A
+    bedrag: 24750
+  - positie: pos. B
+    bedrag: 19800
+
+facturering: dertig_zestig_tien
+betaling: dertig_dagen
+meerprijs_coating: 1450
+coating_optioneel: true
+condenspomp_meerprijs: true
+onderhoud_alinea: true
+documentatie_bijgevoegd: true
+
+werk_inclusief: [montage, bekabeling, transport_hoogwerker, inbedrijfstelling]
+werk_exclusief: [bouwkundig, sparingen, betonboringen, elektra_voeding, regeltechniek, plakplaat]

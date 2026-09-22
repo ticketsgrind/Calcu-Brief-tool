@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcu-Brief-tool — Schilt Airconditioning</title>
+<link rel="stylesheet" href="scherm/stijl.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="logo"><span class="zwiep"></span> Schilt Airconditioning — Calculatie &amp; Brief</div>
+  <div class="spacer"></div>
+  <span class="status" id="saveStatus"></span>
+  <button class="secondary" id="btnNieuw">+ Nieuw project</button>
+  <button class="secondary" id="btnOpenen">Openen…</button>
+  <button id="btnOpslaan">Opslaan als .json</button>
+  <input type="file" id="fileInput" accept="application/json" style="display:none">
+</header>
+
+<nav class="stappen">
+  <button data-stap="calculatie" class="actief"><span class="stapnr">1</span>Calculatie</button>
+  <button data-stap="brief"><span class="stapnr">2</span>Brief</button>
+</nav>
+
+<main>
+
+<!-- ============================== STAP 1: CALCULATIE ============================== -->
+<div class="stap actief" data-stap="calculatie" id="stapCalculatie">
+
+  <div class="warn-banner no-print" id="incompleteWarning" style="display:none;"></div>
+
+  <section class="card" data-sectie-id="projectgegevens">
+    <h2><span class="n">1</span> Projectgegevens <span class="h2-summary" id="sum_projectgegevens"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="grid cols-4">
+      <div class="field"><label>Q-nummer</label><input id="m_qnummer"></div>
+      <div class="field"><label>Projectnaam</label><input id="m_projectnaam"></div>
+      <div class="field"><label>Klantnaam</label><input id="m_klantnaam"></div>
+      <div class="field"><label>Klantnummer</label><input id="m_klantnummer"></div>
+    </div>
+    <div class="field" style="margin-top:10px;">
+      <label>Uitgangspunten (aannames bij het aanbieden van deze offerte)</label>
+      <textarea id="m_uitgangspunten" placeholder="Bijv. uitgangspunten over toegankelijkheid, aangeleverde tekeningen, etc."></textarea>
+    </div>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="instellingen">
+    <h2><span class="n">2</span> Instellingen <span class="h2-summary" id="sum_instellingen"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="grid cols-4">
+      <div class="field">
+        <label>Moeilijkheidsgraad werk</label>
+        <select id="i_moeilijkheid">
+          <option>Makkelijk</option><option selected>Standaard</option><option>Moeilijk</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Reistijd retour (uur)</label>
+        <input type="number" step="0.25" min="0" id="i_reistijd" value="1">
+      </div>
+      <div class="field">
+        <label>Provincie (parkeertarief)</label>
+        <select id="i_provincie"></select>
+      </div>
+      <div class="field">
+        <label>Aantal verdeelboxen <span class="muted" style="font-weight:400;">(automatisch)</span></label>
+        <div class="readonly-out" id="i_verdeelboxen_out">0</div>
+      </div>
+      <div class="field">
+        <label>Bonusdragende klant</label>
+        <select id="i_bonusklant"></select>
+      </div>
+      <div class="field">
+        <label>Provisie</label>
+        <select id="i_provisieklant"></select>
+      </div>
+    </div>
+    <div class="hint">Ploegdagen en de daarvan afgeleide reisuren/parkeerkosten worden automatisch berekend uit de uren van hoofd- en hulpmonteur (zie onder). Aantal verdeelboxen volgt automatisch de materiaalregel "VERDEELBOXEN" onder Apparatuur.</div>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="installaties">
+    <h2><span class="n">3</span> Installaties <span class="h2-summary" id="sum_installaties"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="hint" id="installatiesApparatuurHint" style="display:none;margin-bottom:10px;"></div>
+    <div id="installatiesList"></div>
+    <button class="btn ghost" id="btnInstallatieToevoegen">+ Installatie toevoegen</button>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="materiaal">
+    <h2><span class="n">4</span> Materiaal <span class="h2-summary" id="sum_materiaal"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="search-wrap">
+      <label>Zoek een artikel (op naam, artikelcode, of Panasonic-/Daikin-productcode) om toe te voegen</label>
+      <input id="materiaalZoek" placeholder="typ bijv. 'trillingsdemper', 'BN0440…', 'CU-2Z35CBE' of 'FTXZ25N'" autocomplete="off">
+      <div class="search-results" id="materiaalZoekResults" style="display:none;"></div>
+    </div>
+    <div class="hint">Panasonic- en Daikin-apparatuur zoek je hier ook op productcode. Prijzen zijn netto (bruto min de afgesproken korting per merk).</div>
+    <button class="btn ghost small" style="margin-top:8px;" id="btnVrijeRegel">+ Eigen regel toevoegen (projectbestelling)</button>
+    <div id="materiaalFavorieten" style="margin-top:14px;"></div>
+
+    <div class="section-sub" style="margin-top:16px;">Of blader door een onderdeel — handig als je de naam niet uit je hoofd weet</div>
+    <div id="materiaalSectieBrowser" class="grid cols-2"></div>
+
+    <div id="materiaalSecties" style="margin-top:12px;"></div>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="uren">
+    <h2><span class="n">5</span> Uren <span class="h2-summary" id="sum_uren"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="table-scroll">
+    <table>
+      <thead><tr>
+        <th>Rol</th><th class="right">Voorstel</th><th class="right">Definitief</th>
+        <th class="right">Tarief €/u</th><th class="right">Kosten</th><th></th>
+      </tr></thead>
+      <tbody id="urenBody"></tbody>
+      <tfoot><tr><td>Totaal</td><td></td><td class="right" id="urenTotaalUren"></td><td></td><td class="right" id="urenTotaalKosten"></td><td></td></tr></tfoot>
+    </table>
+    </div>
+    <div class="section-sub">Servicemonteur — overige (handmatige) uren</div>
+    <div class="grid cols-2">
+      <div class="field"><label>Overige servicemonteur-uren (afpompen, ventilatorregeling, koppelen bediening, toeslag, …)</label>
+        <input type="number" min="0" step="0.5" id="sm_overig" value="0"></div>
+      <div class="field"><label class="muted">Automatisch (IBS centrale regelaar + VRF IBS)</label>
+        <input type="text" id="sm_auto" disabled></div>
+    </div>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="uitbesteding">
+    <h2><span class="n">6</span> Uitbesteding <span class="h2-summary" id="sum_uitbesteding"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Omschrijving</th><th class="right">Aantal</th><th>Eenheid</th><th class="right">Prijs</th><th class="right">Totaal</th><th></th></tr></thead>
+      <tbody id="uitbestedingBody"></tbody>
+      <tfoot><tr><td colspan="4">Totaal</td><td class="right" id="uitbestedingTotaal"></td><td></td></tr></tfoot>
+    </table>
+    </div>
+    <button class="btn ghost small" id="btnUitbestedingToevoegen">+ Eigen regel toevoegen</button>
+    <button class="btn ghost small no-print" id="uitbestedingBodyToggle" data-toggle="toonAlleUitbesteding">+ Meer standaardposten tonen</button>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="equipment">
+    <h2><span class="n">7</span> Equipment rental <span class="h2-summary" id="sum_equipment"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Omschrijving</th><th class="right">Aantal</th><th>Eenheid</th><th class="right">Prijs</th><th class="right">Totaal</th><th></th></tr></thead>
+      <tbody id="equipmentBody"></tbody>
+      <tfoot><tr><td colspan="4">Totaal</td><td class="right" id="equipmentTotaal"></td><td></td></tr></tfoot>
+    </table>
+    </div>
+    <button class="btn ghost small" id="btnEquipmentToevoegen">+ Eigen regel toevoegen</button>
+    <button class="btn ghost small no-print" id="equipmentBodyToggle" data-toggle="toonAlleEquipment">+ Meer standaardposten tonen</button>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="overig">
+    <h2><span class="n">8</span> Overig <span class="h2-summary" id="sum_overig"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="grid cols-4">
+      <div class="field"><label class="muted">Parkeeruren (ploegdagen × 8)</label><input id="ov_parkeeruren" disabled></div>
+      <div class="field"><label class="muted">Parkeerkosten</label><input id="ov_parkeerkosten" disabled></div>
+      <div class="field"><label>Aantal overnachtingen</label><input type="number" min="0" step="1" id="ov_nachten" value="0"></div>
+      <div class="field"><label>Prijs per overnachting</label><input type="number" min="0" step="1" id="ov_nachtprijs" value="150"></div>
+    </div>
+    </div>
+  </section>
+
+  <section class="card" data-sectie-id="marge">
+    <h2><span class="n">9</span> Kostprijs &amp; verkoopprijs <span class="h2-summary" id="sum_marge"></span><span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <div class="table-scroll">
+    <table>
+      <tbody>
+        <tr><td>Materiaal</td><td class="right" id="mg_materiaal"></td></tr>
+        <tr><td>Arbeid</td><td class="right" id="mg_arbeid"></td></tr>
+        <tr><td>Uitbesteding</td><td class="right" id="mg_uitbesteding"></td></tr>
+        <tr><td>Opslag inkoop (12%) + uitbesteding (12%)</td><td class="right" id="mg_overhead"></td></tr>
+        <tr><td>Equipment rental</td><td class="right" id="mg_equipment"></td></tr>
+        <tr><td>Reiskosten (parkeren + overnachtingen)</td><td class="right" id="mg_reiskosten"></td></tr>
+        <tr><td>Contingency (reserves)<br><input type="number" min="0" step="10" id="mg_contingency_reserves" value="0" class="price-input"></td><td class="right" id="mg_contingency_reserves_out"></td></tr>
+        <tr><td>Contingency (onderhandelingsruimte)<br><input type="number" min="0" step="10" id="mg_contingency_onderhandeling" value="0" class="price-input"></td><td class="right" id="mg_contingency_onderhandeling_out"></td></tr>
+        <tr style="font-weight:700;"><td>Intermediary cost (IC)</td><td class="right" id="mg_ic"></td></tr>
+        <tr><td>Lost quotation costs (4%)</td><td class="right" id="mg_lost"></td></tr>
+        <tr><td>Financial costs (0,7%)</td><td class="right" id="mg_financial"></td></tr>
+        <tr><td>Group fees (4%)</td><td class="right" id="mg_groupfees"></td></tr>
+        <tr style="font-weight:700;"><td>Full cost (interne kostprijs)</td><td class="right" id="mg_fullcost"></td></tr>
+        <tr><td><b>Project price</b> (hier zelf de verkoopprijs bepalen, excl. bonus/garantie/provisie)<br>
+          <input type="number" min="0" step="1" id="mg_projectprice" class="price-input" style="max-width:160px;"></td>
+          <td class="right" id="mg_projectprice_out"></td></tr>
+        <tr><td>Resultaat</td><td class="right" id="mg_resultaat"></td></tr>
+        <tr><td>Resultaat % van verkoopprijs</td><td class="right" id="mg_resultaat_pct"></td></tr>
+        <tr><td>Omzetbonus</td><td class="right" id="mg_omzetbonus"></td></tr>
+        <tr><td>Garantie (1,25%)</td><td class="right" id="mg_garantie"></td></tr>
+        <tr style="font-weight:700; font-size:15px;"><td>Verkoopprijs (incl. provisie) — te communiceren met de klant</td><td class="right" id="mg_verkoopprijs"></td></tr>
+      </tbody>
+    </table>
+    </div>
+    </div>
+  </section>
+
+  <section class="card no-print" data-sectie-id="bestellijst">
+    <h2><span class="n">10</span> Bestellijst voor werkvoorbereiding <span class="chevron">▾</span></h2>
+    <div class="card-body">
+    <p class="muted">Alle materiaalregels met een aantal groter dan 0, gegroepeerd per sectie.</p>
+    <button class="btn" id="btnBestellijstPrint">Openen als PDF-vriendelijke lijst</button>
+    <button class="btn ghost" id="btnBestellijstCsv">Downloaden als CSV</button>
+    </div>
+  </section>
+
+  <div id="printArea" style="display:none;"></div>
+
+  <div class="card" style="text-align:right;">
+    <button class="btn" id="btnNaarBrief" onclick="CB.naarStap('brief')">Calculatie klaar — verder naar de brief →</button>
+  </div>
+
+  <div class="totals-panel no-print">
+    <div class="item"><span class="lbl">Materiaal</span><span class="val" id="tp_materiaal">—</span></div>
+    <div class="item"><span class="lbl">Arbeid</span><span class="val" id="tp_arbeid">—</span></div>
+    <div class="item"><span class="lbl">Full cost</span><span class="val" id="tp_fullcost">—</span></div>
+    <div class="spacer"></div>
+    <div class="item"><span class="lbl">Resultaat</span><span class="val" id="tp_resultaat">—</span></div>
+    <div class="item"><span class="lbl">Verkoopprijs</span><span class="val big" id="tp_verkoopprijs">—</span></div>
+  </div>
+</div>
+
+<!-- ============================== STAP 2: BRIEF ============================== -->
+<div class="stap" data-stap="brief" id="stapBrief">
+
+  <div class="card">
+    <p class="muted" style="margin:0 0 10px;">Dit is een <b>concept</b>: alles hieronder blijft bewerkbaar. Velden die de
+      calculatie heeft afgeleid (niet zeker) krijgen het label <span class="badge controleer">afgeleid — controleer</span>;
+      ontbrekende verplichte gegevens houden het Word-bestand tegen totdat ze zijn ingevuld.</p>
+    <button class="btn" id="btnVulVoorVanuitCalculatie">↺ Vul voor vanuit de calculatie</button>
+  </div>
+
+  <div class="brief-layout">
+    <div>
+      <section class="card"><h2>Klant</h2><div class="card-body" id="briefKlant"></div></section>
+      <section class="card"><h2>Briefkenmerken &amp; aanleiding</h2><div class="card-body" id="briefKenmerken"></div></section>
+      <section class="card">
+        <h2>Installaties</h2>
+        <div class="card-body">
+          <div id="briefInstallaties"></div>
+          <button class="btn ghost small" id="btnInstallatieToevoegenBrief">+ Installatie toevoegen</button>
+        </div>
+      </section>
+      <section class="card"><h2>Systeem &amp; opties</h2><div class="card-body" id="briefSysteemOpties"></div></section>
+      <section class="card"><h2>Technische specificaties</h2><div class="card-body" id="briefTechspec"></div></section>
+      <section class="card"><h2>Werkzaamheden</h2><div class="card-body" id="briefWerkzaamheden"></div></section>
+      <section class="card"><h2>Prijs</h2><div class="card-body" id="briefPrijs"></div></section>
+      <section class="card"><h2>Facturering &amp; betaling</h2><div class="card-body" id="briefFacturering"></div></section>
+      <section class="card"><h2>Ondertekening &amp; afsluiting</h2><div class="card-body" id="briefOndertekening"></div></section>
+
+      <div class="card">
+        <div class="warn-banner no-print" id="briefOntbreekt" style="display:none;"></div>
+        <button class="btn" id="btnWordBestand">Word-bestand maken</button>
+      </div>
+    </div>
+
+    <div class="brief-vel no-print" id="briefVel"></div>
+  </div>
+</div>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script src="scherm/gedeeld.js"></script>
+<script src="scherm/calculatie.js"></script>
+<script src="scherm/brief.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    CB.bindStappen();
+    CB.bindOpslaanOpenen();
+    // Beide stappen laden hun eigen gegevens async (zie calculatie.js/brief.js
+    // se DOMContentLoaded-handlers, die eerder in het bestand staan en dus
+    // eerder draaien); pas als allebei klaar zijn is er een standaard-state
+    // om de autosave overheen te zetten.
+    Promise.all([CB.calc.klaar, CB.brief.klaar]).then(() => CB.laadAutosave());
+  });
+</script>
+</body>
+</html>

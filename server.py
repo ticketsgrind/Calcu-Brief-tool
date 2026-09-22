@@ -1,0 +1,340 @@
+"""De lokale app: calculatie en briefsamenstelling achter één server.
+
+Precies zoals brieventool/server.py dat al deed voor de brief: de browser
+rekent zelf niets uit, stuurt bij elke wijziging de invoer hierheen en krijgt
+het resultaat terug van dezelfde code die ook de brief/het Word-bestand
+maakt. Dat geldt nu ook voor de calculatie: `calculatie/rekenkern.py` is de
+enige plek waar de marge wordt uitgerekend, dus het scherm en de brief kunnen
+nooit een verschillend bedrag laten zien.
+
+    python3 server.py
+    python3 server.py --poort 8000 --geen-browser
+
+Draait alleen op de eigen machine (127.0.0.1) en is bewust niet van buitenaf
+bereikbaar: er staan klant- en prijsgegevens in.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import mimetypes
+import socket
+import sys
+import tempfile
+import threading
+import webbrowser
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from urllib.parse import urlparse
+
+from brieventool.bibliotheek import BibliotheekFout, laad
+from brieventool.bijlage import SOORTEN, BijlageFout, tekst_uit_bestand
+from brieventool.briefpapier import BriefpapierFout, beeld, lees
+from brieventool.controle import melding, ontbrekende_gegevens
+from brieventool.samenstellen import SamenstelFout, stel_samen
+from brieventool.sjabloon import SjabloonFout, schrijf_docx
+from calculatie import rekenkern as rk
+from overdracht import zet_over
+
+WORTEL = Path(__file__).resolve().parent
+SCHERM_MAP = WORTEL / "scherm"
+DATA_MAP = WORTEL / "data"
+SJABLOON = WORTEL / "sjablonen" / "brief.docx"
+MAX_INHOUD = 20 * 1024 * 1024  # ruim genoeg voor een datablad
+
+# Statisch te serveren mappen: alleen bestanden die hieronder hangen, nooit
+# daarbuiten (zie _statisch_pad).
+STATISCHE_MAPPEN = {"scherm": SCHERM_MAP, "data": DATA_MAP}
+
+
+class Bediening(BaseHTTPRequestHandler):
+    server_version = "CalcuBrief"
+
+    # --- verzoeken -----------------------------------------------------
+
+    def do_GET(self) -> None:
+        pad = urlparse(self.path).path
+        if pad in ("/", "/index.html"):
+            return self._bestand(SCHERM_MAP / "index.html", "text/html; charset=utf-8")
+        if pad == "/app":
+            # Zelfde signaal als brieventool: waaraan het scherm herkent dat
+            # de motor (en dus ook de rekenkern) erachter zit.
+            return self._antwoord(200, {"app": True, "blokken": len(self.server.bibliotheek.blokken)})
+        if pad == "/keuzes":
+            return self._antwoord(200, self._keuzes())
+        if pad == "/briefpapier":
+            return self._briefpapier()
+        if pad.startswith("/beeld/"):
+            return self._beeld(pad[len("/beeld/"):])
+        if pad == "/favicon.ico":
+            self.send_response(204)
+            self.end_headers()
+            return None
+        statisch = self._statisch_pad(pad)
+        if statisch is not None:
+            return self._bestand(statisch)
+        return self._antwoord(404, {"fout": "onbekend adres"})
+
+    def do_POST(self) -> None:
+        pad = urlparse(self.path).path
+        try:
+            gegevens = self._gelezen_json()
+        except ValueError as fout:
+            return self._antwoord(400, {"fout": str(fout)})
+
+        if pad == "/bereken":
+            return self._bereken(gegevens)
+        if pad == "/overdracht":
+            return self._overdracht(gegevens)
+        if pad == "/brief":
+            return self._brief(gegevens)
+        if pad == "/docx":
+            return self._docx(gegevens)
+        if pad == "/datablad":
+            return self._datablad(gegevens)
+        return self._antwoord(404, {"fout": "onbekend adres"})
+
+    # --- calculatie ------------------------------------------------------
+
+    def _bereken(self, staat: dict) -> None:
+        """Rekent de calculatie-state door: afgeleide materiaalregels,
+        uren per rol en de volledige marge-opbouw. Zie calculatie/rekenkern.py
+        -- dit is de enige plek waar dit wordt uitgerekend."""
+        try:
+            resultaat = rk.bereken(staat, self.server.calc_gegevens)
+        except (KeyError, TypeError, ValueError) as fout:
+            return self._antwoord(400, {"fout": f"kan de calculatie niet doorrekenen: {fout}"})
+        return self._antwoord(200, resultaat)
+
+    def _overdracht(self, gegevens: dict) -> None:
+        """Zet een calculatie-state om in een voorinvulling voor de brief.
+
+        Nooit een afgeronde brief: het antwoord is een (deels ingevuld)
+        offerte-formulier plus de lijst velden die overgenomen/afgeleid zijn,
+        zodat het scherm kan laten zien wat gecontroleerd moet worden."""
+        staat = gegevens.get("calculatie") or {}
+        try:
+            berekening = rk.bereken(staat, self.server.calc_gegevens)
+            offerte, overdracht = zet_over(staat, berekening)
+        except (KeyError, TypeError, ValueError) as fout:
+            return self._antwoord(400, {"fout": f"kan de overdracht niet maken: {fout}"})
+        return self._antwoord(200, {
+            "offerte": offerte,
+            "overdracht": [
+                {"pad": v.pad, "status": v.status, "reden": v.reden, "opties": v.opties}
+                for v in overdracht
+            ],
+        })
+
+    # --- brief (ongewijzigd overgenomen uit brieventool/server.py) -------
+
+    def _brief(self, offerte: dict) -> None:
+        try:
+            brief = stel_samen(offerte, self.server.bibliotheek)
+        except (SamenstelFout, BibliotheekFout) as fout:
+            return self._antwoord(200, {"fout": str(fout)})
+
+        return self._antwoord(200, {
+            "secties": [
+                {"naam": naam, "alineas": [
+                    {"tekst": a.tekst, "nadruk": a.nadruk, "stijl": a.stijl,
+                     "blok": a.blok_id, "letterlijk": a.letterlijk,
+                     "uitgelijnd": a.uitgelijnd, "cursief": a.cursief,
+                     "los": a.los}
+                    for a in alineas]}
+                for naam, alineas in brief.secties.items() if alineas
+            ],
+            "blokken": brief.gebruikte_blokken,
+            "waarschuwingen": brief.waarschuwingen,
+            "ontbreekt": ontbrekende_gegevens(offerte),
+            "kenmerken": {"projectnummer": offerte.get("projectnummer") or "",
+                          "referentie": brief.context.get("referentie") or ""},
+        })
+
+    def _docx(self, offerte: dict) -> None:
+        ontbreekt = ontbrekende_gegevens(offerte)
+        if ontbreekt:
+            return self._antwoord(200, {"fout": melding(ontbreekt), "ontbreekt": ontbreekt})
+        try:
+            brief = stel_samen(offerte, self.server.bibliotheek)
+            with tempfile.TemporaryDirectory() as tijdelijk:
+                pad = schrijf_docx(brief, SJABLOON, Path(tijdelijk) / "brief.docx")
+                inhoud = pad.read_bytes()
+        except (SamenstelFout, BibliotheekFout, SjabloonFout) as fout:
+            return self._antwoord(200, {"fout": str(fout)})
+
+        naam = _bestandsnaam(offerte)
+        self.send_response(200)
+        self.send_header("Content-Type",
+                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document")
+        self.send_header("Content-Disposition", f'attachment; filename="{naam}"')
+        self.send_header("Content-Length", str(len(inhoud)))
+        self.end_headers()
+        self.wfile.write(inhoud)
+
+    def _datablad(self, gegevens: dict) -> None:
+        import base64
+        naam = str(gegevens.get("naam") or "datablad")
+        try:
+            rauw = base64.b64decode(gegevens.get("inhoud") or "", validate=True)
+        except Exception:
+            return self._antwoord(200, {"fout": "het bestand kwam beschadigd aan"})
+
+        with tempfile.TemporaryDirectory() as tijdelijk:
+            pad = Path(tijdelijk) / Path(naam).name
+            pad.write_bytes(rauw)
+            try:
+                return self._antwoord(200, {"tekst": tekst_uit_bestand(pad)})
+            except BijlageFout as fout:
+                return self._antwoord(200, {"fout": str(fout)})
+
+    def _keuzes(self) -> dict:
+        bib = self.server.bibliotheek
+        velden = bib.velden()
+        return {
+            "secties": {sectie: [{"id": i, "label": l} for i, l in bib.keuzes(sectie)]
+                        for sectie in bib.secties},
+            "ondertekenaars": [{"id": sleutel, "naam": persoon.get("naam", sleutel)}
+                               for sleutel, persoon in bib.ondertekenaars.items()],
+            "bestandssoorten": list(SOORTEN),
+            # Antwoordvelden afgeleid uit de voorwaarden zelf (zie
+            # brieventool/bibliotheek.py:velden) -- het formulier hardcodeert
+            # zo geen enkele optie-waarde; die staan alleen in teksten.yaml.
+            "velden": {
+                "enkeleKeuze": {veld: [{"waarde": w, "label": l} for w, l in opties]
+                                for veld, opties in velden.enkele_keuze.items()},
+                "meervoudigeKeuze": {veld: [{"waarde": w, "label": l} for w, l in opties]
+                                     for veld, opties in velden.meervoudige_keuze.items()},
+                "vinkjes": [{"veld": veld, "label": label} for veld, label in velden.vinkjes.items()],
+            },
+        }
+
+    # --- plumbing --------------------------------------------------------
+
+    def _briefpapier(self) -> None:
+        try:
+            self._antwoord(200, lees(SJABLOON))
+        except BriefpapierFout as fout:
+            self._antwoord(200, {"fout": str(fout)})
+
+    def _beeld(self, naam: str) -> None:
+        try:
+            inhoud, soort = beeld(SJABLOON, naam)
+        except BriefpapierFout as fout:
+            return self._antwoord(404, {"fout": str(fout)})
+        self.send_response(200)
+        self.send_header("Content-Type", soort)
+        self.send_header("Content-Length", str(len(inhoud)))
+        self.send_header("Cache-Control", "max-age=3600")
+        self.end_headers()
+        self.wfile.write(inhoud)
+
+    def _statisch_pad(self, verzoekpad: str) -> Path | None:
+        """Vertaalt "/scherm/app.js" of "/data/foo.json" naar een echt
+        bestand, zonder buiten die mappen te kunnen komen."""
+        delen = [d for d in verzoekpad.split("/") if d not in ("", ".", "..")]
+        if len(delen) < 2 or delen[0] not in STATISCHE_MAPPEN:
+            return None
+        kandidaat = STATISCHE_MAPPEN[delen[0]].joinpath(*delen[1:]).resolve()
+        map_wortel = STATISCHE_MAPPEN[delen[0]].resolve()
+        if map_wortel not in kandidaat.parents and kandidaat != map_wortel:
+            return None
+        if not kandidaat.is_file():
+            return None
+        return kandidaat
+
+    def _bestand(self, pad: Path, content_type: str | None = None) -> None:
+        try:
+            inhoud = pad.read_bytes()
+        except OSError:
+            return self._antwoord(404, {"fout": f"{pad.name} ontbreekt"})
+        soort = content_type or mimetypes.guess_type(pad.name)[0] or "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", soort)
+        self.send_header("Content-Length", str(len(inhoud)))
+        self.end_headers()
+        self.wfile.write(inhoud)
+
+    def _gelezen_json(self) -> dict:
+        lengte = int(self.headers.get("Content-Length") or 0)
+        if lengte > MAX_INHOUD:
+            raise ValueError("het verzoek is te groot")
+        try:
+            return json.loads(self.rfile.read(lengte) or b"{}")
+        except json.JSONDecodeError as fout:
+            raise ValueError(f"onleesbaar verzoek: {fout}") from fout
+
+    def _antwoord(self, code: int, gegevens: dict) -> None:
+        inhoud = json.dumps(gegevens, ensure_ascii=False).encode("utf-8")
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(inhoud)))
+        self.end_headers()
+        self.wfile.write(inhoud)
+
+    def log_message(self, indeling, *argumenten):
+        """Standaard logt http.server elk verzoek; dat is hier alleen ruis."""
+
+
+def _bestandsnaam(offerte: dict) -> str:
+    delen = [str(offerte.get("achternaam") or "offerte").strip(),
+             str(offerte.get("plaats") or "").strip(),
+             str(offerte.get("sa_nummer") or "").strip()]
+    kaal = "-".join(d for d in delen if d)
+    veilig = "".join(t if (t.isalnum() or t in "-_") else "-" for t in kaal)
+    return (veilig.strip("-").lower() or "offerte") + ".docx"
+
+
+def _vrije_poort(voorkeur: int) -> int:
+    for poort in range(voorkeur, voorkeur + 20):
+        with socket.socket() as s:
+            if s.connect_ex(("127.0.0.1", poort)) != 0:
+                return poort
+    raise SystemExit(f"geen vrije poort gevonden vanaf {voorkeur}")
+
+
+def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | None = None) -> int:
+    try:
+        bibliotheek = laad(bibliotheek_map)
+    except BibliotheekFout as fout:
+        print(f"Fout: {fout}", file=sys.stderr)
+        return 1
+    if not SJABLOON.is_file():
+        print(f"Let op: {SJABLOON} ontbreekt. Maak het met: python3 tools/maak_sjabloon.py",
+              file=sys.stderr)
+
+    poort = _vrije_poort(poort)
+    server = ThreadingHTTPServer(("127.0.0.1", poort), Bediening)
+    server.bibliotheek = bibliotheek
+    server.calc_gegevens = rk.laad_gegevens()
+
+    adres = f"http://127.0.0.1:{poort}/"
+    print(f"Calcu-Brief-tool draait op {adres}")
+    print(f"  {len(bibliotheek.blokken)} tekstblokken · stoppen met Ctrl-C")
+    if open_browser:
+        threading.Timer(0.4, lambda: webbrowser.open(adres)).start()
+
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        print("\nGestopt.")
+    finally:
+        server.server_close()
+    return 0
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--poort", type=int, default=8391)
+    ap.add_argument("--geen-browser", action="store_true",
+                    help="niet automatisch een browser openen")
+    ap.add_argument("--bibliotheek", type=Path,
+                    help="map met teksten.yaml (standaard: BRIEVENTOOL_BIBLIOTHEEK of de projectmap)")
+    keuzes = ap.parse_args()
+    return start(keuzes.poort, not keuzes.geen_browser, keuzes.bibliotheek)
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

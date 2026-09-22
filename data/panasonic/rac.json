@@ -1,0 +1,1359 @@
+{
+ "meta": {
+  "bron": "Panasonic RAC prijscatalogus 2026|2027 (aircologic)",
+  "korting_pct": 0.43,
+  "prijzen_zijn": "exclusief btw"
+ },
+ "artikelen": [
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel BZ",
+   "kleur": null,
+   "set_code": "KIT-BZ25-CKE",
+   "binnenunit_code": "CS-BZ25CKE",
+   "buitenunit_code": "CU-BZ25CKE",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.15,
+   "bruto_prijs": 795,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-BZ25-CKE",
+    "CS-BZ25CKE",
+    "CU-BZ25CKE"
+   ],
+   "netto_prijs": 453.15
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel BZ",
+   "kleur": null,
+   "set_code": "KIT-BZ35-CKE",
+   "binnenunit_code": "CS-BZ35CKE",
+   "buitenunit_code": "CU-BZ35CKE",
+   "koelen_kw": 3.3,
+   "verwarmen_kw": 3.7,
+   "bruto_prijs": 889,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-BZ35-CKE",
+    "CS-BZ35CKE",
+    "CU-BZ35CKE"
+   ],
+   "netto_prijs": 506.73
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel BZ",
+   "kleur": null,
+   "set_code": "KIT-BZ50-CKE",
+   "binnenunit_code": "CS-BZ50CKE",
+   "buitenunit_code": "CU-BZ50CKE",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.4,
+   "bruto_prijs": 1434,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-BZ50-CKE",
+    "CS-BZ50CKE",
+    "CU-BZ50CKE"
+   ],
+   "netto_prijs": 817.38
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel BZ",
+   "kleur": null,
+   "set_code": "KIT-BZ60-CKE",
+   "binnenunit_code": "CS-BZ60CKE",
+   "buitenunit_code": "CU-BZ60CKE",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 1829,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-BZ60-CKE",
+    "CS-BZ60CKE",
+    "CU-BZ60CKE"
+   ],
+   "netto_prijs": 1042.53
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ20-CKE",
+   "binnenunit_code": "CS-TZ20CKEW",
+   "buitenunit_code": "CU-TZ20CKE",
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 2.7,
+   "bruto_prijs": 870,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ20-CKE",
+    "CS-TZ20CKEW",
+    "CU-TZ20CKE"
+   ],
+   "netto_prijs": 495.9
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ25-CKE",
+   "binnenunit_code": "CS-TZ25CKEW",
+   "buitenunit_code": "CU-TZ25CKE",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.3,
+   "bruto_prijs": 956,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ25-CKE",
+    "CS-TZ25CKEW",
+    "CU-TZ25CKE"
+   ],
+   "netto_prijs": 544.92
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ35-CKE",
+   "binnenunit_code": "CS-TZ35CKEW",
+   "buitenunit_code": "CU-TZ35CKE",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 1143,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ35-CKE",
+    "CS-TZ35CKEW",
+    "CU-TZ35CKE"
+   ],
+   "netto_prijs": 651.51
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ42-CKE",
+   "binnenunit_code": "CS-TZ42CKEW",
+   "buitenunit_code": "CU-TZ42CKE",
+   "koelen_kw": 4.2,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 1497,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ42-CKE",
+    "CS-TZ42CKEW",
+    "CU-TZ42CKE"
+   ],
+   "netto_prijs": 853.29
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ50-CKE",
+   "binnenunit_code": "CS-TZ50CKEW",
+   "buitenunit_code": "CU-TZ50CKE",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.8,
+   "bruto_prijs": 1690,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ50-CKE",
+    "CS-TZ50CKEW",
+    "CU-TZ50CKE"
+   ],
+   "netto_prijs": 963.3
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ60-CKE",
+   "binnenunit_code": "CS-TZ60CKEW",
+   "buitenunit_code": "CU-TZ60CKE",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 2077,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ60-CKE",
+    "CS-TZ60CKEW",
+    "CU-TZ60CKE"
+   ],
+   "netto_prijs": 1183.89
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel TZ",
+   "kleur": null,
+   "set_code": "KIT-TZ71-CKE",
+   "binnenunit_code": "CS-TZ71CKEW",
+   "buitenunit_code": "CU-TZ71CKE",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.2,
+   "bruto_prijs": 2458,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-TZ71-CKE",
+    "CS-TZ71CKEW",
+    "CU-TZ71CKE"
+   ],
+   "netto_prijs": 1401.06
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Vloerconsole",
+   "kleur": null,
+   "set_code": "KIT-Z25-CFE",
+   "binnenunit_code": "CS-Z25CFEAW",
+   "buitenunit_code": "CU-Z25CBEA",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.4,
+   "bruto_prijs": 1614,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z25-CFE",
+    "CS-Z25CFEAW",
+    "CU-Z25CBEA"
+   ],
+   "netto_prijs": 919.98
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Vloerconsole",
+   "kleur": null,
+   "set_code": "KIT-Z35-CFE",
+   "binnenunit_code": "CS-Z35CFEAW",
+   "buitenunit_code": "CU-Z35CBEA",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.3,
+   "bruto_prijs": 1912,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z35-CFE",
+    "CS-Z35CFEAW",
+    "CU-Z35CBEA"
+   ],
+   "netto_prijs": 1089.84
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Vloerconsole",
+   "kleur": null,
+   "set_code": "KIT-Z50-CFE",
+   "binnenunit_code": "CS-Z50CFEAW",
+   "buitenunit_code": "CU-Z50CBEA",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.8,
+   "bruto_prijs": 2358,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z50-CFE",
+    "CS-Z50CFEAW",
+    "CU-Z50CBEA"
+   ],
+   "netto_prijs": 1344.06
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": "KIT-Z25-CD3",
+   "binnenunit_code": "CS-Z25CD3EAW",
+   "buitenunit_code": "CU-Z25CBEA",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 1797,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z25-CD3",
+    "CS-Z25CD3EAW",
+    "CU-Z25CBEA"
+   ],
+   "netto_prijs": 1024.29
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": "KIT-Z35-CD3",
+   "binnenunit_code": "CS-Z35CD3EAW",
+   "buitenunit_code": "CU-Z35CBEA",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.2,
+   "bruto_prijs": 2057,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z35-CD3",
+    "CS-Z35CD3EAW",
+    "CU-Z35CBEA"
+   ],
+   "netto_prijs": 1172.49
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": "KIT-Z50-CD3",
+   "binnenunit_code": "CS-Z50CD3EAW",
+   "buitenunit_code": "CU-Z50CBEA",
+   "koelen_kw": 5.1,
+   "verwarmen_kw": 6.1,
+   "bruto_prijs": 2309,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z50-CD3",
+    "CS-Z50CD3EAW",
+    "CU-Z50CBEA"
+   ],
+   "netto_prijs": 1316.13
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": "KIT-Z60-CD3",
+   "binnenunit_code": "CS-Z60CD3EAW",
+   "buitenunit_code": "CU-Z60CBEA",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 2513,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z60-CD3",
+    "CS-Z60CD3EAW",
+    "CU-Z60CBEA"
+   ],
+   "netto_prijs": 1432.41
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z20-CKE",
+   "binnenunit_code": "CS-Z20CKEW",
+   "buitenunit_code": "CU-Z20CKE",
+   "koelen_kw": 2.0,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1256,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z20-CKE",
+    "CS-Z20CKEW",
+    "CU-Z20CKE"
+   ],
+   "netto_prijs": 715.92
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": "KIT-XZ20-CKE-H",
+   "binnenunit_code": "CS-XZ20CKEW-H",
+   "buitenunit_code": "CU-Z20CKE",
+   "koelen_kw": 2.0,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1309,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-XZ20-CKE-H",
+    "CS-XZ20CKEW-H",
+    "CU-Z20CKE"
+   ],
+   "netto_prijs": 746.13
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z25-CKE",
+   "binnenunit_code": "CS-Z25CKEW",
+   "buitenunit_code": "CU-Z25CKE",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1383,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z25-CKE",
+    "CS-Z25CKEW",
+    "CU-Z25CKE"
+   ],
+   "netto_prijs": 788.31
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": "KIT-XZ25-CKE-H",
+   "binnenunit_code": "CS-XZ25CKEW-H",
+   "buitenunit_code": "CU-Z25CKE",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1442,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-XZ25-CKE-H",
+    "CS-XZ25CKEW-H",
+    "CU-Z25CKE"
+   ],
+   "netto_prijs": 821.94
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z35-CKE",
+   "binnenunit_code": "CS-Z35CKEW",
+   "buitenunit_code": "CU-Z35CKE",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1638,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z35-CKE",
+    "CS-Z35CKEW",
+    "CU-Z35CKE"
+   ],
+   "netto_prijs": 933.66
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": "KIT-XZ35-CKE-H",
+   "binnenunit_code": "CS-XZ35CKEW-H",
+   "buitenunit_code": "CU-Z35CKE",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1732,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-XZ35-CKE-H",
+    "CS-XZ35CKEW-H",
+    "CU-Z35CKE"
+   ],
+   "netto_prijs": 987.24
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z42-CKE",
+   "binnenunit_code": "CS-Z42CKEW",
+   "buitenunit_code": "CU-Z42CKE",
+   "koelen_kw": 4.2,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1984,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z42-CKE",
+    "CS-Z42CKEW",
+    "CU-Z42CKE"
+   ],
+   "netto_prijs": 1130.88
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": "KIT-XZ42-CKE-H",
+   "binnenunit_code": "CS-XZ42CKEW-H",
+   "buitenunit_code": "CU-Z42CKE",
+   "koelen_kw": 4.2,
+   "verwarmen_kw": null,
+   "bruto_prijs": 2070,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-XZ42-CKE-H",
+    "CS-XZ42CKEW-H",
+    "CU-Z42CKE"
+   ],
+   "netto_prijs": 1179.9
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z50-CKE",
+   "binnenunit_code": "CS-Z50CKEW",
+   "buitenunit_code": "CU-Z50CKE",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": null,
+   "bruto_prijs": 2106,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z50-CKE",
+    "CS-Z50CKEW",
+    "CU-Z50CKE"
+   ],
+   "netto_prijs": 1200.42
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "single_split",
+   "lijn": "Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": "KIT-Z71-CKE",
+   "binnenunit_code": "CS-Z71CKEW",
+   "buitenunit_code": "CU-Z71CKE",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": null,
+   "bruto_prijs": 2856,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z71-CKE",
+    "CS-Z71CKEW",
+    "CU-Z71CKE"
+   ],
+   "netto_prijs": 1627.92
+  },
+  {
+   "rol": "systeem_compleet",
+   "systeemtype": "rac_solo",
+   "lijn": "RAC Solo",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "P-M0G16IC5-E",
+   "buitenunit_code": "P-M0G16IC5-E",
+   "koelen_kw": 1.7,
+   "verwarmen_kw": 1.71,
+   "bruto_prijs": 2029,
+   "pagina": 4,
+   "zoekcodes": [
+    "P-M0G16IC5-E"
+   ],
+   "koudemiddel": "R290",
+   "netto_prijs": 1156.53
+  },
+  {
+   "rol": "systeem_compleet",
+   "systeemtype": "rac_solo",
+   "lijn": "RAC Solo",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "P-M0Z20IC5-E",
+   "buitenunit_code": "P-M0Z20IC5-E",
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 2.08,
+   "bruto_prijs": 2029,
+   "pagina": 4,
+   "zoekcodes": [
+    "P-M0Z20IC5-E"
+   ],
+   "koudemiddel": "R32",
+   "netto_prijs": 1156.53
+  },
+  {
+   "rol": "systeem_compleet",
+   "systeemtype": "rac_solo",
+   "lijn": "RAC Solo",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "P-M0Z25IC5-E",
+   "buitenunit_code": "P-M0Z25IC5-E",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 2.31,
+   "bruto_prijs": 2183,
+   "pagina": 4,
+   "zoekcodes": [
+    "P-M0Z25IC5-E"
+   ],
+   "koudemiddel": "R32",
+   "netto_prijs": 1244.31
+  },
+  {
+   "rol": "systeem_compleet",
+   "systeemtype": "rac_solo",
+   "lijn": "RAC Solo",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "P-M0Z30IC5-E",
+   "buitenunit_code": "P-M0Z30IC5-E",
+   "koelen_kw": 3.0,
+   "verwarmen_kw": 2.75,
+   "bruto_prijs": 2284,
+   "pagina": 4,
+   "zoekcodes": [
+    "P-M0Z30IC5-E"
+   ],
+   "koudemiddel": "R32",
+   "netto_prijs": 1301.88
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-2Z35CBE",
+   "aansluiten_binnencapaciteit": "3,2 - 6,0 kW",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.2,
+   "bruto_prijs": 1223,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-2Z35CBE"
+   ],
+   "netto_prijs": 697.11
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-2Z41CBE",
+   "aansluiten_binnencapaciteit": "3,2 - 6,0 kW",
+   "koelen_kw": 4.1,
+   "verwarmen_kw": 4.6,
+   "bruto_prijs": 1292,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-2Z41CBE"
+   ],
+   "netto_prijs": 736.44
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-2Z50CBE",
+   "aansluiten_binnencapaciteit": "3,2 - 7,7 kW",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 1527,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-2Z50CBE"
+   ],
+   "netto_prijs": 870.39
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-3Z52CBE",
+   "aansluiten_binnencapaciteit": "4,5 - 9,5 kW",
+   "koelen_kw": 5.2,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 1857,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-3Z52CBE"
+   ],
+   "netto_prijs": 1058.49
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-3Z68CBE",
+   "aansluiten_binnencapaciteit": "4,5 - 11,2 kW",
+   "koelen_kw": 6.8,
+   "verwarmen_kw": 8.5,
+   "bruto_prijs": 2080,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-3Z68CBE"
+   ],
+   "netto_prijs": 1185.6
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-4Z68CBE",
+   "aansluiten_binnencapaciteit": "4,5 - 11,5 kW",
+   "koelen_kw": 6.8,
+   "verwarmen_kw": 8.5,
+   "bruto_prijs": 2402,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-4Z68CBE"
+   ],
+   "netto_prijs": 1369.14
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-4Z80CBE",
+   "aansluiten_binnencapaciteit": "4,5 - 14,7 kW",
+   "koelen_kw": 8.0,
+   "verwarmen_kw": 9.6,
+   "bruto_prijs": 2790,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-4Z80CBE"
+   ],
+   "netto_prijs": 1590.3
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Buitenunits",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-5Z90CBE",
+   "aansluiten_binnencapaciteit": "4,5 - 18,3 kW",
+   "koelen_kw": 9.0,
+   "verwarmen_kw": 10.4,
+   "bruto_prijs": 3373,
+   "pagina": 5,
+   "zoekcodes": [
+    "CU-5Z90CBE"
+   ],
+   "netto_prijs": 1922.61
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-MTZ16CKE",
+   "buitenunit_code": null,
+   "koelen_kw": 1.6,
+   "verwarmen_kw": 2.6,
+   "bruto_prijs": 292,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-MTZ16CKE"
+   ],
+   "netto_prijs": 166.44
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ20CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 2.7,
+   "bruto_prijs": 319,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ20CKEW"
+   ],
+   "netto_prijs": 181.83
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ25CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.3,
+   "bruto_prijs": 396,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ25CKEW"
+   ],
+   "netto_prijs": 225.72
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ35CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 489,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ35CKEW"
+   ],
+   "netto_prijs": 278.73
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ42CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 4.2,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 537,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ42CKEW"
+   ],
+   "netto_prijs": 306.09
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ50CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.8,
+   "bruto_prijs": 583,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ50CKEW"
+   ],
+   "netto_prijs": 332.31
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ60CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 788,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ60CKEW"
+   ],
+   "netto_prijs": 449.16
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Wandmodel TZ",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-TZ71CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.6,
+   "bruto_prijs": 872,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-TZ71CKEW"
+   ],
+   "netto_prijs": 497.04
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-MZ16CKE",
+   "buitenunit_code": null,
+   "koelen_kw": 1.6,
+   "verwarmen_kw": 2.6,
+   "bruto_prijs": 457,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-MZ16CKE"
+   ],
+   "netto_prijs": 260.49
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z20CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.05,
+   "verwarmen_kw": 2.8,
+   "bruto_prijs": 473,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z20CKEW"
+   ],
+   "netto_prijs": 269.61
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": null,
+   "binnenunit_code": "CS-XZ20CKEW-H",
+   "buitenunit_code": null,
+   "koelen_kw": 2.05,
+   "verwarmen_kw": 2.8,
+   "bruto_prijs": 526,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-XZ20CKEW-H"
+   ],
+   "netto_prijs": 299.82
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z25CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.4,
+   "bruto_prijs": 533,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z25CKEW"
+   ],
+   "netto_prijs": 303.81
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": null,
+   "binnenunit_code": "CS-XZ25CKEW-H",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.4,
+   "bruto_prijs": 592,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-XZ25CKEW-H"
+   ],
+   "netto_prijs": 337.44
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z35CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 630,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z35CKEW"
+   ],
+   "netto_prijs": 359.1
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": null,
+   "binnenunit_code": "CS-XZ35CKEW-H",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 724,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-XZ35CKEW-H"
+   ],
+   "netto_prijs": 412.68
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z42CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 4.2,
+   "verwarmen_kw": 5.3,
+   "bruto_prijs": 726,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z42CKEW"
+   ],
+   "netto_prijs": 413.82
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Graphite",
+   "set_code": null,
+   "binnenunit_code": "CS-XZ42CKEW-H",
+   "buitenunit_code": null,
+   "koelen_kw": 4.2,
+   "verwarmen_kw": 5.3,
+   "bruto_prijs": 812,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-XZ42CKEW-H"
+   ],
+   "netto_prijs": 462.84
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z50CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.8,
+   "bruto_prijs": 804,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z50CKEW"
+   ],
+   "netto_prijs": 458.28
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z_of_power_heat",
+   "lijn": "Multi Z / Power Heat Multi - Wandmodel Etherea",
+   "kleur": "Mat Wit",
+   "set_code": null,
+   "binnenunit_code": "CS-Z71CKEW",
+   "buitenunit_code": null,
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.2,
+   "bruto_prijs": 1175,
+   "pagina": 5,
+   "zoekcodes": [
+    "CS-Z71CKEW"
+   ],
+   "netto_prijs": 669.75
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Vloerconsole",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-MZ20CFEA",
+   "buitenunit_code": null,
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 774,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-MZ20CFEA"
+   ],
+   "netto_prijs": 441.18
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Vloerconsole",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z25CFEAW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 856,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z25CFEAW"
+   ],
+   "netto_prijs": 487.92
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Vloerconsole",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z35CFEAW",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.5,
+   "bruto_prijs": 1014,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z35CFEAW"
+   ],
+   "netto_prijs": 577.98
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Vloerconsole",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z50CFEAW",
+   "buitenunit_code": null,
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.3,
+   "bruto_prijs": 1242,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z50CFEAW"
+   ],
+   "netto_prijs": 707.94
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - 4-weg cassette 60x60",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "S-M20PY3E",
+   "buitenunit_code": null,
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 997,
+   "pagina": 6,
+   "zoekcodes": [
+    "S-M20PY3E"
+   ],
+   "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
+   "netto_prijs": 568.29
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - 4-weg cassette 60x60",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "S-25PY3E",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 1012,
+   "pagina": 6,
+   "zoekcodes": [
+    "S-25PY3E"
+   ],
+   "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
+   "netto_prijs": 576.84
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - 4-weg cassette 60x60",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "S-36PY3E",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 1222,
+   "pagina": 6,
+   "zoekcodes": [
+    "S-36PY3E"
+   ],
+   "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
+   "netto_prijs": 696.54
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - 4-weg cassette 60x60",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "S-50PY3E",
+   "buitenunit_code": null,
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 1374,
+   "pagina": 6,
+   "zoekcodes": [
+    "S-50PY3E"
+   ],
+   "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
+   "netto_prijs": 783.18
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - 4-weg cassette 60x60",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "S-60PY3E",
+   "buitenunit_code": null,
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 8.5,
+   "bruto_prijs": 1498,
+   "pagina": 6,
+   "zoekcodes": [
+    "S-60PY3E"
+   ],
+   "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
+   "netto_prijs": 853.86
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-MZ20CD3EA",
+   "buitenunit_code": null,
+   "koelen_kw": 2.0,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 936,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-MZ20CD3EA"
+   ],
+   "netto_prijs": 533.52
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z25CD3EAW",
+   "buitenunit_code": null,
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 1039,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z25CD3EAW"
+   ],
+   "netto_prijs": 592.23
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z35CD3EAW",
+   "buitenunit_code": null,
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.5,
+   "bruto_prijs": 1159,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z35CD3EAW"
+   ],
+   "netto_prijs": 660.63
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z50CD3EAW",
+   "buitenunit_code": null,
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 1193,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z50CD3EAW"
+   ],
+   "netto_prijs": 680.01
+  },
+  {
+   "rol": "binnenunit",
+   "systeemtype": "multi_z",
+   "lijn": "Multi Z - Kanaalmodel met lage statische druk",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "CS-Z60CD3EAW",
+   "buitenunit_code": null,
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 8.5,
+   "bruto_prijs": 1293,
+   "pagina": 6,
+   "zoekcodes": [
+    "CS-Z60CD3EAW"
+   ],
+   "netto_prijs": 737.01
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "power_heat_multi",
+   "lijn": "Power Heat Multi",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-2Z50ABEC",
+   "aansluiten_binnencapaciteit": "4,0 - 8,5 kW",
+   "koelen_kw": 5.3,
+   "verwarmen_kw": 6.4,
+   "bruto_prijs": 1900,
+   "pagina": 6,
+   "zoekcodes": [
+    "CU-2Z50ABEC"
+   ],
+   "netto_prijs": 1083.0
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "power_heat_multi",
+   "lijn": "Power Heat Multi",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "CU-3Z75ABEC",
+   "aansluiten_binnencapaciteit": "4,5 - 11,0 kW",
+   "koelen_kw": 7.5,
+   "verwarmen_kw": 8.6,
+   "bruto_prijs": 2570,
+   "pagina": 6,
+   "zoekcodes": [
+    "CU-3Z75ABEC"
+   ],
+   "netto_prijs": 1464.9
+  }
+ ]
+}

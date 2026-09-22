@@ -1,0 +1,64 @@
+# Toetsbestand: de antwoorden waarmee uitgewerkt-3 is nagebouwd.
+#
+# Gebruikt voor tools/toets_tegen_echte_brief.py. De klantgegevens zijn
+# vervangen door voorbeelden -- die staan niet in git. Wil je de toets opnieuw
+# draaien, vul dan de echte naam, het adres en het e-mailadres in en zet de
+# verstuurde brief terug in bronbrieven/uitgewerkt/:
+#
+#     python3 tools/toets_tegen_echte_brief.py \
+#         voorbeelden/toets-uitgewerkt-3.yaml \
+#         bronbrieven/uitgewerkt/<brief>.docx
+#
+# De technische keuzes hieronder zijn wel die van de echte brief; dat is het
+# deel dat de toets betekenis geeft.
+
+klanttype: particulier
+documentsoort: offerte
+installatietype: airconditioning
+aanspreekvorm: de heer
+voorletters: X.
+achternaam: van Voorbeeld
+email_klant: naam@voorbeeld.nl
+straat_huisnummer: Voorbeeldstraat 1
+postcode: 1234AB
+plaats: Voorbeeldstad
+briefdatum: 2026-03-23
+projectnummer: Q.1018394.6.01
+opsteller_initialen: RdJ
+sa_nummer: 35738
+ondertekenaar: nick_vervoorn
+aanleiding: onderhoud
+adviseur: Nick Vervoorn
+datum_aanleiding: 20 maart
+locatieaanduiding: uw twee slaapkamers en de keuken
+model_binnenunit: wand
+opstelling_buitenunit: muursteun
+condensafvoer: natuurlijk_verloop
+bediening: infrarood
+technische_specificaties: uitgeschreven
+systeemsoort: multi-splitsystem
+installaties:
+  - ruimte: de slaapkamer op de eerste verdieping en de keuken
+    aantal_systemen: 1
+    systeemsoort: multi-splitsystem
+    montagewijze: wand/vloermontage
+    merk: Panasonic
+    type_binnendeel: "CS-TZ35CKEW (1x), CS-Z35CFEAW (1x)"
+    aantal_binnendelen: 2
+    aantal_buitendelen: 1
+    type_buitendeel: CU-2Z50CBE
+  - ruimte: de slaapkamer
+    aantal_systemen: 1
+    systeemsoort: splitsystem
+    montagewijze: vloermontage
+    merk: Panasonic
+    type_binnendeel: KIT-Z25-UFE
+prijssoort: totaalprijs
+prijsregels:
+  - bedrag: 10950
+facturering: vijftig_vijftig
+betaling: termijnen_particulier
+onderhoud_alinea: false
+documentatie_bijgevoegd: true
+werk_inclusief: [montage, bekabeling, transport, inbedrijfstelling]
+werk_exclusief: [bouwkundig, betonboringen, elektra_stopcontact]

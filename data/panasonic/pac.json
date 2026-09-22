@@ -1,0 +1,2125 @@
+{
+ "meta": {
+  "bron": "Panasonic PACi prijscatalogus 2026|2027 (aircologic)",
+  "korting_pct": 0.43,
+  "prijzen_zijn": "exclusief btw",
+  "niet_meegenomen": [
+   "PACi NX-serie Binnenunits voor twin/triple/double-twin-systemen (pagina 8) - geen eigen prijs gepubliceerd, alleen als onderdeel van een single-set. Navragen bij Schilt.",
+   "Accessoires en bedieningen (sensoren, regelingen, interfaces, pagina 10-11) - nog niet overgenomen."
+  ]
+ },
+ "artikelen": [
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "YKEA Serverruimte oplossing -25°C",
+   "kleur": null,
+   "set_code": "KIT-Z25-YKEA-1",
+   "binnenunit_code": "CS-Z25YKEA-1",
+   "buitenunit_code": "CU-Z25YKEA-1",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.4,
+   "bruto_prijs": 1372,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z25-YKEA-1",
+    "CS-Z25YKEA-1",
+    "CU-Z25YKEA-1"
+   ],
+   "netto_prijs": 782.04
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "YKEA Serverruimte oplossing -25°C",
+   "kleur": null,
+   "set_code": "KIT-Z35-YKEA-1",
+   "binnenunit_code": "CS-Z35YKEA-1",
+   "buitenunit_code": "CU-Z35YKEA-1",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 1644,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z35-YKEA-1",
+    "CS-Z35YKEA-1",
+    "CU-Z35YKEA-1"
+   ],
+   "netto_prijs": 937.08
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "YKEA Serverruimte oplossing -25°C",
+   "kleur": null,
+   "set_code": "KIT-Z42-YKEA-1",
+   "binnenunit_code": "CS-Z42YKEA-1",
+   "buitenunit_code": "CU-Z42YKEA-1",
+   "koelen_kw": 4.2,
+   "verwarmen_kw": 5.3,
+   "bruto_prijs": 1943,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z42-YKEA-1",
+    "CS-Z42YKEA-1",
+    "CU-Z42YKEA-1"
+   ],
+   "netto_prijs": 1107.51
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "YKEA Serverruimte oplossing -25°C",
+   "kleur": null,
+   "set_code": "KIT-Z50-YKEA-1",
+   "binnenunit_code": "CS-Z50YKEA-1",
+   "buitenunit_code": "CU-Z50YKEA-1",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.8,
+   "bruto_prijs": 2123,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z50-YKEA-1",
+    "CS-Z50YKEA-1",
+    "CU-Z50YKEA-1"
+   ],
+   "netto_prijs": 1210.11
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "YKEA Serverruimte oplossing -25°C",
+   "kleur": null,
+   "set_code": "KIT-Z71-YKEA-1",
+   "binnenunit_code": "CS-Z71YKEA-1",
+   "buitenunit_code": "CU-Z71YKEA-1",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.2,
+   "bruto_prijs": 2710,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-Z71-YKEA-1",
+    "CS-Z71YKEA-1",
+    "CU-Z71YKEA-1"
+   ],
+   "netto_prijs": 1544.7
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-25PK4Z5",
+   "binnenunit_code": "S-2545PK4E",
+   "buitenunit_code": "U-25PZ3E5",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 2.8,
+   "bruto_prijs": 1933,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-25PK4Z5",
+    "S-2545PK4E",
+    "U-25PZ3E5"
+   ],
+   "netto_prijs": 1101.81
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-36PK4Z5",
+   "binnenunit_code": "S-2545PK4E",
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 2054,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-36PK4Z5",
+    "S-2545PK4E",
+    "U-36PZ3E5"
+   ],
+   "netto_prijs": 1170.78
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-50PK4Z5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 2774,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-50PK4Z5",
+    "S-5010PK4E",
+    "U-50PZ3E5"
+   ],
+   "netto_prijs": 1581.18
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-60PK4Z5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 6.1,
+   "verwarmen_kw": 6.1,
+   "bruto_prijs": 2839,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-60PK4Z5",
+    "S-5010PK4E",
+    "U-60PZ3E5A"
+   ],
+   "netto_prijs": 1618.23
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-71PK4Z5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 7.1,
+   "bruto_prijs": 3353,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-71PK4Z5",
+    "S-5010PK4E",
+    "U-71PZ3E5A"
+   ],
+   "netto_prijs": 1911.21
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-100PK4Z8",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 9.0,
+   "verwarmen_kw": 9.0,
+   "bruto_prijs": 3839,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-100PK4Z8",
+    "S-5010PK4E",
+    "U-100PZ3E8"
+   ],
+   "netto_prijs": 2188.23
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-36PK4ZH5",
+   "binnenunit_code": "S-2545PK4E",
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2656,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-36PK4ZH5",
+    "S-2545PK4E",
+    "U-36PZH3E5"
+   ],
+   "netto_prijs": 1513.92
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-50PK4ZH5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 3133,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-50PK4ZH5",
+    "S-5010PK4E",
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1785.81
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-60PK4ZH5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.2,
+   "bruto_prijs": 3178,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-60PK4ZH5",
+    "S-5010PK4E",
+    "U-60PZH3E5"
+   ],
+   "netto_prijs": 1811.46
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-71PK4ZH5",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-71PZH4E5",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 3980,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-71PK4ZH5",
+    "S-5010PK4E",
+    "U-71PZH4E5"
+   ],
+   "netto_prijs": 2268.6
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-71PK4ZH48",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-71PZH4E8",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 4178,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-71PK4ZH48",
+    "S-5010PK4E",
+    "U-71PZH4E8"
+   ],
+   "netto_prijs": 2381.46
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite wandmodel - PK4",
+   "kleur": null,
+   "set_code": "KIT-100PK4ZH48",
+   "binnenunit_code": "S-5010PK4E",
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 9.5,
+   "verwarmen_kw": 9.5,
+   "bruto_prijs": 4627,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-100PK4ZH48",
+    "S-5010PK4E",
+    "U-100PZH4E8"
+   ],
+   "netto_prijs": 2637.39
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-25PY3Z5",
+   "binnenunit_code": "S-25PY3E",
+   "buitenunit_code": "U-25PZ3E5",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 1716,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-25PY3Z5",
+    "S-25PY3E",
+    "U-25PZ3E5"
+   ],
+   "netto_prijs": 978.12
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-36PY3Z5",
+   "binnenunit_code": "S-36PY3E",
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 2047,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-36PY3Z5",
+    "S-36PY3E",
+    "U-36PZ3E5"
+   ],
+   "netto_prijs": 1166.79
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-50PY3Z5",
+   "binnenunit_code": "S-50PY3E",
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 2586,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-50PY3Z5",
+    "S-50PY3E",
+    "U-50PZ3E5"
+   ],
+   "netto_prijs": 1474.02
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-60PY3Z5",
+   "binnenunit_code": "S-60PY3E",
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 6.0,
+   "bruto_prijs": 2775,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-60PY3Z5",
+    "S-60PY3E",
+    "U-60PZ3E5A"
+   ],
+   "netto_prijs": 1581.75
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-36PY3ZH5",
+   "binnenunit_code": "S-36PY3E",
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2649,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-36PY3ZH5",
+    "S-36PY3E",
+    "U-36PZH3E5"
+   ],
+   "netto_prijs": 1509.93
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-50PY3ZH5",
+   "binnenunit_code": "S-50PY3E",
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 2945,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-50PY3ZH5",
+    "S-50PY3E",
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1678.65
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 60x60 cassette - PY3",
+   "kleur": null,
+   "set_code": "KIT-60PY3ZH5",
+   "binnenunit_code": "S-60PY3E",
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 3114,
+   "pagina": 4,
+   "zoekcodes": [
+    "KIT-60PY3ZH5",
+    "S-60PY3E",
+    "U-60PZH3E5"
+   ],
+   "netto_prijs": 1774.98
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-36PU3Z5",
+   "binnenunit_code": "S-3650PU3E",
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 3.6,
+   "bruto_prijs": 2044,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-36PU3Z5",
+    "S-3650PU3E",
+    "U-36PZ3E5"
+   ],
+   "netto_prijs": 1165.08
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-50PU3Z5",
+   "binnenunit_code": "S-3650PU3E",
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 2431,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-50PU3Z5",
+    "S-3650PU3E",
+    "U-50PZ3E5"
+   ],
+   "netto_prijs": 1385.67
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-60PU3Z5",
+   "binnenunit_code": "S-6071PU3E",
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 6.0,
+   "bruto_prijs": 2714,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-60PU3Z5",
+    "S-6071PU3E",
+    "U-60PZ3E5A"
+   ],
+   "netto_prijs": 1546.98
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-71PU3Z5",
+   "binnenunit_code": "S-6071PU3E",
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 7.1,
+   "bruto_prijs": 3228,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-71PU3Z5",
+    "S-6071PU3E",
+    "U-71PZ3E5A"
+   ],
+   "netto_prijs": 1839.96
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-100PU3Z8",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 10.0,
+   "bruto_prijs": 3937,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-100PU3Z8",
+    "S-1014PU3E",
+    "U-100PZ3E8"
+   ],
+   "netto_prijs": 2244.09
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-125PU3Z8",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 12.5,
+   "bruto_prijs": 4324,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-125PU3Z8",
+    "S-1014PU3E",
+    "U-125PZ3E8"
+   ],
+   "netto_prijs": 2464.68
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-140PU3Z8",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 4991,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-140PU3Z8",
+    "S-1014PU3E",
+    "U-140PZ3E8"
+   ],
+   "netto_prijs": 2844.87
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-36PU3ZH5",
+   "binnenunit_code": "S-3650PU3E",
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2646,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-36PU3ZH5",
+    "S-3650PU3E",
+    "U-36PZH3E5"
+   ],
+   "netto_prijs": 1508.22
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-50PU3ZH5",
+   "binnenunit_code": "S-3650PU3E",
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 2790,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-50PU3ZH5",
+    "S-3650PU3E",
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1590.3
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-60PU3ZH5",
+   "binnenunit_code": "S-6071PU3E",
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 3053,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-60PU3ZH5",
+    "S-6071PU3E",
+    "U-60PZH3E5"
+   ],
+   "netto_prijs": 1740.21
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-71PU3ZH48",
+   "binnenunit_code": "S-6071PU3E",
+   "buitenunit_code": "U-71PZH4E8",
+   "koelen_kw": 7.6,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 4053,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-71PU3ZH48",
+    "S-6071PU3E",
+    "U-71PZH4E8"
+   ],
+   "netto_prijs": 2310.21
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-100PU3ZH48",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 11.2,
+   "bruto_prijs": 4725,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-100PU3ZH48",
+    "S-1014PU3E",
+    "U-100PZH4E8"
+   ],
+   "netto_prijs": 2693.25
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-125PU3ZH48",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-125PZH4E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 5002,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-125PU3ZH48",
+    "S-1014PU3E",
+    "U-125PZH4E8"
+   ],
+   "netto_prijs": 2851.14
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite 90x90 cassette - PU3",
+   "kleur": null,
+   "set_code": "KIT-140PU3ZH48",
+   "binnenunit_code": "S-1014PU3E",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 16.0,
+   "bruto_prijs": 5598,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-140PU3ZH48",
+    "S-1014PU3E",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 3190.86
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-36PT3Z5",
+   "binnenunit_code": "S-3650PT3E",
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 3.5,
+   "bruto_prijs": 2068,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-36PT3Z5",
+    "S-3650PT3E",
+    "U-36PZ3E5"
+   ],
+   "netto_prijs": 1178.76
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-50PT3Z5",
+   "binnenunit_code": "S-3650PT3E",
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 2455,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-50PT3Z5",
+    "S-3650PT3E",
+    "U-50PZ3E5"
+   ],
+   "netto_prijs": 1399.35
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-60PT3Z5",
+   "binnenunit_code": "S-6071PT3E",
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 6.0,
+   "bruto_prijs": 2739,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-60PT3Z5",
+    "S-6071PT3E",
+    "U-60PZ3E5A"
+   ],
+   "netto_prijs": 1561.23
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-71PT3Z5",
+   "binnenunit_code": "S-6071PT3E",
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 6.8,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 3253,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-71PT3Z5",
+    "S-6071PT3E",
+    "U-71PZ3E5A"
+   ],
+   "netto_prijs": 1854.21
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-100PT3Z8",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 10.0,
+   "bruto_prijs": 4137,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-100PT3Z8",
+    "S-1014PT3E",
+    "U-100PZ3E8"
+   ],
+   "netto_prijs": 2358.09
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-125PT3Z8",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 12.5,
+   "bruto_prijs": 4524,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-125PT3Z8",
+    "S-1014PT3E",
+    "U-125PZ3E8"
+   ],
+   "netto_prijs": 2578.68
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-140PT3Z8",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 5191,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-140PT3Z8",
+    "S-1014PT3E",
+    "U-140PZ3E8"
+   ],
+   "netto_prijs": 2958.87
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-36PT3ZH5",
+   "binnenunit_code": "S-3650PT3E",
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.5,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2670,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-36PT3ZH5",
+    "S-3650PT3E",
+    "U-36PZH3E5"
+   ],
+   "netto_prijs": 1521.9
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-50PT3ZH5",
+   "binnenunit_code": "S-3650PT3E",
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 2814,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-50PT3ZH5",
+    "S-3650PT3E",
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1603.98
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-60PT3ZH5",
+   "binnenunit_code": "S-6071PT3E",
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 3078,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-60PT3ZH5",
+    "S-6071PT3E",
+    "U-60PZH3E5"
+   ],
+   "netto_prijs": 1754.46
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-71PT3ZH45",
+   "binnenunit_code": "S-6071PT3E",
+   "buitenunit_code": "U-71PZH4E5",
+   "koelen_kw": 6.8,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 3880,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-71PT3ZH45",
+    "S-6071PT3E",
+    "U-71PZH4E5"
+   ],
+   "netto_prijs": 2211.6
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-71PT3ZH48",
+   "binnenunit_code": "S-6071PT3E",
+   "buitenunit_code": "U-71PZH4E8",
+   "koelen_kw": 7.2,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 4078,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-71PT3ZH48",
+    "S-6071PT3E",
+    "U-71PZH4E8"
+   ],
+   "netto_prijs": 2324.46
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-100PT3ZH48",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 9.5,
+   "verwarmen_kw": 11.2,
+   "bruto_prijs": 4925,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-100PT3ZH48",
+    "S-1014PT3E",
+    "U-100PZH4E8"
+   ],
+   "netto_prijs": 2807.25
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-125PT3ZH48",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-125PZH4E8",
+   "koelen_kw": 12.1,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 5202,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-125PT3ZH48",
+    "S-1014PT3E",
+    "U-125PZH4E8"
+   ],
+   "netto_prijs": 2965.14
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite plafondmodel - PT3",
+   "kleur": null,
+   "set_code": "KIT-140PT3ZH48",
+   "binnenunit_code": "S-1014PT3E",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 13.4,
+   "verwarmen_kw": 16.0,
+   "bruto_prijs": 5798,
+   "pagina": 5,
+   "zoekcodes": [
+    "KIT-140PT3ZH48",
+    "S-1014PT3E",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 3304.86
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-36PF3Z5",
+   "binnenunit_code": "S-3650PF3E",
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.4,
+   "verwarmen_kw": 3.4,
+   "bruto_prijs": 2092,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-36PF3Z5",
+    "S-3650PF3E",
+    "U-36PZ3E5"
+   ],
+   "netto_prijs": 1192.44
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-50PF3Z5",
+   "binnenunit_code": "S-3650PF3E",
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.0,
+   "bruto_prijs": 2479,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-50PF3Z5",
+    "S-3650PF3E",
+    "U-50PZ3E5"
+   ],
+   "netto_prijs": 1413.03
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-60PF3Z5",
+   "binnenunit_code": "S-6071PF3E",
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 5.7,
+   "verwarmen_kw": 5.7,
+   "bruto_prijs": 2758,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-60PF3Z5",
+    "S-6071PF3E",
+    "U-60PZ3E5A"
+   ],
+   "netto_prijs": 1572.06
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-71PF3Z5",
+   "binnenunit_code": "S-6071PF3E",
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 6.8,
+   "verwarmen_kw": 6.8,
+   "bruto_prijs": 3272,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-71PF3Z5",
+    "S-6071PF3E",
+    "U-71PZ3E5A"
+   ],
+   "netto_prijs": 1865.04
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-100PF3Z8",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 9.5,
+   "verwarmen_kw": 9.5,
+   "bruto_prijs": 3920,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-100PF3Z8",
+    "S-1014PF3E",
+    "U-100PZ3E8"
+   ],
+   "netto_prijs": 2234.4
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-125PF3Z8",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.1,
+   "verwarmen_kw": 12.1,
+   "bruto_prijs": 4307,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-125PF3Z8",
+    "S-1014PF3E",
+    "U-125PZ3E8"
+   ],
+   "netto_prijs": 2454.99
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-140PF3Z8",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 13.4,
+   "verwarmen_kw": 13.4,
+   "bruto_prijs": 4974,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-140PF3Z8",
+    "S-1014PF3E",
+    "U-140PZ3E8"
+   ],
+   "netto_prijs": 2835.18
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-36PF3ZH5",
+   "binnenunit_code": "S-3650PF3E",
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2694,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-36PF3ZH5",
+    "S-3650PF3E",
+    "U-36PZH3E5"
+   ],
+   "netto_prijs": 1535.58
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-50PF3ZH5",
+   "binnenunit_code": "S-3650PF3E",
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 2838,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-50PF3ZH5",
+    "S-3650PF3E",
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1617.66
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-60PF3ZH5",
+   "binnenunit_code": "S-6071PF3E",
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 6.1,
+   "bruto_prijs": 3097,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-60PF3ZH5",
+    "S-6071PF3E",
+    "U-60PZH3E5"
+   ],
+   "netto_prijs": 1765.29
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-71PF3ZH45",
+   "binnenunit_code": "S-6071PF3E",
+   "buitenunit_code": "U-71PZH4E5",
+   "koelen_kw": 7.0,
+   "verwarmen_kw": 7.5,
+   "bruto_prijs": 3899,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-71PF3ZH45",
+    "S-6071PF3E",
+    "U-71PZH4E5"
+   ],
+   "netto_prijs": 2222.43
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-71PF3ZH48",
+   "binnenunit_code": "S-6071PF3E",
+   "buitenunit_code": "U-71PZH4E8",
+   "koelen_kw": 7.0,
+   "verwarmen_kw": 7.5,
+   "bruto_prijs": 4097,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-71PF3ZH48",
+    "S-6071PF3E",
+    "U-71PZH4E8"
+   ],
+   "netto_prijs": 2335.29
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-100PF3ZH48",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 9.5,
+   "verwarmen_kw": 10.8,
+   "bruto_prijs": 4985,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-100PF3ZH48",
+    "S-1014PF3E",
+    "U-100PZH4E8"
+   ],
+   "netto_prijs": 2841.45
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-125PF3ZH48",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-125PZH4E8",
+   "koelen_kw": 12.1,
+   "verwarmen_kw": 13.5,
+   "bruto_prijs": 5361,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-125PF3ZH48",
+    "S-1014PF3E",
+    "U-125PZH4E8"
+   ],
+   "netto_prijs": 3055.77
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Elite kanaalmodel - PF3",
+   "kleur": null,
+   "set_code": "KIT-140PF3ZH48",
+   "binnenunit_code": "S-1014PF3E",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 13.2,
+   "verwarmen_kw": 15.5,
+   "bruto_prijs": 5581,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-140PF3ZH48",
+    "S-1014PF3E",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 3181.17
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Big PACi hoogstatische druk kanaalmodel",
+   "kleur": null,
+   "set_code": "KIT-200PE4ZH8",
+   "binnenunit_code": "S-200PE4E",
+   "buitenunit_code": "U-200PZH4E8",
+   "koelen_kw": 19.5,
+   "verwarmen_kw": 22.4,
+   "bruto_prijs": 7901,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-200PE4ZH8",
+    "S-200PE4E",
+    "U-200PZH4E8"
+   ],
+   "netto_prijs": 4503.57
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Big PACi hoogstatische druk kanaalmodel",
+   "kleur": null,
+   "set_code": "KIT-250PE4ZH8",
+   "binnenunit_code": "S-250PE4E",
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 23.2,
+   "verwarmen_kw": 28.0,
+   "bruto_prijs": 8800,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-250PE4ZH8",
+    "S-250PE4E",
+    "U-250PZH4E8"
+   ],
+   "netto_prijs": 5016.0
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Standard",
+   "kleur": null,
+   "set_code": "KIT-140MC5ZH8",
+   "binnenunit_code": "P-VTVF140MC5-PE",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 14.1,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 10528,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-140MC5ZH8",
+    "P-VTVF140MC5-PE",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 6000.96
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Standard",
+   "kleur": null,
+   "set_code": "KIT-250MC5ZH8",
+   "binnenunit_code": "P-VTVF250MC5-PE",
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 24.2,
+   "verwarmen_kw": 26.7,
+   "bruto_prijs": 14831,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-250MC5ZH8",
+    "P-VTVF250MC5-PE",
+    "U-250PZH4E8"
+   ],
+   "netto_prijs": 8453.67
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Smart",
+   "kleur": null,
+   "set_code": "KIT-140MC5AZH8",
+   "binnenunit_code": "P-VTVF140MC5A-PE",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 14.1,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 11137,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-140MC5AZH8",
+    "P-VTVF140MC5A-PE",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 6348.09
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Smart",
+   "kleur": null,
+   "set_code": "KIT-250MC5AZH8",
+   "binnenunit_code": "P-VTVF250MC5A-PE",
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 24.2,
+   "verwarmen_kw": 26.7,
+   "bruto_prijs": 16049,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-250MC5AZH8",
+    "P-VTVF250MC5A-PE",
+    "U-250PZH4E8"
+   ],
+   "netto_prijs": 9147.93
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Ducted",
+   "kleur": null,
+   "set_code": "KIT-140PC5ZH8",
+   "binnenunit_code": "P-VTVF140PC5A-PE",
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 14.1,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 9188,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-140PC5ZH8",
+    "P-VTVF140PC5A-PE",
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 5237.16
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "Jet Air Stream Ducted",
+   "kleur": null,
+   "set_code": "KIT-250PC5ZH8",
+   "binnenunit_code": "P-VTVF250PC5A-PE",
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 24.2,
+   "verwarmen_kw": 26.7,
+   "bruto_prijs": 12142,
+   "pagina": 7,
+   "zoekcodes": [
+    "KIT-250PC5ZH8",
+    "P-VTVF250PC5A-PE",
+    "U-250PZH4E8"
+   ],
+   "netto_prijs": 6920.94
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaal multi zone",
+   "kleur": null,
+   "set_code": "KIT-71PQ41Z5",
+   "binnenunit_code": "S-7110PQ41E",
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 7.1,
+   "bruto_prijs": null,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-71PQ41Z5",
+    "S-7110PQ41E",
+    "U-71PZ3E5A"
+   ],
+   "opmerking": "Prijs \"op aanvraag\" in de catalogus zelf - geen bruto prijs gepubliceerd.",
+   "netto_prijs": null
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaal multi zone",
+   "kleur": null,
+   "set_code": "KIT-100PQ51Z8",
+   "binnenunit_code": "S-1014PQ51E",
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 9.1,
+   "bruto_prijs": null,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-100PQ51Z8",
+    "S-1014PQ51E",
+    "U-100PZ3E8"
+   ],
+   "opmerking": "Prijs \"op aanvraag\" in de catalogus zelf - geen bruto prijs gepubliceerd.",
+   "netto_prijs": null
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaal multi zone",
+   "kleur": null,
+   "set_code": "KIT-125PQ51Z8",
+   "binnenunit_code": "S-1014PQ51E",
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.0,
+   "verwarmen_kw": 9.7,
+   "bruto_prijs": null,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-125PQ51Z8",
+    "S-1014PQ51E",
+    "U-125PZ3E8"
+   ],
+   "opmerking": "Prijs \"op aanvraag\" in de catalogus zelf - geen bruto prijs gepubliceerd.",
+   "netto_prijs": null
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "PACi NX-serie Standard kanaal multi zone",
+   "kleur": null,
+   "set_code": "KIT-140PQ51Z8",
+   "binnenunit_code": "S-1014PQ51E",
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 13.2,
+   "verwarmen_kw": 13.3,
+   "bruto_prijs": null,
+   "pagina": 6,
+   "zoekcodes": [
+    "KIT-140PQ51Z8",
+    "S-1014PQ51E",
+    "U-140PZ3E8"
+   ],
+   "opmerking": "Prijs \"op aanvraag\" in de catalogus zelf - geen bruto prijs gepubliceerd.",
+   "netto_prijs": null
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "BIG PACi NX-serie met water warmtewisselaar",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "PAW-200W5APAC-2",
+   "buitenunit_code": "U-200PZH4E8",
+   "koelen_kw": 17.5,
+   "verwarmen_kw": 24.6,
+   "bruto_prijs": 8475,
+   "pagina": 7,
+   "zoekcodes": [
+    "U-200PZH4E8",
+    "PAW-200W5APAC-2"
+   ],
+   "netto_prijs": 4830.75
+  },
+  {
+   "rol": "systeem_set",
+   "systeemtype": "paci_single",
+   "lijn": "BIG PACi NX-serie met water warmtewisselaar",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": "PAW-250W5APAC-2",
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 20.6,
+   "verwarmen_kw": 28.0,
+   "bruto_prijs": 9389,
+   "pagina": 7,
+   "zoekcodes": [
+    "U-250PZH4E8",
+    "PAW-250W5APAC-2"
+   ],
+   "netto_prijs": 5351.73
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 1871,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-50PZH3E5"
+   ],
+   "netto_prijs": 1066.47
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-71PZH4E5",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 2418,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-71PZH4E5"
+   ],
+   "netto_prijs": 1378.26
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-71PZH4E8",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 2616,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-71PZH4E8"
+   ],
+   "netto_prijs": 1491.12
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 9.5,
+   "verwarmen_kw": 11.2,
+   "bruto_prijs": 3065,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-100PZH4E8"
+   ],
+   "netto_prijs": 1747.05
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-125PZH4E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 3342,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-125PZH4E8"
+   ],
+   "netto_prijs": 1904.94
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (PACi NX)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 13.4,
+   "verwarmen_kw": 16.0,
+   "bruto_prijs": 3938,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-140PZH4E8"
+   ],
+   "netto_prijs": 2244.66
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (Big PACi)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-200PZH4E8",
+   "koelen_kw": 19.0,
+   "verwarmen_kw": 22.4,
+   "bruto_prijs": 4540,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-200PZH4E8"
+   ],
+   "netto_prijs": 2587.8
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Elite Utiliteit twin/triple/double-twin (Big PACi)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 22.0,
+   "verwarmen_kw": 24.0,
+   "bruto_prijs": 5146,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-250PZH4E8"
+   ],
+   "netto_prijs": 2933.22
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Standard Utiliteit twin systeem",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 10.0,
+   "bruto_prijs": 2277,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-100PZ3E8"
+   ],
+   "netto_prijs": 1297.89
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Standard Utiliteit twin systeem",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 12.5,
+   "bruto_prijs": 2664,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-125PZ3E8"
+   ],
+   "netto_prijs": 1518.48
+  },
+  {
+   "rol": "buitenunit",
+   "systeemtype": "utiliteit_twin",
+   "lijn": "Buitenunits PACi NX-serie Standard Utiliteit twin systeem",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 3331,
+   "pagina": 8,
+   "zoekcodes": [
+    "U-140PZ3E8"
+   ],
+   "netto_prijs": 1898.67
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "jet_air_stream_accessoire",
+   "lijn": "PACi NX Jet Air Stream accessoires",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": null,
+   "omschrijving": "Luchtinlaatplenum (1x DN355 mm) voor VTVF140N en VIVF140P",
+   "koelen_kw": null,
+   "verwarmen_kw": null,
+   "bruto_prijs": 349,
+   "pagina": 10,
+   "zoekcodes": [
+    "PCZ-AHRX0056"
+   ],
+   "artikelcode": "PCZ-AHRX0056",
+   "netto_prijs": 198.93
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "jet_air_stream_accessoire",
+   "lijn": "PACi NX Jet Air Stream accessoires",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": null,
+   "omschrijving": "Luchtinlaatplenum (2x DN355 mm) voor VTVF250N en VTVF250P",
+   "koelen_kw": null,
+   "verwarmen_kw": null,
+   "bruto_prijs": 674,
+   "pagina": 10,
+   "zoekcodes": [
+    "PCZ-AHRX0057"
+   ],
+   "artikelcode": "PCZ-AHRX0057",
+   "netto_prijs": 384.18
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "jet_air_stream_accessoire",
+   "lijn": "PACi NX Jet Air Stream accessoires",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": null,
+   "omschrijving": "Grondluchtinlaatmodule (VTVF250 vereist)",
+   "koelen_kw": null,
+   "verwarmen_kw": null,
+   "bruto_prijs": 1075,
+   "pagina": 10,
+   "zoekcodes": [
+    "PCZ-AHRX0061"
+   ],
+   "artikelcode": "PCZ-AHRX0061",
+   "netto_prijs": 612.75
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "jet_air_stream_accessoire",
+   "lijn": "PACi NX Jet Air Stream accessoires",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": null,
+   "omschrijving": "Luchtinlaatrooster voor kanalen",
+   "koelen_kw": null,
+   "verwarmen_kw": null,
+   "bruto_prijs": 195,
+   "pagina": 10,
+   "zoekcodes": [
+    "PCZ-AHRX0071"
+   ],
+   "artikelcode": "PCZ-AHRX0071",
+   "netto_prijs": 111.15
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-25PZ3E5",
+   "koelen_kw": 2.5,
+   "verwarmen_kw": 3.2,
+   "bruto_prijs": 2227,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-25PZ3E5"
+   ],
+   "netto_prijs": 1269.39
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-36PZ3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2348,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-36PZ3E5"
+   ],
+   "netto_prijs": 1338.36
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-50PZ3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 2735,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-50PZ3E5"
+   ],
+   "netto_prijs": 1558.95
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-60PZ3E5A",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 2800,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-60PZ3E5A"
+   ],
+   "netto_prijs": 1596.0
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-71PZ3E5A",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 3314,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-71PZ3E5A"
+   ],
+   "netto_prijs": 1888.98
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-100PZ3E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 11.2,
+   "bruto_prijs": 3800,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-100PZ3E8"
+   ],
+   "netto_prijs": 2166.0
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-125PZ3E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 4187,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-125PZ3E8"
+   ],
+   "netto_prijs": 2386.59
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Standard (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-140PZ3E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 16.0,
+   "bruto_prijs": 4854,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-140PZ3E8"
+   ],
+   "netto_prijs": 2766.78
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-36PZH3E5",
+   "koelen_kw": 3.6,
+   "verwarmen_kw": 4.0,
+   "bruto_prijs": 2950,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-36PZH3E5"
+   ],
+   "netto_prijs": 1681.5
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-50PZH3E5",
+   "koelen_kw": 5.0,
+   "verwarmen_kw": 5.6,
+   "bruto_prijs": 3094,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-50PZH3E5"
+   ],
+   "netto_prijs": 1763.58
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-60PZH3E5",
+   "koelen_kw": 6.0,
+   "verwarmen_kw": 7.0,
+   "bruto_prijs": 3139,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-60PZH3E5"
+   ],
+   "netto_prijs": 1789.23
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-71PZH4E5",
+   "koelen_kw": 7.1,
+   "verwarmen_kw": 8.0,
+   "bruto_prijs": 3941,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-71PZH4E5"
+   ],
+   "netto_prijs": 2246.37
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-100PZH4E8",
+   "koelen_kw": 10.0,
+   "verwarmen_kw": 11.2,
+   "bruto_prijs": 4588,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-100PZH4E8"
+   ],
+   "netto_prijs": 2615.16
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-125PZH4E8",
+   "koelen_kw": 12.5,
+   "verwarmen_kw": 14.0,
+   "bruto_prijs": 4865,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-125PZH4E8"
+   ],
+   "netto_prijs": 2773.05
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-140PZH4E8",
+   "koelen_kw": 14.0,
+   "verwarmen_kw": 16.0,
+   "bruto_prijs": 5461,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-140PZH4E8"
+   ],
+   "netto_prijs": 3112.77
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-200PZH4E8",
+   "koelen_kw": 19.5,
+   "verwarmen_kw": 22.4,
+   "bruto_prijs": 6063,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-200PZH4E8"
+   ],
+   "netto_prijs": 3455.91
+  },
+  {
+   "rol": "accessoire",
+   "systeemtype": "lbk_aansluitkit",
+   "lijn": "LBK-aansluitkit Elite (i.c.m. PAW-280PAH3M-1 à €1.523,- bruto)",
+   "kleur": null,
+   "set_code": null,
+   "binnenunit_code": null,
+   "buitenunit_code": "U-250PZH4E8",
+   "koelen_kw": 23.2,
+   "verwarmen_kw": 28.0,
+   "bruto_prijs": 6669,
+   "pagina": 6,
+   "zoekcodes": [
+    "LBK-U-250PZH4E8"
+   ],
+   "netto_prijs": 3801.33
+  }
+ ]
+}

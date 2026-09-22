@@ -1,0 +1,84 @@
+# Ondertekenaars van de offertebrieven.
+#
+# Een nieuwe collega toevoegen is één blok hieronder erbij — er hoeft geen code
+# aangepast te worden. De sleutel (bijv. nick_vervoorn) is de waarde die de tool
+# in het keuzemenu gebruikt.
+#
+# `initialen` wordt gebruikt voor het eerste deel van het veld "Ref."
+# (patroon: <initialen ondertekenaar>/[<initialen opsteller>/]SA<volgnummer>).
+#
+# Velden met `null` konden niet uit de brieven gehaald worden. Onder de
+# ondertekening staan alleen naam en functie; telefoonnummers en e-mailadressen
+# komen in de brieven uitsluitend voor als algemene bedrijfsgegevens in de
+# briefkop. Zie analyse/vragen.md vraag 5.
+
+ondertekenaars:
+
+  nick_vervoorn:
+    naam: "Nick Vervoorn"
+    functie: "Technisch Commercieel Adviseur"
+    initialen: "NV"           # bevestigd uit Ref. NV/... in 6 uitgewerkte brieven
+    telefoon: null            # staat niet in de brieven
+    mobiel: null              # staat niet in de brieven
+    email: null               # staat niet in de brieven
+    handtekening: null        # geen handtekeningafbeelding aangetroffen
+
+  john_van_de_weetering:
+    naam: "John van de Weetering"
+    # LET OP: de sjablonen schrijven consequent "Weetering" met dubbele e,
+    # de opdrachtgever schreef "Wetering". Zie analyse/vragen.md vraag 14.
+    functie: "Technisch Commercieel Manager"
+    initialen: "JvdW"         # bevestigd uit Ref. JvdW/VL/SA35838
+    telefoon: null
+    mobiel: null
+    email: null
+    handtekening: null
+
+  ricardo_rozendaal:
+    naam: "Ricardo Rozendaal"
+    functie: "Project Engineer"
+    initialen: "RR"           # afgeleid, niet bevestigd: geen Ref. met RR aangetroffen
+    telefoon: null
+    mobiel: null
+    email: null
+    handtekening: null
+
+  robert_hartman:
+    # Niet genoemd in de opdracht, wel aangetroffen als ondertekenaar van de
+    # uitgewerkte brieven (Ref. RH/...). Zie analyse/vragen.md vraag 4.
+    naam: "Robert Hartman"
+    functie: "Business Unit General Manager"
+    initialen: "RH"           # bevestigd uit Ref. RH/...
+    telefoon: null
+    mobiel: null
+    email: null
+    handtekening: null
+
+# Opstellers: het optionele middendeel van het veld "Ref.". Wie dit zijn is nog
+# niet bevestigd — zie analyse/vragen.md vraag 1d.
+opstellers:
+  RdJ: null                   # aangetroffen in 4 brieven
+  VL: null                    # aangetroffen in 1 brief
+  LH: null                    # aangetroffen in 1 brief
+
+# Gegevens die voor iedereen gelijk zijn. Letterlijk overgenomen uit de
+# Word-header van alle 16 sjablonen.
+bedrijf:
+  naam: "Schilt Bedrijven B.V."
+  business_unit: "Business Unit Schilt Airconditioning"
+  adres: "Energieweg 29"
+  postcode: "4231 DJ"
+  plaats: "Meerkerk"
+  telefoon: "+31 (0)183 35 25 44"
+  email: "info@schiltbedrijven.nl"
+  website: "www.schiltbedrijven.nl"
+  privacyverklaring: "www.schiltbedrijven.nl/privacyverklaring"
+  btw_nummer: "NL008929634B01"
+  kvk: "23044288"
+  bank:
+    bic: "INGBNL2A"
+    iban: "NL96 INGB 0676 071 317"
+  g_rekening:
+    iban: "NL76 INGB 0991 025 245"
+  algemene_voorwaarden: "Metaalunievoorwaarden (Koninklijke Metaalunie), gedeponeerd ter griffie van de rechtbank te Rotterdam"
+  classificatie: "C2-Vertrouwelijk"   # staat dubbel in de voettekst, zie vragen.md vraag 19

@@ -1,0 +1,90 @@
+{
+ "omzetbonus": [
+  {
+   "klant": "Geen bonusdragende klant",
+   "bonus": 0
+  },
+  {
+   "klant": "Unica Groep",
+   "bonus": 0.02
+  },
+  {
+   "klant": "BAM",
+   "bonus": 0.015
+  },
+  {
+   "klant": "Kuijpers Installaties",
+   "bonus": 0.015
+  },
+  {
+   "klant": "A. de Jong Inst.Techn.",
+   "bonus": 0.02
+  },
+  {
+   "klant": "Homij",
+   "bonus": 0.01
+  },
+  {
+   "klant": "Croonwolter&dros",
+   "bonus": 0.02
+  },
+  {
+   "klant": "DGC groep",
+   "bonus": 0.04
+  },
+  {
+   "klant": "Roodenburg",
+   "bonus": 0.03
+  },
+  {
+   "klant": "DMG, Keukens, \nBadkamers, Sanitair",
+   "bonus": 0.02
+  },
+  {
+   "klant": "Naaykens",
+   "bonus": 0.03
+  },
+  {
+   "klant": "Kropman",
+   "bonus": 0.03
+  },
+  {
+   "klant": "Soprowa Elsaker BV",
+   "bonus": 0.04
+  },
+  {
+   "klant": "Van Dorp Groep en \nVan Galen",
+   "bonus": 0.02
+  },
+  {
+   "klant": "Bink Installatietechniek \n(voorheen KIN)",
+   "bonus": 0.015
+  },
+  {
+   "klant": "ULC Groep B.V.",
+   "bonus": 0.02
+  },
+  {
+   "klant": "Equans Nederland B.V.",
+   "bonus": 0.01
+  }
+ ],
+ "provisie": [
+  {
+   "klant": "Geen provisie",
+   "provisie": 0
+  },
+  {
+   "klant": "Bosman Bedrijven",
+   "provisie": 0.1
+  },
+  {
+   "klant": "Van der Linden",
+   "provisie": 0.1
+  },
+  {
+   "klant": "GF Deko",
+   "provisie": 0.08
+  }
+ ]
+}

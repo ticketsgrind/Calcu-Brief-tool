@@ -1,0 +1,54 @@
+[
+ {
+  "provincie": "Geen parkeerkosten",
+  "tarief_per_uur": 0
+ },
+ {
+  "provincie": "Noord-Holland",
+  "tarief_per_uur": 8
+ },
+ {
+  "provincie": "Utrecht",
+  "tarief_per_uur": 6.9
+ },
+ {
+  "provincie": "Zuid-Holland",
+  "tarief_per_uur": 6.7
+ },
+ {
+  "provincie": "Noord-Brabant",
+  "tarief_per_uur": 3.7
+ },
+ {
+  "provincie": "Gelderland",
+  "tarief_per_uur": 3.2
+ },
+ {
+  "provincie": "Overijssel",
+  "tarief_per_uur": 2.1
+ },
+ {
+  "provincie": "Friesland",
+  "tarief_per_uur": 2.7
+ },
+ {
+  "provincie": "Groningen",
+  "tarief_per_uur": 2.7
+ },
+ {
+  "provincie": "Limburg",
+  "tarief_per_uur": 3.1
+ },
+ {
+  "provincie": "Drenthe",
+  "tarief_per_uur": 2.7
+ },
+ {
+  "provincie": "Flevoland",
+  "tarief_per_uur": 2.7
+ },
+ {
+  "provincie": "Zeeland",
+  "tarief_per_uur": 2.7
+ }
+]
