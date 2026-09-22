@@ -319,6 +319,68 @@ def _vrije_poort(voorkeur: int) -> int:
     raise SystemExit(f"geen vrije poort gevonden vanaf {voorkeur}")
 
 
+# Aantal beeldjes per seconde waarmee scherm/laadscherm.gif is gemaakt (zie
+# .github/workflows/build-app.yml) -- moet gelijk blijven aan de "fps"-waarde
+# in dat ffmpeg-commando, anders loopt de afspeelsnelheid hier uit de pas.
+LAADSCHERM_FPS = 12
+
+
+def _native_laadscherm_pad() -> Path | None:
+    """scherm/laadscherm.gif bestaat alleen in een gebouwde .exe/.app (zie de
+    ffmpeg-stap in de build-workflow) -- draai je vanuit de broncode, dan is
+    er geen gif en valt start() terug op gewoon de browser openen."""
+    gif = WORTEL / "scherm" / "laadscherm.gif"
+    return gif if gif.is_file() else None
+
+
+def _toon_native_laadscherm(gif_pad: Path) -> None:
+    """Speelt het laadscherm-filmpje (als gif, want tkinter kan geen video)
+    in een eigen, kaderloos venster op het bureaublad -- dit dekt precies het
+    stuk tussen dubbelklikken op de .exe en het openen van de browser, dat
+    een browserpagina nooit kan laten zien (er draait dan nog geen browser,
+    dus ook geen JavaScript). Blokkeert tot het filmpje één keer is
+    afgespeeld; roep dit dus aan vóórdat de browser wordt geopend, niet
+    ernaast. Elke fout (geen tkinter, geen beeldscherm, kapotte gif) komt
+    gewoon omhoog naar de aanroeper, die dan gewoon de browser opent."""
+    import tkinter as tk
+
+    root = tk.Tk()
+    root.title("Calcu-Brief-tool")
+    root.overrideredirect(True)  # geen titelbalk/randen -- een laadscherm, geen venster om te bedienen
+    root.attributes("-topmost", True)
+    root.configure(bg="#414B4D")
+
+    frames: list[tk.PhotoImage] = []
+    i = 0
+    while True:
+        try:
+            frames.append(tk.PhotoImage(file=str(gif_pad), format=f"gif -index {i}"))
+        except tk.TclError:
+            break
+        i += 1
+    if not frames:
+        root.destroy()
+        raise ValueError(f"{gif_pad} bevat geen leesbare beeldjes")
+
+    breedte, hoogte = frames[0].width(), frames[0].height()
+    scherm_b, scherm_h = root.winfo_screenwidth(), root.winfo_screenheight()
+    root.geometry(f"{breedte}x{hoogte}+{(scherm_b - breedte) // 2}+{(scherm_h - hoogte) // 2}")
+
+    label = tk.Label(root, image=frames[0], bd=0, bg="#414B4D")
+    label.pack()
+
+    frame_ms = round(1000 / LAADSCHERM_FPS)
+
+    def animeer(idx: int = 0) -> None:
+        label.configure(image=frames[idx])
+        root.after(frame_ms, animeer, (idx + 1) % len(frames))
+
+    animeer()
+    # Eén volledige lus, dan verder -- niet oneindig blijven doorspelen.
+    root.after(len(frames) * frame_ms, root.destroy)
+    root.mainloop()
+
+
 def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | None = None) -> int:
     # BRIEVENTOOL_BIBLIOTHEEK (bijv. een gedeelde OneDrive-map) blijft ook in
     # een gebouwde .exe/.app werken -- alleen als die niet gezet is, en er ook
@@ -345,16 +407,29 @@ def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | 
     adres = f"http://127.0.0.1:{poort}/"
     print(f"Calcu-Brief-tool draait op {adres}")
     print(f"  {len(bibliotheek.blokken)} tekstblokken · stoppen met Ctrl-C")
+
+    # serve_forever() draait op een eigen thread, zodat de hoofdthread vrij is
+    # om (indien beschikbaar) het native laadscherm te tonen -- dat MOET op de
+    # hoofdthread draaien (tkinter-eis, vooral hard op macOS). Bibliotheek en
+    # calculatiegegevens staan hierboven al klaar, dus de server kan gewoon
+    # meteen gaan luisteren; er hoeft nergens op "gereed" gewacht te worden.
+    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+    server_thread.start()
+
     if open_browser:
-        # Naar het laadscherm-filmpje, niet direct naar de tool: dat filmpje
-        # zelf regelt (scherm/splash.html) wanneer het naar "/" doorschakelt,
-        # zodra het is uitgespeeld. Op dit punt is de server al helemaal
-        # klaar (bibliotheek en calculatiegegevens zijn hierboven al geladen),
-        # dus er hoeft niet apart op "gereed" gewacht te worden.
-        threading.Timer(0.4, lambda: webbrowser.open(f"{adres}scherm/splash.html")).start()
+        gif_pad = _native_laadscherm_pad()
+        if gif_pad is not None:
+            try:
+                _toon_native_laadscherm(gif_pad)
+            except Exception as fout:
+                print(f"Laadscherm kon niet getoond worden ({fout}); open direct de browser.",
+                      file=sys.stderr)
+            webbrowser.open(adres)
+        else:
+            threading.Timer(0.4, lambda: webbrowser.open(adres)).start()
 
     try:
-        server.serve_forever()
+        server_thread.join()
     except KeyboardInterrupt:
         print("\nGestopt.")
     finally:

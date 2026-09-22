@@ -35,6 +35,17 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
+      - name: Zet het laadscherm-filmpje om naar een gif
+        # tkinter (voor het native laadscherm, zie server.py) kan geen video
+        # afspelen, wel een gif frame voor frame. ffmpeg staat al op de
+        # GitHub-runner. 12 fps moet gelijk blijven aan LAADSCHERM_FPS in
+        # server.py; 320px breed is ruim genoeg voor een laadscherm en houdt
+        # het bestand klein. palettegen/paletteuse: een gangbare tweetraps-
+        # aanpak voor een scherpere gif dan een simpele kleurreductie.
+        run: >
+          ffmpeg -y -i scherm/laadscherm.mp4
+          -vf "scale=320:-1:flags=lanczos,fps=12,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"
+          -loop 0 scherm/laadscherm.gif
       - name: Bouw CalcuBriefTool.exe
         # --onedir (niet --onefile): een onefile-.exe pakt zichzelf bij ELKE
         # start opnieuw uit naar een tijdelijke map, wat met dit filmpje erbij
@@ -79,6 +90,11 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
+      - name: Zet het laadscherm-filmpje om naar een gif
+        run: >
+          ffmpeg -y -i scherm/laadscherm.mp4
+          -vf "scale=320:-1:flags=lanczos,fps=12,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"
+          -loop 0 scherm/laadscherm.gif
       - name: Bouw CalcuBriefTool.app
         # --onedir is hier al PyInstaller's eigen standaard (in tegenstelling
         # tot Windows hierboven, waar --onefile expliciet aan moest staan);

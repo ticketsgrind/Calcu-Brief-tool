@@ -22,8 +22,9 @@ er hoeft niets geïnstalleerd te worden:
   dubbelklikken (eerste keer rechtsklik → Open, vanwege de onbekende-
   ontwikkelaar-waarschuwing van macOS).
 
-Bij het opstarten speelt eerst het laadscherm-filmpje in de browser; zodra
-dat is afgelopen schakelt hij vanzelf door naar de tool zelf.
+Bij het opstarten speelt eerst het laadscherm-filmpje op het bureaublad (niet
+in de browser — dat dekt precies de tijd tussen dubbelklikken en het openen
+van de browser); zodra dat is afgelopen opent de browser vanzelf met de tool.
 
 Deze bestanden worden automatisch opnieuw gebouwd bij elke wijziging (zie
 `.github/workflows/build-app.yml`) — de link hierboven geeft altijd de

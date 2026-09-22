@@ -140,40 +140,51 @@ voor beide PyInstaller-modi identiek: `sys._MEIPASS` wijst bij `--onedir` naar
 de map naast de `.exe` in plaats van een tijdelijke uitpakmap, maar de code
 hoeft dat onderscheid niet te kennen.
 
-## Laadscherm: twee lagen, met opzet gescheiden
+## Laadscherm: native (vóór de browser) + een overlay in de pagina
 
-**Laag 1 — `scherm/splash.html`, het filmpje.** `server.py:start()` opent de
-browser altijd hier eerst (niet op `/`), pas ná het laden van bibliotheek en
-calculatiegegevens — de server is dus al klaar op het moment dat dit scherm
-draait. Het speelt `scherm/laadscherm.mp4` (staand formaat, 10,24s, afgeleid
-uit de mp4-boxen zelf met een klein scriptje, niet afgespeeld — deze omgeving
-kon de video niet decoderen om te bekijken) helemaal af en schakelt dan pas
-door naar `/` (`location.replace`). Dat "helemaal afspelen, dan pas de tool"
-is een expliciete eis (niet zomaar een "tot het geladen is"-vangnet): omdat
-de server al klaar is tegen de tijd dat dit scherm opent, hoeft er verder
-nergens op gewacht te worden. Terugval bij een niet-afspeelbare video: zowel
-een `error`-listener als (want niet elke browser stuurt daadwerkelijk een
-`error`-event bij een ontbrekende codec) een noodrem van 15s. Bewust geen
-afhankelijkheid van `gedeeld.js`/`calculatie.js`/`brief.js`: dit bestand moet
-werken voordat er verder nog iets anders geladen is.
+**Waarom niet gewoon een pagina met het filmpje?** Eerdere versie opende de
+browser meteen naar zo'n pagina (`scherm/splash.html`, inmiddels verwijderd).
+Bleek niet te werken: het echte "duurt lang"-moment bij een gebouwde `.exe`
+is niet de tijd die de tool zelf nodig heeft (bibliotheek/calculatiegegevens
+laden is een kwestie van milliseconden), maar de tijd die de browser zelf
+nodig heeft om als apart programma op te starten — en tot die browser er is,
+kan geen enkele HTML-pagina iets laten zien. Dat gaf een "blauwe laadcirkel"
+van 10-20s met niets erachter, precies het probleem dat opgelost moest
+worden.
 
-**Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only,
-geen video meer sinds het filmpje naar `splash.html` is verhuisd) dekt alleen
-de eigen, veel kortere data-ophaal-stap van de tool zelf af: verdwijnt pas
-als zowel `CB.calc.klaar` als `CB.brief.klaar` zijn opgelost (zie de inline
-`<script>` onderaan dat bestand), dus na de materiaalcatalogus/YIMM/
-Panasonic/Daikin-data, `/keuzes` en de eerste `/bereken`-ronde. Voeg je een
-nieuwe async opstartstap toe aan een van beide stappen, neem die dan op in de
-`klaar`-promise van die stap, anders verdwijnt deze overlay te vroeg. Deze
-laag bestaat vooral voor wie rechtstreeks op `/` uitkomt zonder via de splash
-te zijn gegaan (bijv. een herlaadde pagina) — `MINIMALE_DUUR_MS` staat hier
-daarom laag (300ms, alleen om een flits-en-weg-effect te voorkomen), niet
-hoog zoals toen deze laag zelf nog de video liet zien.
+**Laag 1 — het native laadscherm**, `_toon_native_laadscherm()` in
+`server.py`, draait daarom vóórdat de browser wordt geopend, als een eigen,
+kaderloos venster (tkinter, stdlib, geen nieuwe afhankelijkheid). tkinter kan
+geen video afspelen, dus dit speelt `scherm/laadscherm.gif` (per frame via
+`tk.PhotoImage(..., format="gif -index N")`) — die gif bestaat alleen in een
+gebouwde `.exe`/`.app`, gemaakt uit `scherm/laadscherm.mp4` door een
+ffmpeg-stap in `.github/workflows/build-app.yml` (12 fps, moet gelijk
+blijven aan `LAADSCHERM_FPS` in `server.py`). Draai je vanuit de broncode
+(geen gif aanwezig), dan slaat `start()` dit laagje gewoon over en opent de
+browser zoals voorheen — `_native_laadscherm_pad()` geeft dan `None` terug.
+`serve_forever()` draait daarom op een eigen thread: tkinter's `mainloop()`
+moet op de hoofdthread (harde eis, vooral op macOS), en de server moet
+tegelijk al kunnen luisteren.
 
-**Waarom niet één laag?** Het `.exe`-opstartmoment (dubbelklikken tot de
-browser opent) valt buiten wat een pagina kan dekken — daar draait nog geen
-JavaScript. `splash.html` bestaat specifiek om dát moment te vullen met iets
-zichtbaars, onafhankelijk van hoe snel de rest daarna laadt.
+**Dit is het enige stuk van de hele tool dat niet vanuit deze omgeving te
+testen was** (geen tkinter, geen beeldscherm in de sandbox waarin dit
+gebouwd is) — bij een wijziging hier dus extra voorzichtig zijn en op een
+echte Windows-/Mac-machine controleren. Elke fout in
+`_toon_native_laadscherm()` wordt in `start()` opgevangen: bij een probleem
+(geen tkinter, corrupte gif, geen beeldscherm) print het een waarschuwing en
+opent gewoon de browser, in plaats van de app te laten crashen op wat
+uiteindelijk maar een laadscherm is.
+
+**Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only)
+dekt de eigen, veel kortere data-ophaal-stap van de tool zelf af zodra de
+browser eenmaal open is: verdwijnt pas als zowel `CB.calc.klaar` als
+`CB.brief.klaar` zijn opgelost (zie de inline `<script>` onderaan dat
+bestand), dus na de materiaalcatalogus/YIMM/Panasonic/Daikin-data, `/keuzes`
+en de eerste `/bereken`-ronde. Voeg je een nieuwe async opstartstap toe aan
+een van beide stappen, neem die dan op in de `klaar`-promise van die stap,
+anders verdwijnt deze overlay te vroeg. `MINIMALE_DUUR_MS` staat hier laag
+(300ms, alleen om een flits-en-weg-effect te voorkomen) — het filmpje zelf
+hoort nu alleen bij laag 1.
 
 ## Git
 
