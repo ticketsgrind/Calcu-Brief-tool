@@ -30,10 +30,15 @@ CB.debounce = (fn, ms) => {
 };
 
 /* ------------------------------- laadscherm ------------------------------ */
-// Blijft zichtbaar tot beide stappen klaar zijn met hun eigen opstart
-// (data ophalen, /keuzes, de eerste /bereken-ronde) — zie de aanroep van
-// CB.laadscherm.verberg() onderaan index.html.
+// Blijft zichtbaar tot beide stappen klaar zijn met hun eigen opstart (data
+// ophalen, /keuzes, de eerste /bereken-ronde) — zie de aanroep van
+// CB.laadscherm.verberg() onderaan index.html. Op localhost is die opstart
+// vaak binnen een paar honderd ms klaar, dus zonder ondergrens flitst het
+// laadscherm (en het filmpje erin) voorbij voor iemand het goed heeft
+// gezien; MINIMALE_DUUR_MS zorgt dat het minstens zo lang zichtbaar blijft.
 CB.laadscherm = {
+  _vanaf: Date.now(),
+  MINIMALE_DUUR_MS: 3000,
   zetStatus(tekst) {
     const el = document.getElementById('laadschermStatus');
     if (el) el.textContent = tekst;
@@ -41,8 +46,11 @@ CB.laadscherm = {
   verberg() {
     const el = document.getElementById('laadscherm');
     if (!el) return;
-    el.classList.add('klaar');
-    setTimeout(() => el.remove(), 400);
+    const wachttijd = Math.max(0, this.MINIMALE_DUUR_MS - (Date.now() - this._vanaf));
+    setTimeout(() => {
+      el.classList.add('klaar');
+      setTimeout(() => el.remove(), 400);
+    }, wachttijd);
   },
 };
 

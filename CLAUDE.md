@@ -112,6 +112,20 @@ beide stappen, neem die dan op in de `klaar`-promise van die stap
 (`CB.calc.klaar` / `CB.brief.klaar`), anders verdwijnt het laadscherm te
 vroeg.
 
+Het scherm zelf is `scherm/laadscherm.mp4`, staand formaat (afgeleid uit de
+mp4-boxen zelf met een klein scriptje, niet afgespeeld — deze omgeving kon de
+video niet decoderen om te bekijken). Twee dingen die daarbij horen:
+- **Ondergrens van 3s** (`CB.laadscherm.MINIMALE_DUUR_MS` in
+  `scherm/gedeeld.js`): op localhost is de opstart vaak binnen een paar
+  honderd ms klaar, dus zonder ondergrens flitst het filmpje voorbij voordat
+  iemand het ziet. `verberg()` wacht tot minstens die tijd is verstreken
+  sinds het laadscherm verscheen, ook al is de rest allang klaar.
+- **Terugval naar de spinner** (`.video-mislukt`-klasse): niet elke browser
+  stuurt een `error`-event als een `<video>` een codec niet ondersteunt (soms
+  blijft hij gewoon stil hangen) — er is dus zowel een `onerror`-handler als
+  een tijdslimiet van 2,5s zonder `playing`-event, allebei in de inline
+  `<script>` direct na de laadscherm-`<div>` in `scherm/index.html`.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

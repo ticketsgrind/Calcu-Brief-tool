@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import mimetypes
+import re
 import socket
 import sys
 import tempfile
@@ -251,13 +252,31 @@ class Bediening(BaseHTTPRequestHandler):
         return kandidaat
 
     def _bestand(self, pad: Path, content_type: str | None = None) -> None:
+        """Serveert een statisch bestand, met Range-ondersteuning (nodig voor
+        het laadscherm-filmpje: zonder 206 Partial Content laat lang niet elke
+        browser <video> soepel spelen/spoelen)."""
         try:
-            inhoud = pad.read_bytes()
+            grootte = pad.stat().st_size
         except OSError:
             return self._antwoord(404, {"fout": f"{pad.name} ontbreekt"})
         soort = content_type or mimetypes.guess_type(pad.name)[0] or "application/octet-stream"
-        self.send_response(200)
+
+        bereik = self.headers.get("Range")
+        treffer = re.match(r"bytes=(\d*)-(\d*)", bereik) if bereik else None
+        if treffer and (treffer.group(1) or treffer.group(2)):
+            start = int(treffer.group(1)) if treffer.group(1) else 0
+            eind = int(treffer.group(2)) if treffer.group(2) else grootte - 1
+            eind = min(eind, grootte - 1)
+            with pad.open("rb") as f:
+                f.seek(start)
+                inhoud = f.read(eind - start + 1)
+            self.send_response(206)
+            self.send_header("Content-Range", f"bytes {start}-{eind}/{grootte}")
+        else:
+            inhoud = pad.read_bytes()
+            self.send_response(200)
         self.send_header("Content-Type", soort)
+        self.send_header("Accept-Ranges", "bytes")
         self.send_header("Content-Length", str(len(inhoud)))
         self.end_headers()
         self.wfile.write(inhoud)

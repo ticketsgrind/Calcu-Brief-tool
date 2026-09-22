@@ -7,7 +7,22 @@ nooit als een afgeronde brief. Dit is de samenvoeging van twee eerder losse
 tools (de calculatietool en de brieventool); zie "Herkomst" onderaan voor wat
 daarbij is overgenomen, geport en toegevoegd.
 
-## Starten
+## Starten (voor collega's: downloaden en dubbelklikken, geen Python nodig)
+
+Op de [Releases-pagina](https://github.com/ticketsgrind/Calcu-Brief-tool/releases/tag/app-download)
+staat een op zichzelf staande app per platform — Python zit erin gebakken,
+er hoeft niets geïnstalleerd te worden:
+
+- **Windows:** `CalcuBriefTool.exe` downloaden, dubbelklikken.
+- **Mac:** `CalcuBriefTool-mac.zip` downloaden, uitpakken, `CalcuBriefTool.app`
+  dubbelklikken (eerste keer rechtsklik → Open, vanwege de onbekende-
+  ontwikkelaar-waarschuwing van macOS).
+
+Deze bestanden worden automatisch opnieuw gebouwd bij elke wijziging (zie
+`.github/workflows/build-app.yml`) — de link hierboven geeft altijd de
+nieuwste versie.
+
+## Starten vanuit de broncode (voor ontwikkelaars)
 
 **Mac:** dubbelklik `Calcu-Brief-tool.app`. Dat is een echte, headless
 app-bundel: geen Terminal-venster, alleen een systeemmelding als er iets
