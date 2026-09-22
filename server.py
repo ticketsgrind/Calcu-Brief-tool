@@ -37,7 +37,13 @@ from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
 from overdracht import zet_over
 
-WORTEL = Path(__file__).resolve().parent
+if getattr(sys, "frozen", False):
+    # Gebouwd met PyInstaller (--onefile/--windowed): de meegepakte data
+    # (analyse/, config/, sjablonen/, data/, scherm/) staat dan niet naast dit
+    # bestand maar in de tijdelijke uitpakmap die PyInstaller bijhoudt.
+    WORTEL = Path(sys._MEIPASS)  # type: ignore[attr-defined]
+else:
+    WORTEL = Path(__file__).resolve().parent
 SCHERM_MAP = WORTEL / "scherm"
 DATA_MAP = WORTEL / "data"
 SJABLOON = WORTEL / "sjablonen" / "brief.docx"
@@ -295,6 +301,14 @@ def _vrije_poort(voorkeur: int) -> int:
 
 
 def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | None = None) -> int:
+    # BRIEVENTOOL_BIBLIOTHEEK (bijv. een gedeelde OneDrive-map) blijft ook in
+    # een gebouwde .exe/.app werken -- alleen als die niet gezet is, en er ook
+    # geen --bibliotheek is meegegeven, valt een gebouwde app terug op zijn
+    # eigen meegepakte teksten.yaml (WORTEL) in plaats van naast een niet-
+    # bestaand .py-bestand te zoeken (laad()'s eigen standaardmap()).
+    import os
+    if bibliotheek_map is None and getattr(sys, "frozen", False) and not os.environ.get("BRIEVENTOOL_BIBLIOTHEEK"):
+        bibliotheek_map = WORTEL
     try:
         bibliotheek = laad(bibliotheek_map)
     except BibliotheekFout as fout:
@@ -307,7 +321,7 @@ def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | 
     poort = _vrije_poort(poort)
     server = ThreadingHTTPServer(("127.0.0.1", poort), Bediening)
     server.bibliotheek = bibliotheek
-    server.calc_gegevens = rk.laad_gegevens()
+    server.calc_gegevens = rk.laad_gegevens(DATA_MAP)
 
     adres = f"http://127.0.0.1:{poort}/"
     print(f"Calcu-Brief-tool draait op {adres}")

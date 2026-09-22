@@ -1,0 +1,90 @@
+name: Bouw standalone app (Windows + Mac)
+
+# Bouwt een echte, op zichzelf staande .exe (Windows) en .app (Mac) met
+# PyInstaller -- Python zit erin gebakken, dus een collega hoeft niets te
+# installeren: downloaden van de Release-pagina en dubbelklikken is genoeg.
+# Draait op GitHub's eigen Windows-/Mac-runners omdat je een .exe/.app niet
+# vanaf een andere besturingssysteem kunt bouwen (geen cross-compilatie).
+
+on:
+  push:
+    branches: [claude/magical-davinci-63dmec]
+    paths:
+      - "server.py"
+      - "overdracht.py"
+      - "brieventool/**"
+      - "calculatie/**"
+      - "scherm/**"
+      - "data/**"
+      - "analyse/**"
+      - "config/**"
+      - "sjablonen/**"
+      - "requirements.txt"
+      - ".github/workflows/build-app.yml"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt pyinstaller
+      - name: Bouw CalcuBriefTool.exe
+        run: >
+          pyinstaller --onefile --noconsole --name CalcuBriefTool
+          --add-data "analyse;analyse"
+          --add-data "config;config"
+          --add-data "sjablonen;sjablonen"
+          --add-data "data;data"
+          --add-data "scherm;scherm"
+          server.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CalcuBriefTool-windows
+          path: dist/CalcuBriefTool.exe
+      - name: Publiceer op de Release-pagina
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view app-download --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create app-download --repo "$GITHUB_REPOSITORY" \
+              --title "Calcu-Brief-tool — desktop-app" \
+              --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Downloaden en dubbelklikken; geen Python nodig."
+          gh release upload app-download dist/CalcuBriefTool.exe --repo "$GITHUB_REPOSITORY" --clobber
+
+  macos:
+    needs: windows  # voorkomt dat beide jobs tegelijk de release proberen aan te maken
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r requirements.txt pyinstaller
+      - name: Bouw CalcuBriefTool.app
+        run: >
+          pyinstaller --windowed --name CalcuBriefTool
+          --add-data "analyse:analyse"
+          --add-data "config:config"
+          --add-data "sjablonen:sjablonen"
+          --add-data "data:data"
+          --add-data "scherm:scherm"
+          server.py
+      - name: Zip de .app (bewaart de bundel-structuur en het uitvoerbaar-vlag)
+        run: cd dist && ditto -c -k --keepParent CalcuBriefTool.app CalcuBriefTool-mac.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CalcuBriefTool-mac
+          path: dist/CalcuBriefTool-mac.zip
+      - name: Publiceer op de Release-pagina
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload app-download dist/CalcuBriefTool-mac.zip --repo "$GITHUB_REPOSITORY" --clobber
