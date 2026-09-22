@@ -35,13 +35,17 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
+      - name: Installeer ffmpeg
+        # Staat niet standaard op het PATH van de windows-latest runner;
+        # chocolatey (wel standaard aanwezig) installeert het.
+        run: choco install ffmpeg -y
       - name: Zet het laadscherm-filmpje om naar een gif
         # tkinter (voor het native laadscherm, zie server.py) kan geen video
-        # afspelen, wel een gif frame voor frame. ffmpeg staat al op de
-        # GitHub-runner. 12 fps moet gelijk blijven aan LAADSCHERM_FPS in
-        # server.py; 320px breed is ruim genoeg voor een laadscherm en houdt
-        # het bestand klein. palettegen/paletteuse: een gangbare tweetraps-
-        # aanpak voor een scherpere gif dan een simpele kleurreductie.
+        # afspelen, wel een gif frame voor frame. 12 fps moet gelijk blijven
+        # aan LAADSCHERM_FPS in server.py; 320px breed is ruim genoeg voor
+        # een laadscherm en houdt het bestand klein. palettegen/paletteuse:
+        # een gangbare tweetraps-aanpak voor een scherpere gif dan een
+        # simpele kleurreductie.
         run: >
           ffmpeg -y -i scherm/laadscherm.mp4
           -vf "scale=320:-1:flags=lanczos,fps=12,split[s0][s1];[s0]palettegen[p];[s1][p]paletteuse"
@@ -90,6 +94,8 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements.txt pyinstaller
+      - name: Installeer ffmpeg (indien nog niet aanwezig)
+        run: brew list ffmpeg &>/dev/null || brew install ffmpeg
       - name: Zet het laadscherm-filmpje om naar een gif
         run: >
           ffmpeg -y -i scherm/laadscherm.mp4
