@@ -9,18 +9,37 @@ daarbij is overgenomen, geport en toegevoegd.
 
 ## Starten
 
-**Mac:** dubbelklik `start.command` (eerste keer: rechtsklik → Open, vanwege
-onbekende-ontwikkelaar-waarschuwing).
-**Windows:** dubbelklik `start.bat`.
+**Mac:** dubbelklik `Calcu-Brief-tool.app`. Dat is een echte, headless
+app-bundel: geen Terminal-venster, alleen een systeemmelding als er iets
+misgaat (Python ontbreekt, of `pip install -r requirements.txt` is nog niet
+gedraaid). Eerste keer: rechtsklik → Open (onbekende-ontwikkelaar-
+waarschuwing van macOS).
+
+Wil je een pictogram op je Bureaublad of in het Dock? Sleep het `.app`-
+bestand daar **niet** los naartoe — hij verwacht de rest van de projectmap
+naast zich. Maak in plaats daarvan een Finder-alias (rechtsklik op
+`Calcu-Brief-tool.app` → Maak alias) en sleep die alias naar je Bureaublad of
+Dock; die blijft naar de app in de projectmap wijzen.
+
+**Windows:** dubbelklik `start-app.pyw`. Windows koppelt `.pyw`-bestanden
+standaard aan `pythonw.exe`, dat draait zonder zwart consolevenster (fouten
+komen als een dialoogvenster). Wil je juist wél live meelezen wat de server
+doet (bijv. om een probleem uit te zoeken), gebruik dan `start.bat`.
+Bureaublad-snelkoppeling: rechtsklik `start-app.pyw` → Verzenden naar →
+Bureaublad (snelkoppeling maken).
 
 Beide starten een lokale server en openen de tool in je browser
-(`http://127.0.0.1:8391/`). De app is bewust niet van buitenaf bereikbaar: er
-staan klant- en prijsgegevens in.
+(`http://127.0.0.1:8391/`), met een kort laadscherm terwijl de gegevens en de
+rekenkern klaarstaan. De app is bewust niet van buitenaf bereikbaar: er staan
+klant- en prijsgegevens in.
 
-Vereist: Python 3.11+ (`python3 --version`). Zonder de dubbelklik-opstarter
-kan het ook met:
+Vereist: Python 3.11+ (`python3 --version` / `python --version`) mét de
+afhankelijkheden geïnstalleerd:
 
     pip install -r requirements.txt   # PyYAML + Jinja2, allebei pure Python
+
+Zonder dubbelklik-opstarter kan het ook rechtstreeks:
+
     python3 server.py
     python3 server.py --poort 8000 --geen-browser
 
@@ -62,7 +81,10 @@ geen archief, alleen die ene computer heeft het.
 
 ## Indeling
 
-    server.py            de lokale app: bedient beide stappen
+    server.py             de lokale app: bedient beide stappen
+    Calcu-Brief-tool.app/ dubbelklik-opstarter voor Mac (geen Terminal-venster)
+    start-app.pyw         dubbelklik-opstarter voor Windows (geen consolevenster)
+    start.command / .bat  dezelfde opstart, wél met zichtbare terminal/console (handig bij problemen)
     calculatie/
       rekenkern.py        de rekenkern (marge, uren, afgeleide materiaalregels)
     overdracht.py         zet een calculatie om in een briefconcept

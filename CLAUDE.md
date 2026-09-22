@@ -86,6 +86,32 @@ voorvoegsel (`/scherm/app.js`, `/data/foo.json`) — nooit op de root. HTML/JS
 die naar deze bestanden verwijst moet dus `scherm/...` schrijven, niet een
 kale bestandsnaam (die zou naar `/bestand.js` resolven, wat een 404 geeft).
 
+## De dubbelklik-opstarters gaan uit van hun plek in de projectmap
+
+`Calcu-Brief-tool.app` (Mac) en `start-app.pyw`/`start.bat` (Windows) vinden
+`server.py` via een relatief pad vanaf hun eigen locatie — ze moeten dus
+in de projectmap blijven staan. Een `.app` die je los naar het Bureaublad
+sleept, verliest die relatie; een Finder-alias (of op Windows een
+snelkoppeling) niet, vandaar dat de README dat aanraadt in plaats van
+verplaatsen/kopiëren. macOS start een `.app`-bundel headless (geen
+Terminal-venster): `Contents/MacOS/start` toont fouten daarom als
+`osascript display alert` in plaats van ze te printen, en logt de server
+zelf naar `.calcubrief-server.log` (gitignored) voor het geval de melding
+niet genoeg zegt. Windows-equivalent: `start-app.pyw` draait via
+`pythonw.exe` (geen console) en gebruikt `tkinter.messagebox` voor
+foutmeldingen.
+
+## Laadscherm
+
+De overlay in `scherm/index.html` (`#laadscherm`) verdwijnt pas als zowel
+`CB.calc.klaar` als `CB.brief.klaar` zijn opgelost (zie de inline `<script>`
+onderaan dat bestand) — dus pas als de materiaalcatalogus/YIMM/Panasonic/
+Daikin-data zijn opgehaald, `/keuzes` is geladen én de eerste `/bereken`-
+ronde is geweest. Voeg je een nieuwe async opstartstap toe aan een van
+beide stappen, neem die dan op in de `klaar`-promise van die stap
+(`CB.calc.klaar` / `CB.brief.klaar`), anders verdwijnt het laadscherm te
+vroeg.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

@@ -189,6 +189,16 @@ table tfoot td{font-weight:700; border-top:2px solid var(--border); border-botto
 .sectie-browser-row select{cursor:pointer;}
 .override-flag{font-size:10.5px; color:var(--blauw); font-weight:700; cursor:pointer; margin-left:6px;}
 
+.laadscherm-merk{display:flex; align-items:center; gap:14px; color:#fff;}
+.laadscherm-titel{font-size:20px; font-weight:700; letter-spacing:.01em;}
+.laadscherm-spinner{
+  width:34px; height:34px; border-radius:50%;
+  border:3px solid rgba(255,255,255,.25); border-top-color:var(--blauw);
+  animation:laadscherm-draai .8s linear infinite;
+}
+@keyframes laadscherm-draai{to{transform:rotate(360deg);}}
+.laadscherm-status{color:rgba(255,255,255,.75); font-size:13px; min-height:16px;}
+
 .brief-layout{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
 @media (max-width:960px){.brief-layout{grid-template-columns:1fr;}}
 .vinkjes-lijst{display:grid; grid-template-columns:1fr 1fr; gap:4px 14px;}

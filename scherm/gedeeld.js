@@ -29,6 +29,23 @@ CB.debounce = (fn, ms) => {
   };
 };
 
+/* ------------------------------- laadscherm ------------------------------ */
+// Blijft zichtbaar tot beide stappen klaar zijn met hun eigen opstart
+// (data ophalen, /keuzes, de eerste /bereken-ronde) — zie de aanroep van
+// CB.laadscherm.verberg() onderaan index.html.
+CB.laadscherm = {
+  zetStatus(tekst) {
+    const el = document.getElementById('laadschermStatus');
+    if (el) el.textContent = tekst;
+  },
+  verberg() {
+    const el = document.getElementById('laadscherm');
+    if (!el) return;
+    el.classList.add('klaar');
+    setTimeout(() => el.remove(), 400);
+  },
+};
+
 CB.toast = msg => {
   const el = document.getElementById('toast');
   el.textContent = msg;

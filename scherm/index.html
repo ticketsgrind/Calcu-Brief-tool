@@ -5,8 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Calcu-Brief-tool — Schilt Airconditioning</title>
 <link rel="stylesheet" href="scherm/stijl.css">
+<style>
+  /* Inline, zodat het laadscherm er ook al staat voordat stijl.css klaar is
+     met laden — dat scheelt een flits van onopgemaakte inhoud. */
+  #laadscherm{position:fixed; inset:0; z-index:1000; background:#414B4D;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:18px;
+    transition:opacity .35s ease; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;}
+  #laadscherm.klaar{opacity:0; pointer-events:none;}
+</style>
 </head>
 <body>
+
+<div id="laadscherm">
+  <div class="laadscherm-merk">
+    <span class="zwiep" style="width:40px;height:40px;"></span>
+    <div class="laadscherm-titel">Schilt Airconditioning</div>
+  </div>
+  <div class="laadscherm-spinner"></div>
+  <div class="laadscherm-status" id="laadschermStatus">Bezig met opstarten…</div>
+</div>
 
 <header class="topbar">
   <div class="logo"><span class="zwiep"></span> Schilt Airconditioning — Calculatie &amp; Brief</div>
@@ -285,7 +302,10 @@
     // se DOMContentLoaded-handlers, die eerder in het bestand staan en dus
     // eerder draaien); pas als allebei klaar zijn is er een standaard-state
     // om de autosave overheen te zetten.
-    Promise.all([CB.calc.klaar, CB.brief.klaar]).then(() => CB.laadAutosave());
+    Promise.all([CB.calc.klaar, CB.brief.klaar]).then(() => {
+      CB.laadAutosave();
+      CB.laadscherm.verberg();
+    });
   });
 </script>
 </body>

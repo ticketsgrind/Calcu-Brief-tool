@@ -398,6 +398,7 @@ function bindFormulier() {
 }
 
 async function initBrief() {
+  CB.laadscherm.zetStatus('Briefbibliotheek laden…');
   keuzes = await CB.getJSON('/keuzes');
   bindFormulier();
   render();

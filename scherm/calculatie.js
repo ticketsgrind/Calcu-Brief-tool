@@ -811,11 +811,13 @@ async function laadData() {
 }
 
 async function initCalculatie() {
+  CB.laadscherm.zetStatus('Materiaal- en prijsgegevens laden…');
   await laadData();
   state = nieuweStaat();
   bindMeta(); bindInstallaties(); bindMateriaal(); bindUren();
   bindLijst('uitbestedingBody', 'uitbesteding'); bindLijst('equipmentBody', 'equipment');
   bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles();
+  CB.laadscherm.zetStatus('Rekenkern voorbereiden…');
   await herbereken();
 }
 

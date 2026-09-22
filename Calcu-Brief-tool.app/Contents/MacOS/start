@@ -1,0 +1,33 @@
+#!/bin/bash
+# Dubbelklikbare opstarter in de .app-bundel. macOS start een app-bundel
+# headless (geen Terminal-venster, anders dan bij start.command) — fouten
+# zijn dus onzichtbaar tenzij we ze zelf als systeemmelding tonen.
+set -u
+HIER="$(cd "$(dirname "$0")/../../.." && pwd)"
+cd "$HIER" || exit 1
+
+melding() {
+  /usr/bin/osascript -e "display alert \"$1\" message \"$2\" as critical" >/dev/null 2>&1
+}
+
+if ! command -v python3 >/dev/null 2>&1; then
+  melding "Python 3 niet gevonden" "Installeer Python 3 vanaf python.org en probeer het opnieuw."
+  exit 1
+fi
+
+if ! python3 -c "import yaml, jinja2" >/dev/null 2>&1; then
+  melding "Ontbrekende Python-pakketten" \
+    "Open een terminal in deze map en draai:\npip3 install -r requirements.txt"
+  exit 1
+fi
+
+LOG="$HIER/.calcubrief-server.log"
+python3 server.py > "$LOG" 2>&1 &
+SERVER_PID=$!
+
+sleep 2
+if ! kill -0 "$SERVER_PID" 2>/dev/null; then
+  FOUT="$(tail -8 "$LOG" 2>/dev/null | tr -d '"' | tr '\n' ' ')"
+  melding "Calcu-Brief-tool kon niet starten" "$FOUT"
+  exit 1
+fi

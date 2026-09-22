@@ -9,3 +9,6 @@ venv/
 .DS_Store
 uit/
 node_modules/
+
+# Servermeldingen van de .app-opstarter (alleen relevant bij een mislukte start)
+.calcubrief-server.log
