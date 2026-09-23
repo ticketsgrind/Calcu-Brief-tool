@@ -50,19 +50,61 @@ CB.debounce = (fn, ms) => {
 };
 
 /* ------------------------------- laadscherm ------------------------------ */
-// Het laadscherm-filmpje zelf speelt native (tkinter, zie
-// server.py:_toon_native_laadscherm), vóór de browser al open is; deze
-// overlay op index.html is een veel kortere, spinner-only terugval voor de
-// eigen data-ophaal-stap van de calculatiestap (materiaalcatalogus/YIMM/
-// Panasonic/Daikin, de eerste /bereken-ronde) -- voor wie rechtstreeks op
-// "/" uitkomt (bijv. door te herladen) is er dus nog altijd iets te zien.
-// Blijft zichtbaar tot CB.calc.klaar is opgelost -- zie de aanroep van
-// CB.laadscherm.verberg() onderaan index.html. MINIMALE_DUUR_MS is klein:
-// alleen om een flits-en-weg-effect te voorkomen, niet om iets te laten zien
-// (dat doet het native laadscherm al).
+// Het laadscherm-filmpje speelt hier gewoon in de pagina (een <video>-
+// element in #laadscherm, index.html) -- niet meer native vóór de browser
+// open is zoals eerder werd geprobeerd (zie CLAUDE.md §Laadscherm): dat
+// crashte op een echte machine, doordat een fout in de native video-weergave
+// het hele proces meetrok. Een <video>-element draait in de browser's eigen
+// sandbox en kan dat niet meer doen; init() hieronder vangt een mislukte
+// afspeelpoging (ontbrekend bestand, browser ondersteunt de codec niet) af
+// met een terugval naar de oude spinner, in plaats van een lege plek waar
+// eerst het filmpje stond. Deze overlay dekt zo ook de eigen data-ophaal-
+// stap van de calculatiestap (materiaalcatalogus/YIMM/Panasonic/Daikin, de
+// eerste /bereken-ronde) af -- blijft zichtbaar tot CB.calc.klaar is
+// opgelost, zie de aanroep van CB.laadscherm.verberg() onderaan index.html.
+//
+// MINIMALE_DUUR_MS is expres (ongeveer) net zo lang als het filmpje: de
+// data-ophaal-stap is hier lokaal typisch een kwestie van milliseconden,
+// dus zonder deze wachttijd zou verberg() de hele #laadscherm-div (met het
+// filmpje erin) al weghalen ruim vóórdat het filmpje ook maar goed en wel
+// geladen is -- de browser breekt zo'n nog lopende download dan af
+// (net::ERR_ABORTED), dus zonder deze wachttijd zou het filmpje in de
+// praktijk vrijwel nooit te zien zijn. init() leest de echte duur van het
+// filmpje uit zodra die bekend is (dus dit blijft kloppen als
+// scherm/laadscherm.mp4 ooit door een andere versie vervangen wordt); de
+// waarde hieronder is alleen de terugval voor de korte periode vóórdat die
+// metadata binnen is, en (in het onwaarschijnlijke geval dat die nooit
+// binnenkomt) voor de rest van die sessie -- 10240ms is de duur van het
+// filmpje op het moment van schrijven.
 CB.laadscherm = {
   _vanaf: Date.now(),
-  MINIMALE_DUUR_MS: 300,
+  MINIMALE_DUUR_MS: 10300,
+  // Wordt onderaan dit bestand meteen aangeroepen: de #laadscherm-elementen
+  // staan al in de DOM (dit script staat onderaan de body), dus dat hoeft
+  // niet op DOMContentLoaded te wachten.
+  init() {
+    const video = document.getElementById('laadschermVideo');
+    if (!video) return;
+    video.addEventListener('error', () => this._toonSpinnerTerugval());
+    video.addEventListener('loadedmetadata', () => {
+      if (isFinite(video.duration) && video.duration > 0) {
+        this.MINIMALE_DUUR_MS = Math.ceil(video.duration * 1000) + 100;
+      }
+    });
+  },
+  _toonSpinnerTerugval() {
+    const video = document.getElementById('laadschermVideo');
+    const merk = document.getElementById('laadschermMerk');
+    const spinner = document.getElementById('laadschermSpinner');
+    if (video) video.style.display = 'none';
+    if (merk) merk.style.display = '';
+    if (spinner) spinner.style.display = '';
+    // Geen filmpje meer om op te wachten -- de lange MINIMALE_DUUR_MS
+    // hierboven bestaat alleen om het filmpje de tijd te geven, dus die
+    // wachttijd heeft hier geen functie meer en zou de gebruiker onnodig
+    // op de spinner laten wachten.
+    this.MINIMALE_DUUR_MS = 300;
+  },
   zetStatus(tekst) {
     const el = document.getElementById('laadschermStatus');
     if (el) el.textContent = tekst;
@@ -82,7 +124,9 @@ CB.laadscherm = {
   // enkel verschil met "duurt gewoon nog even". Toon in plaats daarvan wat
   // er misging, in de plek waar toch al naar gekeken wordt.
   toonFout(fout) {
-    const spinner = document.querySelector('.laadscherm-spinner');
+    const video = document.getElementById('laadschermVideo');
+    if (video) video.style.display = 'none';
+    const spinner = document.getElementById('laadschermSpinner');
     if (spinner) spinner.style.display = 'none';
     const el = document.getElementById('laadschermStatus');
     if (!el) return;
@@ -91,6 +135,7 @@ CB.laadscherm = {
       + '. Probeer de pagina te verversen (F5); blijft dit gebeuren, stuur deze melding door.';
   },
 };
+CB.laadscherm.init();
 
 CB.toast = msg => {
   const el = document.getElementById('toast');

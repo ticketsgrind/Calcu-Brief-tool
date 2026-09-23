@@ -277,40 +277,63 @@ te worden — de asset staat er wel, de weergave loopt alleen nog achter. De
 downloadlink (`.../releases/tag/app-download`) blijft ondertussen hetzelfde,
 want de tagnaam verandert niet.
 
-## Laadscherm: het native filmpje is uitgeschakeld (crashte op een echte machine)
+## Laadscherm: het filmpje speelt in de browser, niet meer native ervoor
 
-**Wat er was geprobeerd.** Om het "duurt lang"-moment tussen dubbelklikken op
-de `.exe` en het openen van de browser (10-20s blauwe laadcirkel, met niets
-erachter) te dekken, speelde `server.py` vóór het openen van de browser
-`scherm/laadscherm.mp4` af als gif (`tk.PhotoImage(..., format="gif -index
-N")`) in een eigen, kaderloos tkinter-venster. De gif werd bij het bouwen
-gemaakt uit het filmpje via ffmpeg (`.github/workflows/build-app.yml`,
-inmiddels ook weer verwijderd).
+**Wat er eerst was geprobeerd, en waarom dat uitgeschakeld is.** Om het
+"duurt lang"-moment tussen dubbelklikken op de `.exe` en het openen van de
+browser (10-20s blauwe laadcirkel, met niets erachter) te dekken, speelde
+`server.py` vóór het openen van de browser `scherm/laadscherm.mp4` af als
+gif in een eigen, kaderloos tkinter-venster. Dit was letterlijk het enige
+stuk van de hele tool dat niet vanuit deze ontwikkelomgeving te testen was
+(geen tkinter, geen beeldscherm in de sandbox) — en het bleek op een echte
+Windows-machine de app te laten crashen vóórdat er iets te zien was, op een
+manier die zelfs Python's eigen foutafhandeling omzeilde (leeg
+`calcubrief-log.txt`, wat op een harde, native crash wijst, vermoedelijk in
+de Tcl/Tk-bibliotheek zelf). Zie git-historie voor de volledige diagnose;
+dit is toen volledig verwijderd uit `server.py` (geen
+`_toon_native_laadscherm()`/`_native_laadscherm_pad()`/`LAADSCHERM_FPS`
+meer) en `build-app.yml` (geen ffmpeg/gif-stap meer).
 
-**Waarom dat nu uitgeschakeld is.** Dit was letterlijk het enige stuk van de
-hele tool dat niet vanuit deze ontwikkelomgeving te testen was (geen
-tkinter, geen beeldscherm in de sandbox) — en het bleek op een echte
-Windows-machine de app te laten crashen vóórdat er iets te zien was. Niet op
-een manier die met een gewone `try`/`except` op te vangen was: het
-logbestand (zie hieronder) bevatte na zo'n mislukte poging geen enkele
-regel, ook niet de allereerste regel die altijd meteen bij het opstarten
-wordt weggeschreven — dat wijst op een harde, native crash (vermoedelijk in
-de Tcl/Tk-bibliotheek zelf) die het hele proces meeneemt vóórdat Python's
-eigen foutafhandeling of bestand-buffering nog kan draaien. Een oudere build
-van vóór dit laadscherm bestond (destijds nog `--onefile`, dus zonder de
-`_internal`-map met `tcl86t.dll`/`tk86t.dll`) werkte op diezelfde machine
-wel altijd probleemloos, wat dit bevestigde.
+**Nu speelt het filmpje in de pagina zelf** — gewoon een `<video>`-element
+(`#laadschermVideo`) in de `#laadscherm`-overlay van `scherm/index.html`,
+niet meer native vóórdat de browser open is. Dat is fundamenteel veiliger:
+een `<video>` draait in de browser's eigen sandbox, dus een probleem daarmee
+(ontbrekend bestand, browser ondersteunt de codec niet) kan nooit meer de
+hele app meetrekken zoals de tkinter-versie deed. `CB.laadscherm.init()`
+(`scherm/gedeeld.js`) luistert daarom naar het `error`-event op de video en
+valt bij zo'n fout terug op de oude spinner (`#laadschermMerk` +
+`#laadschermSpinner`, beide standaard verborgen) in plaats van een lege plek
+waar het filmpje stond — dat gebeurde ook echt tijdens het bouwen hiervan:
+de headless Chromium in deze ontwikkelomgeving kan dit specifieke bestand
+niet decoderen (`DEMUXER_ERROR_NO_SUPPORTED_STREAMS`, vermoedelijk een build
+zonder H.264-ondersteuning) — een goede, onbedoelde test van precies dit
+terugvalpad. Reguliere browsers (Chrome/Edge/Safari op een echte pc/Mac)
+ondersteunen H.264/AAC in mp4 wél gewoon.
 
-Gezien dit al meerdere keren de hele app onbruikbaar maakte voor collega's,
-en niet op afstand te diagnosticeren viel (geen Windows-machine hier, en de
-fout omzeilt Python's eigen foutafhandeling), is dit weer uitgeschakeld:
-`server.py` opent na het opstarten van de server nu weer gewoon direct de
-browser (`threading.Timer(0.4, ...)`), zoals vóór dit filmpje er was.
-`scherm/laadscherm.mp4` staat nog gewoon in de repository (voor als dit ooit
-veiliger opnieuw wordt opgepakt, bijv. door het filmpje in een apart proces
-te tonen zodat een crash daar niet de hele app meeneemt), maar wordt niet
-meer meegepakt in de build (zie de "verwijder het filmpje"-stap in
-`build-app.yml`) en er is geen ffmpeg/gif-stap meer nodig.
+**`MINIMALE_DUUR_MS` is expres (ongeveer) de duur van het filmpje** (10,24s
+op het moment van schrijven, `10300` als terugvalwaarde in de code totdat
+`loadedmetadata` de echte duur teruggeeft), niet meer een klein getal om
+alleen een flits-en-weg-effect te voorkomen. Reden: de data-ophaal-stap
+hieronder is lokaal typisch een kwestie van milliseconden, dus zonder deze
+langere wachttijd zou de overlay (met het filmpje erin) al verwijderd worden
+ruim vóórdat het filmpje ook maar goed geladen is — de browser breekt zo'n
+nog lopende download dan gewoon af (`net::ERR_ABORTED`, ook zo aangetroffen
+tijdens het testen hiervan), waardoor het filmpje in de praktijk vrijwel
+nooit te zien zou zijn geweest. Bij een `error` (zie hierboven) heeft
+wachten geen zin meer: `_toonSpinnerTerugval()` zet `MINIMALE_DUUR_MS` dan
+terug naar 300ms, zodat een gebruiker bij wie het filmpje niet afspeelt niet
+alsnog onnodig 10 seconden naar een spinner hoeft te staren.
+
+**`scherm/laadscherm.mp4` wordt weer meegepakt in de build** (`--add-data
+"scherm;scherm"` bevat het al, dus er was geen aparte stap nodig) — de
+eerdere "verwijder het filmpje uit de build"-stappen in `build-app.yml` zijn
+verwijderd, want het bestand wordt nu wél gebruikt. Vervang je dit bestand
+ooit door een andere versie: de duur wordt automatisch opnieuw uitgelezen
+(zie `loadedmetadata` in `CB.laadscherm.init()`), dus de `10300`-terugvalwaarde
+hoeft dan niet per se aangepast te worden (die is toch alleen de korte
+overbrugging vóórdat de echte duur bekend is) — wel zo netjes om 'm bij een
+bewuste, blijvende vervanging alsnog bij te werken zodat de code zichzelf
+blijft documenteren.
 
 **De rest van de laadscherm-diagnostiek blijft wel relevant.** Een
 `--windowed`/`--noconsole`-build (zowel de Windows-.exe als de Mac-.app)
@@ -336,15 +359,15 @@ gebouwde app** — check eerst of `calcubrief-log.txt` bestaat en wat erin
 staat (leeg bestand = harde crash, geen bestand = nog niet eens tot in
 `server.py` gekomen, een foutmelding erin = een gewone, opgevangen fout).
 
-**De overlay in `scherm/index.html`** (`#laadscherm`, spinner-only) dekt de
-eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af zodra de
-browser eenmaal open is: verdwijnt pas als `CB.calc.klaar` is opgelost (zie
-de inline `<script>` onderaan dat bestand), dus na de materiaalcatalogus/
-YIMM/Panasonic/Daikin-data en de eerste `/bereken`-ronde. Voeg je een nieuwe
-async opstartstap toe aan de calculatiestap, neem die dan op in die
-`klaar`-promise, anders verdwijnt deze overlay te vroeg. `MINIMALE_DUUR_MS`
-staat hier laag (300ms, alleen om een flits-en-weg-effect te voorkomen).
-`scherm/brief.html` is een eigen pagina met zijn eigen (eenvoudigere)
+**De overlay in `scherm/index.html`** (`#laadscherm`, met het filmpje erin,
+zie hierboven) dekt de eigen data-ophaal-stap van de calculatiestap zelf af
+zodra de browser eenmaal open is: verdwijnt pas als zowel `CB.calc.klaar` is
+opgelost (zie de inline `<script>` onderaan dat bestand) als de
+`MINIMALE_DUUR_MS`-wachttijd voorbij is — dus na de materiaalcatalogus/YIMM/
+Panasonic/Daikin-data, de eerste `/bereken`-ronde, én (in het normale geval)
+het filmpje. Voeg je een nieuwe async opstartstap toe aan de calculatiestap,
+neem die dan op in die `klaar`-promise, anders verdwijnt deze overlay te
+vroeg. `scherm/brief.html` is een eigen pagina met zijn eigen (eenvoudigere)
 laadgedrag, zie hierboven.
 
 ## Git
