@@ -68,39 +68,44 @@ Zonder dubbelklik-opstarter kan het ook rechtstreeks:
 
 ## Hoe de twee stappen samenhangen
 
-- **Stap 1 — Calculatie**: installaties, materiaal, uren, uitbesteding,
-  equipment en de marge-opbouw tot en met de verkoopprijs. De rekenkern
-  (`calculatie/rekenkern.py`) is de enige plek waar dit wordt uitgerekend —
-  het scherm stuurt bij elke wijziging de invoer naar `POST /bereken` en
-  toont het antwoord, precies zoals stap 2 dat al deed voor de brief. Zo
-  kunnen de twee stappen nooit een verschillend bedrag laten zien.
-- **Overdracht**: de knop "↺ Vul voor vanuit de calculatie" in stap 2 zet de
-  calculatie om in een (deels ingevulde) briefconcept (`overdracht.py`).
-  Directe overnames (datum, verkoopprijs, merk, aantallen) worden gewoon
-  ingevuld. Onzekere afleidingen — vooral de vertaling van de calculatie se
-  grove systeemsoort (VRF/RAC/PAC/Overig) naar de fijnere indeling die de
-  brief kent (splitsystem/multi-splitsystem/vrf/warmtepomp/
-  vloeistofkoelmachine) — krijgen het label **"afgeleid — controleer"** en
-  blijven gewoon een bewerkbaar veld. Wat de calculatie niet kan weten
-  (klanttype, adres, aanhef, facturering, ondertekenaar, ...) blijft een
-  gewoon, door `brieventool/controle.py` bewaakt formulierveld: er komt geen
-  Word-bestand totdat alles is ingevuld, en de melding noemt precies wat er
-  nog mist.
-- **Stap 2 — Brief**: kiest en vult tekstblokken uit
-  `analyse/teksten.yaml` (zie `brieventool/`) en levert een Word-bestand op
-  het echte Schilt-briefpapier. Facturering, betaling, condensafvoer e.d.
-  hardcoderen hun mogelijke waarden niet in het scherm: die worden afgeleid
-  uit de voorwaarden in `teksten.yaml` zelf (`GET /keuzes`, zie
-  `brieventool/bibliotheek.py:velden`), zodat een nieuwe variant in de
-  tekstbibliotheek vanzelf in het formulier verschijnt.
+- **Stap 1 — Calculatie** (`scherm/index.html`): installaties, materiaal,
+  uren, uitbesteding, equipment en de marge-opbouw tot en met de
+  verkoopprijs. De rekenkern (`calculatie/rekenkern.py`) is de enige plek
+  waar dit wordt uitgerekend — het scherm stuurt bij elke wijziging de
+  invoer naar `POST /bereken` en toont het antwoord. "Calculatie klaar →
+  verder naar de brief" navigeert daarna naar de briefstap.
+- **Stap 2 — Brief** (`scherm/brief.html`, een eigen pagina, geen tab): zo
+  goed als 1-op-1 overgenomen van de losstaande brieventool — zie
+  "Herkomst" onderaan. Kiest en vult tekstblokken uit `analyse/teksten.yaml`
+  en levert een Word-bestand op het echte Schilt-briefpapier, via dezelfde
+  `brieventool.samenstellen`/`brieventool.sjabloon`-code die ook de
+  voorvertoning tekent — er is dus precies één plek die bepaalt wat er in de
+  brief komt te staan.
+- **Overdracht**: bij het overstappen naar stap 2 (of via de knop "↺ Vanuit
+  calculatie" daar) zet `overdracht.py` de calculatie om in een (deels
+  ingevulde) aanvulling op het briefconcept — bestaande, met de hand
+  ingevulde velden blijven staan. Directe overnames (datum, verkoopprijs,
+  merk, aantallen) worden gewoon ingevuld. Onzekere afleidingen — vooral de
+  vertaling van de calculatie se grove systeemsoort (VRF/RAC/PAC/Overig)
+  naar de fijnere indeling die de brief kent (splitsystem/multi-
+  splitsystem/vrf/warmtepomp/vloeistofkoelmachine) — worden na de overdracht
+  expliciet genoemd in een melding, ter controle. Wat de calculatie niet kan
+  weten (klanttype, adres, aanhef, facturering, ondertekenaar, ...) blijft
+  een gewoon, door `brieventool/controle.py` bewaakt formulierveld: er komt
+  geen Word-bestand totdat alles is ingevuld, en de melding noemt precies
+  wat er nog mist.
 
 ## Project opslaan/openen
 
-**Opslaan als .json** bewaart zowel de calculatie als het briefconcept in
-één bestand; **Openen** leest zo'n bestand weer helemaal terug (calculatie
-wordt automatisch herberekend). De browser onthoudt daarnaast de laatste
-stand in `localStorage` als vangnet tegen een dichtgeklapt tabblad — dat is
-geen archief, alleen die ene computer heeft het.
+De calculatie (**Calculatie opslaan als .json** / **Calculatie openen…** in
+stap 1) en de brief (**Opslaan** / **Openen** in de kop van stap 2) hebben
+allebei hun eigen bestand — dat is hoe de losstaande brieventool dat al deed
+en is met de overname van die stap zo gebleven. Wat ze wel delen: dezelfde
+klantnaam/projectnaam in de standaard bestandsnaam
+(`Calculatie-klant-project.json` / `Brief-klant-project.docx`), en de
+browser onthoudt de laatste stand van allebei apart in `localStorage` als
+vangnet tegen een dichtgeklapt tabblad — dat is geen archief, alleen die ene
+computer heeft het.
 
 ## Indeling
 
@@ -110,15 +115,20 @@ geen archief, alleen die ene computer heeft het.
     start.command / .bat  dezelfde opstart, wél met zichtbare terminal/console (handig bij problemen)
     calculatie/
       rekenkern.py        de rekenkern (marge, uren, afgeleide materiaalregels)
-    overdracht.py         zet een calculatie om in een briefconcept
+    overdracht.py         zet een calculatie om in een aanvulling op het briefconcept
     brieventool/          tekstblokken kiezen, invullen, Word-bestand schrijven
-    analyse/teksten.yaml  de brieftekst zelf (143 blokken) — geen codewijziging nodig
+    analyse/teksten.yaml  de brieftekst zelf (152 blokken) — geen codewijziging nodig
     config/ondertekenaars.yaml   ondertekenaars + bedrijfsgegevens
     sjablonen/brief.docx  het Word-sjabloon (gegenereerd, niet met de hand bewerken)
     bronbrieven/          de 16 lege bronsjablonen waaraan de opmaak is nagemeten
     data/                 calculatie-stamgegevens (materiaalcatalogus, YIMM, Panasonic/Daikin, tarieven)
-    scherm/               het scherm: index.html + stijl.css + calculatie.js + brief.js
-    tests/                230 tests (rekenkern, overdracht, brieventool)
+    scherm/
+      index.html/stijl.css/calculatie.js/gedeeld.js   stap 1 (calculatie)
+      brief.html         stap 2 (brief) — een eigen pagina, 1-op-1 overgenomen
+                         van de losstaande brieventool (zie "Herkomst")
+    tools/ververs_brief_scherm.py   werkt scherm/brief.html bij na een wijziging
+                         in analyse/teksten.yaml of sjablonen/brief.docx
+    tests/                231 tests (rekenkern, overdracht, brieventool)
     voorbeelden/          ingevulde offertes om mee te proberen (los van de calculatie)
 
 ## Tests
@@ -138,13 +148,20 @@ koppeling-aanpak):
   De DOM-weergave en het zoeken/bladeren in de materiaalcatalogus zijn zo
   goed als ongewijzigd overgenomen (`scherm/calculatie.js`).
 - **De brieventool** (`brieven-tool-schilt-bedrijven`) — Python, met een
-  volledig werkende motor (`brieventool/`, 118+ tests) maar nog zonder
-  formulier ("Wat er nog niet is: het formulier", zie de oorspronkelijke
-  README). Dat formulier is hier gebouwd (`scherm/brief.js`), samen met de
-  nieuwe overdracht vanuit de calculatie.
+  volledig werkende motor (`brieventool/`, 118+ tests) én een werkend
+  prototype van het formulier (`ontwerp/prototype.html`). Dat prototype is
+  hier overgenomen als `scherm/brief.html`, vrijwel letterlijk — zie
+  hieronder waarom.
 
-Wat bewust niet is overgenomen: de losse, server-loze JS-spiegel van de
-brief-motor in `ontwerp/prototype.html` (een noodgreep om de brief ook zonder
-Python te kunnen tonen). Omdat deze tool sowieso een Python-server draait
-voor de calculatie, is die tweede motor hier overbodig — er is nu precies
-één plek (Python) die bepaalt wat er in de brief komt te staan.
+**Een eerdere versie van deze samenvoeging bouwde het briefformulier zelf
+opnieuw** (`scherm/brief.js`, inmiddels verwijderd), in plaats van het
+bestaande prototype over te nemen. Dat werkte in eigen tests, maar de brief
+week op punten af van wat de losstaande brieventool maakte, en het
+Word-bestand klopte niet altijd — precies het probleem dat deze samenvoeging
+had moeten voorkomen. `scherm/brief.html` is daarom alsnog vrijwel een
+letterlijke kopie van `ontwerp/prototype.html`: die pagina praat rechtstreeks
+met dezelfde `brieventool.samenstellen`/`brieventool.sjabloon`-code als de
+rest van de tool, en is in de bronrepo al grondig getoetst. De enige
+toevoegingen zijn de koppeling met de calculatiestap (er was in de
+losstaande tool geen calculatiestap om aan te koppelen) en een aangepaste
+standaard bestandsnaam; zie CLAUDE.md voor de details.

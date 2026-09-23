@@ -30,32 +30,6 @@ class TestBibliotheek(unittest.TestCase):
         for blok in laad(WORTEL).blokken:
             self.assertNotIn("\\t", blok.tekst, f"blok {blok.id} heeft een letterlijke \\t")
 
-    def test_velden_leidt_de_bekende_antwoordvelden_af(self):
-        # Dit is wat het brief-formulier gebruikt om zijn keuzelijsten te vullen
-        # zonder de mogelijke waarden zelf te hoeven hardcoderen (zie
-        # bibliotheek.velden()). Een paar velden die we weten dat er zijn,
-        # controleren dat de afleiding echt werkt.
-        velden = laad(WORTEL).velden()
-        self.assertIn("facturering", velden.enkele_keuze)
-        self.assertIn(("dertig_zestig_tien", "30% bij opdracht, 60% bij aanvang, 10% bij oplevering"),
-                      velden.enkele_keuze["facturering"])
-        self.assertIn("condensafvoer", velden.enkele_keuze)
-        self.assertIn("werk_inclusief", velden.meervoudige_keuze)
-        self.assertIn("winterregeling", velden.vinkjes)
-        # Enkelvoud/meervoud van hetzelfde antwoord ("bediening_infrarood_enkel"
-        # vs "_meervoud") moet één optie opleveren, geen twee.
-        bediening_waarden = [w for w, _ in velden.enkele_keuze["bediening"]]
-        self.assertEqual(bediening_waarden.count("infrarood"), 1)
-
-    def test_velden_negeert_installatie_en_interne_velden(self):
-        velden = laad(WORTEL).velden()
-        for intern in ("opstelling_per_installatie", "aantal_binnenunits", "aantal_buitenunits",
-                       "klanttype", "installatietype"):
-            self.assertNotIn(intern, velden.enkele_keuze)
-            self.assertNotIn(intern, velden.vinkjes)
-        # regel.systeemsoort e.d. zijn installatievelden, geen los antwoordveld.
-        self.assertNotIn("systeemsoort", velden.enkele_keuze)
-
 
 class TestParticuliereBrief(unittest.TestCase):
     @classmethod

@@ -31,14 +31,11 @@ geen rekenregel, en dupliceert dus niets business-kritisch.
 
 Drie statussen per veld, zie de moduledocstring:
 - **direct** — simpele overname (datum, verkoopprijs).
-- **afgeleid** — een toegepaste regel met een niet-triviale aanname; krijgt
-  in het scherm altijd het label "afgeleid — controleer"
-  (`overdracht.VeldOverdracht`, gerenderd via `controleBadge()` in
-  `scherm/brief.js`). De systeemsoort-vertaling (calculatie se grove
-  VRF/RAC/PAC/Overig → de fijnere indeling van de brief) is hier het
-  voorbeeld: RAC/PAC met 1 binnendeel wordt splitsystem, met meer een
-  multi-splitsystem — ook als het in werkelijkheid meerdere losse
-  splitsystemen zijn. Vandaar altijd het controleer-label.
+- **afgeleid** — een toegepaste regel met een niet-triviale aanname. De
+  systeemsoort-vertaling (calculatie se grove VRF/RAC/PAC/Overig → de fijnere
+  indeling van de brief) is hier het voorbeeld: RAC/PAC met 1 binnendeel
+  wordt splitsystem, met meer een multi-splitsystem — ook als het in
+  werkelijkheid meerdere losse splitsystemen zijn.
 - **keuze_nodig** — de calculatie bevat de informatie niet; het veld blijft
   leeg. "Overig" kan zowel warmtepomp als vloeistofkoelmachine zijn en krijgt
   daarom nooit een gok, altijd een lege keuze met beide opties.
@@ -52,50 +49,115 @@ offerte met de hand in YAML werd geschreven) — zonder systeemsoort matcht
 geen enkel blok in de sectie "systeemomschrijving" en blijft die
 installatieregel stilzwijgend zonder omschrijving.
 
-**De "Calculatie klaar → naar de brief"-knop past de overdracht meteen toe**
-(`btnNaarBrief` in `scherm/index.html`, roept `CB.brief.vulVoorVanuitCalculatie()`
-aan vóór `CB.naarStap('brief')`). Eerder was dat twee losse acties (tab
-wisselen, dan apart op "Vul voor vanuit de calculatie" klikken) en dat tweede
-knopje werd gemist — leek dan alsof calculatie en brief niet gekoppeld waren.
-De losse knop in de briefstap blijft bestaan om de overdracht later opnieuw
-toe te passen (bijv. na een wijziging in de calculatie, of na het alsnog
-instellen van klanttype voor de btw-berekening hieronder).
+**De koppeling zit in `scherm/brief.html`, niet in `overdracht.py` zelf** —
+zie de sectie "De briefstap is 1-op-1 overgenomen" hieronder voor waar en
+hoe. Voor de "afgeleid"-status geldt daar: dit scherm heeft geen los
+badge-per-veld-systeem zoals eerder werd geprobeerd; in plaats daarvan noemt
+`vulVanuitCalculatie()` de afgeleide velden expliciet in een melding na de
+overdracht, zodat "nooit stilzwijgend" behouden blijft zonder de
+overgenomen UI te hoeven aanpassen.
 
 **Btw bij overdracht.** De calculatie rekent altijd exclusief btw (er is geen
 klanttype-begrip in stap 1). `overdracht.zet_over()` krijgt daarom optioneel
-`klanttype` mee (door `scherm/brief.js` meegestuurd als de huidige waarde van
-`antwoorden.klanttype` op het moment van de klik) en telt er 21% bij op vóór
-het bedrag in `prijsregels` komt, maar alleen bij `klanttype == "particulier"`
+`klanttype` mee (door `scherm/brief.html` meegestuurd als de huidige waarde
+van `A.klanttype` op het moment van de klik) en telt er 21% bij op vóór het
+bedrag in `prijsregels` komt, maar alleen bij `klanttype == "particulier"`
 -- onbekend/leeg klanttype blijft exclusief, nooit een gok welke kant op.
 Wordt klanttype pas ná de eerste overdracht ingesteld, dan klopt het bedrag
-dus nog niet totdat de overdracht opnieuw wordt toegepast.
+dus nog niet totdat de overdracht opnieuw wordt toegepast (de knop "↺ Vanuit
+calculatie" in `scherm/brief.html`).
 
-## `bibliotheek.velden()`: geen hardcoded keuzelijsten
+## De briefstap is 1-op-1 overgenomen uit de losstaande brieventool
 
-Facturering, betaling, condensafvoer, bediening, opstelling_buitenunit,
-aanleiding, technische_specificaties en de werkzaamhedenlijsten hardcoderen
-hun mogelijke waarden nergens in `scherm/brief.js`. `bibliotheek.velden()`
-leidt ze af uit de voorwaarden in `analyse/teksten.yaml` zelf (`veld ==
-'waarde'` → losse keuze, `'waarde' in veld` → checkbox-lijst, kale naam →
-vinkje). Voeg je een nieuwe factureringsvariant toe aan `teksten.yaml`, dan
-verschijnt die vanzelf in het formulier — geen codewijziging nodig. Alleen
-`klanttype`, `installatietype`, `aanspreekvorm`, `documentsoort` en de
-per-installatie velden (`systeemsoort`, `montagewijze`) zijn wél hardcoded in
-`scherm/brief.js`: die zijn structureel (sturen te veel andere velden, of
-hebben geen `omschrijving`-blok om de waarde uit af te leiden) en veranderen
-zelden. `meerprijs_coating`/`meerprijs_ral` gedragen zich in `teksten.yaml`
-als vlag (elk bedrag > 0 is "waar") maar zijn een bedrag, geen ja/nee — ze
-staan daarom expliciet uitgezonderd van de generieke vinkjes-render
-(`BEDRAG_VLAGGEN` in `scherm/brief.js`).
+`scherm/brief.html` is vrijwel een letterlijke kopie van
+`ontwerp/prototype.html` uit de losstaande brieventool (repo
+`brieven-tool-schilt-bedrijven`) — niet een eigen bouwsel zoals de eerdere
+`scherm/brief.js` dat was. Reden: die eigen JS-implementatie leek te werken
+in tests, maar de echte brief week op punten af van wat de losstaande tool
+maakte, en het Word-bestand daaruit klopte niet altijd. Het prototype is
+grondig getest (eigen `test_spiegel.py`/`test_server.py` in de bronrepo) en
+praat via `fetch("app")`/`fetch("brief")`/`fetch("docx")`/`fetch("briefpapier")`/
+`fetch("datablad")` rechtstreeks met dezelfde `brieventool.samenstellen`/
+`brieventool.sjabloon`-code als deze tool — er is dus precies één plek die
+bepaalt wat er in de brief staat, ook nu.
+
+**Waarom een aparte pagina en geen tab zoals stap 1.** Het prototype is een
+complete, op zichzelf staande pagina (eigen `<style>`, eigen kop met
+Nieuw/Openen/Opslaan/Word-bestand-knoppen) — die in de bestaande
+tab-structuur van `index.html` proppen zou of de CSS van de twee stappen
+laten botsen, of de eigen kop van het prototype dubbel neerzetten naast de
+stappen-nav. `server.py` serveert `scherm/brief.html` daarom op het
+root-niveau (`/brief.html`, niet onder `/scherm/`), zodat de relatieve
+`fetch("app")` etc. in dat bestand — ongewijzigd overgenomen — gewoon naar
+`/app` etc. resolven zonder dat de URL's aangepast hoefden te worden. De
+"Calculatie klaar → verder naar de brief"-knop en de "2 Brief →"-knop in de
+stappen-nav (`scherm/index.html`) doen daarom een echte paginanavigatie
+(`location.href = 'brief.html'`), geen tab-wissel meer.
+
+**De koppeling met de calculatie** (niet in het origineel, want die kende
+geen calculatiestap) zit in een apart, duidelijk afgebakend script-blok
+onderaan `scherm/brief.html`, vlak vóór de bestaande opstart-IIFE:
+- `calculatieStaatOphalen()` leest `localStorage['calcubrief.concept']` —
+  dezelfde sleutel als `AUTOSAVE_SLEUTEL` in `scherm/gedeeld.js` — en pakt
+  daar alleen `.calculatie` uit; er wordt hier nooit iets teruggeschreven.
+- `vulVanuitCalculatie()` stuurt die calculatiestaat plus het huidige
+  `A.klanttype` naar `POST /overdracht` en voegt het resultaat toe aan `A`
+  (`Object.assign`, dus een aanvulling, geen vervanging — bestaande, met de
+  hand ingevulde velden blijven staan). `installaties[]` is een
+  uitzondering: de EERSTE keer (`A._vanuitCalculatieToegepast` nog niet
+  gezet) vervangt de calculatie de voorbeeldinstallaties helemaal — die
+  samenvoegen zou verwarrende resten van de voorbeelddata achterlaten als de
+  aantallen niet overeenkomen. Bij een volgende toepassing (na eigen
+  aanpassingen zoals "ruimte" of "eigen kopregel") wordt per regel
+  samengevoegd, zodat die aanpassingen niet verloren gaan.
+- De knop "↺ Vanuit calculatie" in de kop roept dit handmatig aan; een
+  eenmalige `sessionStorage`-vlag (`calcubrief.naarBrief`, gezet door
+  `scherm/index.html` vlak vóór de navigatie) laat het bij binnenkomst ook
+  automatisch één keer gebeuren — zodat "één klik doet alles" behouden
+  blijft zonder dat deze pagina iets hoeft te weten van hoe `index.html` dat
+  aanroept, en andersom.
+- De standaard bestandsnaam (`bestandsnaam()`, ook gebruikt door de eigen
+  Opslaan-als-JSON-knop van dit scherm) is de enige andere aanpassing t.o.v.
+  het origineel: die las daar `achternaam-plaats-sa_nummer`, hier leest hij
+  eerst `localStorage['calcubrief.concept'].calculatie.meta` (klantnaam +
+  projectnaam) zodat de calculatie- en briefbestanden van hetzelfde project
+  dezelfde naam delen (`Calculatie-…`/`Brief-…`, zie `CB.projectBestandsnaam`
+  in `gedeeld.js`) — en valt terug op de oorspronkelijke naamgeving als er
+  geen calculatieproject bekend is (de brief kan nog steeds los gebruikt
+  worden).
+
+**Bijwerken na een wijziging in `analyse/teksten.yaml` of
+`sjablonen/brief.docx`.** Net als het origineel heeft `scherm/brief.html` de
+tekstblokken en het Word-sjabloon ingebakken (voor de fallback-modus zonder
+server, zie hieronder) — dat loopt dus niet vanzelf gelijk met een wijziging
+in die bronbestanden. Draai na zo'n wijziging:
+
+    python3 tools/ververs_brief_scherm.py
+
+(een aangepaste versie van `ontwerp/ververs_prototype.py` uit de bronrepo,
+die hier `scherm/brief.html` bijwerkt in plaats van `ontwerp/prototype.html`).
+
+**De ingebakken "motor"/"word"-fallback (tussen `/*<motor>*/`...`/*</motor>*/`
+en `/*<word>*/`...`/*</word>*/`) is ongebruikte, maar bewust niet verwijderde
+code.** Die draait alleen als `fetch("app")` faalt (geen server) — in deze
+tool draait er altijd een server, dus dit pad wordt in de praktijk nooit
+gebruikt, behalve als noodgreep wanneer de server tijdens gebruik wegvalt
+(`verversViaApp`'s catch-blok zet dan `VIA_APP=false`). Verwijderen zou de
+1-op-1-overname minder letterlijk maken voor weinig winst; laten staan kost
+niets (het weegt niet mee in wat de browser laadt totdat het echt nodig is).
+Bijkomend voordeel: de bronrepo's eigen `test_spiegel.py` bewijst al dat deze
+JS-motor hetzelfde resultaat geeft als `samenstellen.py` — dat is hier niet
+opnieuw getest, maar de logica zelf is ongewijzigd overgenomen.
 
 ## `scherm/*.js` staan zonder modules naast elkaar
 
-`calculatie.js` en `brief.js` worden allebei als gewoon `<script>` geladen
-(geen `type=module`) en delen dus één globale scope met `gedeeld.js`. Beide
-zijn daarom in een IIFE gewrapt — zonder dat botsen hun `const`/`let` op
-topniveau (was ook meteen de eerste bug bij het testen: `eur`/`pct` werden in
-allebei gedestructureerd uit `CB`). Voeg een derde scherm-bestand toe? Wrap
-het ook in een IIFE, of zet het als module.
+`calculatie.js` wordt als gewoon `<script>` geladen (geen `type=module`) en
+deelt dus één globale scope met `gedeeld.js`. Het is daarom in een IIFE
+gewrapt — zonder dat botsen `const`/`let` op topniveau met wat `gedeeld.js`
+daar zelf neerzet. Voeg je een derde scherm-bestand toe dat **op dezelfde
+pagina** als `gedeeld.js` draait (dus niet `scherm/brief.html`, dat is een
+eigen pagina zonder gedeelde scripts), wrap het dan ook in een IIFE, of zet
+het als module.
 
 ## Server-static-bestanden: het pad-voorvoegsel is verplicht
 
@@ -176,15 +238,15 @@ opent gewoon de browser, in plaats van de app te laten crashen op wat
 uiteindelijk maar een laadscherm is.
 
 **Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only)
-dekt de eigen, veel kortere data-ophaal-stap van de tool zelf af zodra de
-browser eenmaal open is: verdwijnt pas als zowel `CB.calc.klaar` als
-`CB.brief.klaar` zijn opgelost (zie de inline `<script>` onderaan dat
-bestand), dus na de materiaalcatalogus/YIMM/Panasonic/Daikin-data, `/keuzes`
-en de eerste `/bereken`-ronde. Voeg je een nieuwe async opstartstap toe aan
-een van beide stappen, neem die dan op in de `klaar`-promise van die stap,
-anders verdwijnt deze overlay te vroeg. `MINIMALE_DUUR_MS` staat hier laag
-(300ms, alleen om een flits-en-weg-effect te voorkomen) — het filmpje zelf
-hoort nu alleen bij laag 1.
+dekt de eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af
+zodra de browser eenmaal open is: verdwijnt pas als `CB.calc.klaar` is
+opgelost (zie de inline `<script>` onderaan dat bestand), dus na de
+materiaalcatalogus/YIMM/Panasonic/Daikin-data en de eerste `/bereken`-ronde.
+Voeg je een nieuwe async opstartstap toe aan de calculatiestap, neem die dan
+op in die `klaar`-promise, anders verdwijnt deze overlay te vroeg.
+`MINIMALE_DUUR_MS` staat hier laag (300ms, alleen om een flits-en-weg-effect
+te voorkomen) — het filmpje zelf hoort nu alleen bij laag 1. `scherm/brief.html`
+is een eigen pagina met zijn eigen (eenvoudigere) laadgedrag, zie hierboven.
 
 ## Git
 

@@ -64,6 +64,13 @@ class Bediening(BaseHTTPRequestHandler):
         pad = urlparse(self.path).path
         if pad in ("/", "/index.html"):
             return self._bestand(SCHERM_MAP / "index.html", "text/html; charset=utf-8")
+        if pad == "/brief.html":
+            # Op het root-niveau geserveerd (niet onder /scherm/) zodat de
+            # relatieve fetch("app")/fetch("brief")/fetch("docx")-aanroepen in
+            # dat bestand (ongewijzigd overgenomen uit de losstaande
+            # brieventool, zie CLAUDE.md) gewoon naar /app, /brief, /docx
+            # resolven zonder dat de URL's aangepast hoefden te worden.
+            return self._bestand(SCHERM_MAP / "brief.html", "text/html; charset=utf-8")
         if pad == "/app":
             # Zelfde signaal als brieventool: waaraan het scherm herkent dat
             # de motor (en dus ook de rekenkern) erachter zit.
@@ -198,23 +205,12 @@ class Bediening(BaseHTTPRequestHandler):
 
     def _keuzes(self) -> dict:
         bib = self.server.bibliotheek
-        velden = bib.velden()
         return {
             "secties": {sectie: [{"id": i, "label": l} for i, l in bib.keuzes(sectie)]
                         for sectie in bib.secties},
             "ondertekenaars": [{"id": sleutel, "naam": persoon.get("naam", sleutel)}
                                for sleutel, persoon in bib.ondertekenaars.items()],
             "bestandssoorten": list(SOORTEN),
-            # Antwoordvelden afgeleid uit de voorwaarden zelf (zie
-            # brieventool/bibliotheek.py:velden) -- het formulier hardcodeert
-            # zo geen enkele optie-waarde; die staan alleen in teksten.yaml.
-            "velden": {
-                "enkeleKeuze": {veld: [{"waarde": w, "label": l} for w, l in opties]
-                                for veld, opties in velden.enkele_keuze.items()},
-                "meervoudigeKeuze": {veld: [{"waarde": w, "label": l} for w, l in opties]
-                                     for veld, opties in velden.meervoudige_keuze.items()},
-                "vinkjes": [{"veld": veld, "label": label} for veld, label in velden.vinkjes.items()],
-            },
         }
 
     # --- plumbing --------------------------------------------------------

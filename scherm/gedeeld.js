@@ -30,14 +30,16 @@ CB.debounce = (fn, ms) => {
 };
 
 /* ------------------------------- laadscherm ------------------------------ */
-// Het laadscherm-filmpje zelf speelt in scherm/splash.html (altijd het
-// eerste dat opent, zie server.py:start); deze overlay op index.html is een
-// veel kortere, spinner-only terugval voor de eigen data-ophaal-stap van de
-// tool (en voor wie rechtstreeks op "/" uitkomt, bijv. door te herladen).
-// Blijft zichtbaar tot beide stappen klaar zijn (CB.calc.klaar/CB.brief.klaar)
-// — zie de aanroep van CB.laadscherm.verberg() onderaan index.html.
-// MINIMALE_DUUR_MS is klein: alleen om een flits-en-weg-effect te voorkomen,
-// niet om iets te laten zien (dat doet splash.html al).
+// Het laadscherm-filmpje zelf speelt native (tkinter, zie
+// server.py:_toon_native_laadscherm), vóór de browser al open is; deze
+// overlay op index.html is een veel kortere, spinner-only terugval voor de
+// eigen data-ophaal-stap van de calculatiestap (materiaalcatalogus/YIMM/
+// Panasonic/Daikin, de eerste /bereken-ronde) -- voor wie rechtstreeks op
+// "/" uitkomt (bijv. door te herladen) is er dus nog altijd iets te zien.
+// Blijft zichtbaar tot CB.calc.klaar is opgelost -- zie de aanroep van
+// CB.laadscherm.verberg() onderaan index.html. MINIMALE_DUUR_MS is klein:
+// alleen om een flits-en-weg-effect te voorkomen, niet om iets te laten zien
+// (dat doet het native laadscherm al).
 CB.laadscherm = {
   _vanaf: Date.now(),
   MINIMALE_DUUR_MS: 300,
@@ -64,27 +66,12 @@ CB.toast = msg => {
   CB._toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
 };
 
-/* -------------------------- stappen wisselen -------------------------- */
-
-CB.naarStap = (naam) => {
-  for (const stap of document.querySelectorAll('.stap')) {
-    stap.classList.toggle('actief', stap.dataset.stap === naam);
-  }
-  for (const knop of document.querySelectorAll('.stappen button')) {
-    knop.classList.toggle('actief', knop.dataset.stap === naam);
-  }
-  window.scrollTo(0, 0);
-};
-
-CB.bindStappen = () => {
-  for (const knop of document.querySelectorAll('.stappen button')) {
-    knop.addEventListener('click', () => {
-      if (!knop.disabled) CB.naarStap(knop.dataset.stap);
-    });
-  }
-};
-
-/* --------------------- gecombineerd projectbestand --------------------- */
+/* ------------------------------ projectbestand ----------------------------- */
+// Alleen de calculatie: de brief is een eigen pagina (scherm/brief.html) met
+// zijn eigen Opslaan/Openen/Nieuw voor het briefconcept, zo goed als 1-op-1
+// overgenomen van de losstaande brieventool (zie CLAUDE.md). Vroeger stond
+// hier ook CB.brief.antwoorden in hetzelfde bestand; dat is losgekoppeld
+// toen de brief-tab plaatsmaakte voor die eigen pagina.
 
 const PROJECT_MERK = 'calcu-brief-project';
 
@@ -92,13 +79,12 @@ CB.huidigProject = () => ({
   merk: PROJECT_MERK,
   versie: 1,
   calculatie: CB.calc.staat,
-  brief: CB.brief.antwoorden,
 });
 
-CB.heeftInhoud = () => CB.calc.heeftInhoud() || CB.brief.heeftInhoud();
+CB.heeftInhoud = () => CB.calc.heeftInhoud();
 
-// Deelt de sanitatie tussen het projectbestand en het Word-bestand (zie
-// scherm/brief.js) zodat beide dezelfde, voorspelbare naamgeving volgen.
+// scherm/brief.html doet dit zelf nog een keer (veiligeNaamdeel daar): het is
+// een losstaande pagina zonder gedeelde scripts met deze kant van de tool.
 CB.veiligeBestandsnaamdeel = tekst => String(tekst || '').trim().replace(/[\\/:*?"<>|]+/g, '-');
 
 CB.projectBestandsnaam = () => {
@@ -134,10 +120,9 @@ CB.bindOpslaanOpenen = () => {
       try { project = JSON.parse(lezer.result); }
       catch (e) { return CB.toast('Kan dit bestand niet lezen: geen geldige JSON.'); }
       if (project.merk !== PROJECT_MERK) {
-        return CB.toast('Dit is geen calculatie-en-brief-projectbestand.');
+        return CB.toast('Dit is geen calculatie-projectbestand.');
       }
       CB.calc.vulStaat(project.calculatie || CB.calc.nieuweStaat());
-      CB.brief.vulAntwoorden(project.brief || {});
       CB.toast('Project geopend.');
     };
     lezer.readAsText(bestand);
@@ -146,14 +131,15 @@ CB.bindOpslaanOpenen = () => {
   document.getElementById('btnNieuw').addEventListener('click', () => {
     if (CB.heeftInhoud() && !confirm('Alles wissen? Niet-opgeslagen wijzigingen gaan dan verloren.')) return;
     CB.calc.vulStaat(CB.calc.nieuweStaat());
-    CB.brief.vulAntwoorden({});
-    CB.naarStap('calculatie');
     CB.toast('Nieuw project gestart.');
   });
 };
 
 /* Vangnet, geen archief: de browser onthoudt de laatste stand zodat een
-   dichtgeklapt tabblad geen werk kost. Net als bij de losse brieventool. */
+   dichtgeklapt tabblad geen werk kost. Net als bij de losse brieventool.
+   Dezelfde sleutel wordt ook door scherm/brief.html gelezen (nooit
+   weggeschreven) om de calculatiegegevens over te nemen -- zie
+   CALCULATIE_CONCEPT_SLEUTEL daar. */
 const AUTOSAVE_SLEUTEL = 'calcubrief.concept';
 
 CB.autosave = () => {
@@ -168,6 +154,5 @@ CB.laadAutosave = () => {
   try {
     const project = JSON.parse(bewaard);
     if (project.calculatie) CB.calc.vulStaat(project.calculatie);
-    if (project.brief) CB.brief.vulAntwoorden(project.brief);
   } catch (e) { /* corrupte autosave; gewoon leeg beginnen */ }
 };

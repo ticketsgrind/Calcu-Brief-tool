@@ -20,7 +20,7 @@ from brieventool.sjabloon import schrijf_docx
 
 WORTEL = Path(__file__).resolve().parent.parent
 
-# De sets die het scherm voorselecteert; ze staan ook in ontwerp/prototype.html.
+# De sets die het scherm voorselecteert; ze staan ook in scherm/brief.html.
 STANDAARD = {
     "inclusief": ["demontage", "montage", "bekabeling", "transport", "inbedrijfstelling"],
     "exclusief": ["bouwkundig", "sparingen", "betonboringen", "elektra_stopcontact",
@@ -182,21 +182,14 @@ class TestWerkzaamheden(unittest.TestCase):
     def test_de_twee_lijsten_verschillen_echt(self):
         self.assertNotEqual(brief_met(VRF, "vrf"), brief_met(STANDAARD, "splitsystem"))
 
-    def test_het_scherm_kan_elke_regel_aanbieden(self):
-        # Het scherm (scherm/brief.js) hardcodeert geen eigen lijst en kiest
-        # ook niets voor: het rendert een checkbox voor elke waarde die
-        # bibliotheek.velden() teruggeeft voor werk_inclusief/werk_exclusief
-        # (zie renderWerkzaamheden in scherm/brief.js). Het scherm kan dus
-        # nooit achterlopen zolang elke regel hierboven ook echt in die
-        # afgeleide vocabulaire zit -- dat toetst deze test.
-        velden = laad(WORTEL).velden()
-        aangeboden_inclusief = {w for w, _ in velden.meervoudige_keuze.get("werk_inclusief", [])}
-        aangeboden_exclusief = {w for w, _ in velden.meervoudige_keuze.get("werk_exclusief", [])}
-        for naam, set_ in [("STANDAARD", STANDAARD), ("VRF", VRF)]:
-            for sleutel in set_["inclusief"]:
-                self.assertIn(sleutel, aangeboden_inclusief, f"{sleutel} ({naam}) niet aanbiedbaar in het scherm")
-            for sleutel in set_["exclusief"]:
-                self.assertIn(sleutel, aangeboden_exclusief, f"{sleutel} ({naam}) niet aanbiedbaar in het scherm")
+    def test_het_scherm_selecteert_dezelfde_regels_voor(self):
+        # De sets hierboven staan ook in het scherm; die mogen niet uiteenlopen.
+        scherm = (WORTEL / "scherm" / "brief.html").read_text(encoding="utf-8")
+        for naam, set_ in [("WERK_STANDAARD", STANDAARD), ("WERK_VRF", VRF)]:
+            blok = scherm[scherm.index(f"const {naam}="):]
+            blok = blok[:blok.index("};")]
+            for sleutel in set_["inclusief"] + set_["exclusief"]:
+                self.assertIn(f'"{sleutel}"', blok, f"{sleutel} ontbreekt in {naam}")
 
 
 if __name__ == "__main__":

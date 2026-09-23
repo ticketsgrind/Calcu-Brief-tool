@@ -38,15 +38,15 @@
   <div class="logo"><span class="zwiep"></span> Schilt Airconditioning — Calculatie &amp; Brief</div>
   <div class="spacer"></div>
   <span class="status" id="saveStatus"></span>
-  <button class="secondary" id="btnNieuw">+ Nieuw project</button>
-  <button class="secondary" id="btnOpenen">Openen…</button>
-  <button id="btnOpslaan">Opslaan als .json</button>
+  <button class="secondary" id="btnNieuw">+ Nieuwe calculatie</button>
+  <button class="secondary" id="btnOpenen">Calculatie openen…</button>
+  <button id="btnOpslaan">Calculatie opslaan als .json</button>
   <input type="file" id="fileInput" accept="application/json" style="display:none">
 </header>
 
 <nav class="stappen">
-  <button data-stap="calculatie" class="actief"><span class="stapnr">1</span>Calculatie</button>
-  <button data-stap="brief"><span class="stapnr">2</span>Brief</button>
+  <button class="actief" disabled><span class="stapnr">1</span>Calculatie</button>
+  <button id="btnStapBrief"><span class="stapnr">2</span>Brief →</button>
 </nav>
 
 <main>
@@ -258,68 +258,32 @@
   </div>
 </div>
 
-<!-- ============================== STAP 2: BRIEF ============================== -->
-<div class="stap" data-stap="brief" id="stapBrief">
-
-  <div class="card">
-    <p class="muted" style="margin:0 0 10px;">Dit is een <b>concept</b>: alles hieronder blijft bewerkbaar. Velden die de
-      calculatie heeft afgeleid (niet zeker) krijgen het label <span class="badge controleer">afgeleid — controleer</span>;
-      ontbrekende verplichte gegevens houden het Word-bestand tegen totdat ze zijn ingevuld.</p>
-    <button class="btn" id="btnVulVoorVanuitCalculatie">↺ Vul voor vanuit de calculatie</button>
-  </div>
-
-  <div class="brief-layout">
-    <div>
-      <section class="card"><h2>Klant</h2><div class="card-body" id="briefKlant"></div></section>
-      <section class="card"><h2>Briefkenmerken &amp; aanleiding</h2><div class="card-body" id="briefKenmerken"></div></section>
-      <section class="card">
-        <h2>Installaties</h2>
-        <div class="card-body">
-          <div id="briefInstallaties"></div>
-          <button class="btn ghost small" id="btnInstallatieToevoegenBrief">+ Installatie toevoegen</button>
-        </div>
-      </section>
-      <section class="card"><h2>Systeem &amp; opties</h2><div class="card-body" id="briefSysteemOpties"></div></section>
-      <section class="card"><h2>Technische specificaties</h2><div class="card-body" id="briefTechspec"></div></section>
-      <section class="card"><h2>Werkzaamheden</h2><div class="card-body" id="briefWerkzaamheden"></div></section>
-      <section class="card"><h2>Prijs</h2><div class="card-body" id="briefPrijs"></div></section>
-      <section class="card"><h2>Facturering &amp; betaling</h2><div class="card-body" id="briefFacturering"></div></section>
-      <section class="card"><h2>Ondertekening &amp; afsluiting</h2><div class="card-body" id="briefOndertekening"></div></section>
-
-      <div class="card">
-        <div class="warn-banner no-print" id="briefOntbreekt" style="display:none;"></div>
-        <button class="btn" id="btnWordBestand">Word-bestand maken</button>
-      </div>
-    </div>
-
-    <div class="brief-vel no-print" id="briefVel"></div>
-  </div>
-</div>
-
 </main>
 
 <div class="toast" id="toast"></div>
 
 <script src="scherm/gedeeld.js"></script>
 <script src="scherm/calculatie.js"></script>
-<script src="scherm/brief.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    CB.bindStappen();
     CB.bindOpslaanOpenen();
-    // Eén klik doet allebei: de overdracht toepassen (nieuwe waarden uit de
-    // calculatie overnemen) én naar de briefstap gaan -- vroeger moest je
-    // daarna nog apart op "Vul voor vanuit de calculatie" klikken, wat
-    // makkelijk over het hoofd werd gezien (leek dan alsof niets overkwam).
-    document.getElementById('btnNaarBrief').addEventListener('click', async () => {
-      await CB.brief.vulVoorVanuitCalculatie();
-      CB.naarStap('brief');
-    });
-    // Beide stappen laden hun eigen gegevens async (zie calculatie.js/brief.js
-    // se DOMContentLoaded-handlers, die eerder in het bestand staan en dus
-    // eerder draaien); pas als allebei klaar zijn is er een standaard-state
-    // om de autosave overheen te zetten.
-    Promise.all([CB.calc.klaar, CB.brief.klaar]).then(() => {
+    // De brief is een eigen pagina (scherm/brief.html, zo goed als 1-op-1
+    // overgenomen van de losstaande brieventool -- zie CLAUDE.md), geen tab
+    // meer op deze pagina. Voor de navigatie ernaartoe: eerst de huidige
+    // calculatie meteen wegschrijven (niet wachten op de gedebouncede
+    // autosave, anders kan brief.html een verouderde stand lezen), dan een
+    // vlag zetten waarmee brief.html bij het laden zelf de overdracht toepast
+    // -- zo blijft "één klik doet alles" behouden zonder dat deze pagina iets
+    // hoeft te weten van hoe de brief dat doet.
+    const gaNaarBrief = () => {
+      CB.autosave();
+      try { sessionStorage.setItem('calcubrief.naarBrief', '1'); } catch (e) { /* dan gewoon geen auto-overdracht */ }
+      location.href = 'brief.html';
+    };
+    document.getElementById('btnNaarBrief').addEventListener('click', gaNaarBrief);
+    document.getElementById('btnStapBrief').addEventListener('click', gaNaarBrief);
+
+    CB.calc.klaar.then(() => {
       CB.laadAutosave();
       CB.laadscherm.verberg();
     });

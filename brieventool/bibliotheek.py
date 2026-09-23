@@ -11,7 +11,6 @@ ook al draait de tool lokaal.
 from __future__ import annotations
 
 import os
-import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -72,72 +71,6 @@ class Bibliotheek:
     def keuzes(self, sectie: str) -> list[tuple[str, str]]:
         """(id, label) voor het keuzemenu van één sectie."""
         return [(b.id, b.omschrijving) for b in self.per_sectie(sectie) if b.is_keuze]
-
-    def velden(self) -> "VeldOpties":
-        """Leidt uit de voorwaarden van alle keuzeblokken af welke gewone
-        antwoordvelden er bestaan, met welke waarden en welk label erbij hoort.
-
-        Dit voorkomt dat het formulier de mogelijke waarden van bijvoorbeeld
-        `facturering` of `condensafvoer` hardcodeert: die vocabulaire staat al
-        in analyse/teksten.yaml (elk blok is precies één antwoordwaarde) en
-        moet daar de enige plek blijven waar hij verandert. Zie ook de regel
-        in CLAUDE.md dat de inhoud niet in de code hoort te zitten."""
-        return _velden_uit_blokken(self.blokken)
-
-
-@dataclass
-class VeldOpties:
-    """Resultaat van Bibliotheek.velden(): drie soorten gewone (niet-installatie-,
-    niet-blok-id-gebonden) antwoordvelden, afgeleid uit de voorwaarden zelf."""
-    enkele_keuze: dict[str, list[tuple[str, str]]] = field(default_factory=dict)   # veld -> [(waarde, label)]
-    meervoudige_keuze: dict[str, list[tuple[str, str]]] = field(default_factory=dict)  # veld -> [(waarde, label)]
-    vinkjes: dict[str, str] = field(default_factory=dict)                          # veld -> label
-
-
-# Velden die wel in een voorwaarde voorkomen maar geen zelfstandig antwoord zijn:
-# afgeleide/interne vlaggen (opstelling_per_installatie, aantal_*) of velden die
-# het formulier al met een eigen, specifiek invulveld behandelt (klanttype,
-# installatietype -- die sturen te veel andere velden om generiek te doen).
-_GEEN_ANTWOORDVELD = {"opstelling_per_installatie", "aantal_binnenunits",
-                      "aantal_buitenunits", "klanttype", "installatietype"}
-
-_GELIJKHEID = re.compile(r"^(\w+)\s*==\s*'([^']*)'$")
-_LIDMAATSCHAP = re.compile(r"^'([^']*)'\s+in\s+(\w+)$")
-_VLAG = re.compile(r"^(\w+)$")
-
-
-def _velden_uit_blokken(blokken: list["Tekstblok"]) -> VeldOpties:
-    enkele: dict[str, dict[str, str]] = {}
-    meervoudig: dict[str, dict[str, str]] = {}
-    vinkjes: dict[str, str] = {}
-
-    for blok in blokken:
-        if not blok.omschrijving:
-            continue
-        for deel in blok.voorwaarde.split(" and "):
-            deel = deel.strip()
-            if deel.startswith("not ") or deel.startswith("regel."):
-                continue  # een negatie van een interne vlag, of een installatieveld
-
-            treffer = _GELIJKHEID.match(deel)
-            if treffer and treffer.group(1) not in _GEEN_ANTWOORDVELD:
-                enkele.setdefault(treffer.group(1), {}).setdefault(treffer.group(2), blok.omschrijving)
-                continue
-
-            treffer = _LIDMAATSCHAP.match(deel)
-            if treffer and treffer.group(2) not in _GEEN_ANTWOORDVELD:
-                meervoudig.setdefault(treffer.group(2), {}).setdefault(treffer.group(1), blok.omschrijving)
-                continue
-
-            treffer = _VLAG.match(deel)
-            if treffer and treffer.group(1) not in _GEEN_ANTWOORDVELD:
-                vinkjes.setdefault(treffer.group(1), blok.omschrijving)
-
-    return VeldOpties(
-        enkele_keuze={veld: list(opties.items()) for veld, opties in enkele.items()},
-        meervoudige_keuze={veld: list(opties.items()) for veld, opties in meervoudig.items()},
-        vinkjes=vinkjes,
-    )
 
 
 def standaardmap() -> Path:

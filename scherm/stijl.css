@@ -130,8 +130,6 @@ table tfoot td{font-weight:700; border-top:2px solid var(--border); border-botto
 }
 .badge.onbekend{background:var(--oranje-bg); color:#8a5a00; border:1px solid var(--oranje-rand);}
 .badge.ok{background:var(--groen-bg); color:var(--groen);}
-.badge.controleer{background:var(--oranje-bg); color:#8a5a00; border:1px solid var(--oranje-rand); cursor:default;}
-.badge.ontbreekt{background:#fdeaea; color:#a12626; border:1px solid #f0a3a3;}
 .warn-banner{
   background:var(--oranje-bg); border:1px solid var(--oranje-rand); color:#8a5a00;
   padding:9px 12px; border-radius:8px; font-size:13px; margin-bottom:12px; font-weight:600;
@@ -199,24 +197,6 @@ table tfoot td{font-weight:700; border-top:2px solid var(--border); border-botto
 @keyframes laadscherm-draai{to{transform:rotate(360deg);}}
 .laadscherm-status{color:rgba(255,255,255,.75); font-size:13px; min-height:16px;}
 
-.brief-layout{display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start;}
-@media (max-width:960px){.brief-layout{grid-template-columns:1fr;}}
-.vinkjes-lijst{display:grid; grid-template-columns:1fr 1fr; gap:4px 14px;}
-@media (max-width:600px){.vinkjes-lijst{grid-template-columns:1fr;}}
-.vinkjes-lijst label{display:flex; align-items:flex-start; gap:6px; font-weight:400; color:var(--tekst); font-size:13px;}
-.vinkjes-lijst input{width:auto; margin-top:2px;}
-.brief-vel{
-  background:var(--paper); border:1px solid var(--border); border-radius:var(--radius);
-  padding:24px 28px; font-size:13px; line-height:1.6; position:sticky; top:110px;
-  max-height:calc(100vh - 130px); overflow:auto;
-}
-.brief-vel .alinea{margin:0 0 0;}
-.brief-vel .alinea.witregel-erna{margin-bottom:1em;}
-.brief-vel .kop{text-decoration:underline; font-weight:600;}
-.brief-vel .kopvet{font-weight:700;}
-.brief-vel .opsomming{padding-left:1.2em; position:relative;}
-.brief-vel .opsomming::before{content:"–"; position:absolute; left:0;}
-.brief-vel .cursief{font-style:italic;}
 .brief-vel .prijs b{font-weight:700;}
 .installatie-controle-lijst{margin:6px 0 0; padding-left:0; list-style:none; font-size:12px;}
 .installatie-controle-lijst li{margin-bottom:2px;}
