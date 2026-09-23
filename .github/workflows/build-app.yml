@@ -112,65 +112,48 @@ jobs:
         with:
           name: CalcuBriefTool-mac
           path: bestanden
-      - name: Publiceer op de Release-pagina
+      - name: "Publiceer op de Release-pagina (tijdelijk: met volledige diagnostiek)"
+        # TIJDELIJKE diagnostische versie -- geen retry-cyclus, wel volledige
+        # uitvoer van elke gh-aanroep. Eerdere versies slikten alle fouten in
+        # met "|| true" en concludeerden alleen uit een navraag-achteraf of
+        # het bestand er stond; dat bleek zelfs op een gloednieuwe release
+        # (dus geen kwestie van een kapotte asset-reservering op een oud
+        # release-object) na 3 volledige cycli nog steeds "nee" te zeggen,
+        # zonder ook maar één zichtbare foutmelding van gh release upload
+        # zelf. Om te zien wat er werkelijk gebeurt (mislukt de upload
+        # geluidloos, of lukt hij en klopt alleen de navraag niet) draait dit
+        # nu zonder foutonderdrukking en met expliciete tussenstappen. Wordt
+        # teruggezet naar een retry-cyclus zodra duidelijk is welk van de
+        # twee het is.
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Eerdere versies van dit workflow-bestand deden dit per platform
-          # (windows uploadde eerst, macos daarna naar dezelfde release) en
-          # probeerden bij een mislukte upload steeds opnieuw tegen datzelfde
-          # release-object. Dat bleek niet te repareren: een upload-poging
-          # kan op GitHub's kant een asset-naam "reserveren" zonder dat het
-          # bestand ooit zichtbaar wordt (gh release upload gaf daarna een
-          # HTTP 422 "ReleaseAsset.name already exists" op precies die naam,
-          # terwijl gh release view --json assets nog altijd assets: []
-          # liet zien -- ook een kwartier later nog). Dat is geen kwestie
-          # van even wachten: die naam op dát release-object bleef
-          # permanent kapot, dus opnieuw uploaden tegen diezelfde release
-          # loopt telkens tegen dezelfde muur op. De enige uitweg bleek de
-          # hele release weg te gooien en helemaal opnieuw te beginnen.
-          #
-          # Vandaar nu: één centrale publicatiestap die de HELE cyclus
-          # (verwijderen, aanmaken, allebei de bestanden uploaden, navragen)
-          # als één geheel herhaalt bij een mislukking, in plaats van alleen
-          # de upload-stap. Zo blijft er nooit een release liggen met één
-          # kapotte assetnaam-reservering waar een volgende poging weer
-          # tegenaan loopt. Dit ook in één job voor beide platforms samen
-          # (met actions/download-artifact hierboven om bij allebei de
-          # bestanden te kunnen) -- anders zou "windows lukt, mac loopt vast"
-          # de mac-job voor de keus stellen tussen de werkende windows-asset
-          # meenemen bij een noodzakelijke volledige release-reset, of een
-          # eigen, aparte reset-mechaniek bouwen dat de windows-asset dan
-          # weer stuk zou kunnen maken.
-          bestanden=(CalcuBriefTool-windows.zip CalcuBriefTool-mac.zip)
+          set +e
+          set -x
+          echo "--- bestanden/ voor het uploaden ---"
+          ls -la bestanden/
+          file bestanden/*.zip
 
-          for cyclus in 1 2 3; do
-            echo "=== Cyclus $cyclus: release helemaal opnieuw aanmaken ==="
-            gh release delete app-download --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
-            sleep 5
-            gh release create app-download --repo "$GITHUB_REPOSITORY" \
-              --title "Calcu-Brief-tool — desktop-app" \
-              --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Uitpakken en CalcuBriefTool.exe (in de map) dubbelklikken; geen Python nodig."
-            sleep 10
+          gh release delete app-download --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+          sleep 5
 
-            for bestand in "${bestanden[@]}"; do
-              gh release upload app-download "bestanden/$bestand" --repo "$GITHUB_REPOSITORY" || true
-            done
-            sleep 10
+          echo "--- gh release create ---"
+          gh release create app-download --repo "$GITHUB_REPOSITORY" \
+            --title "Calcu-Brief-tool — desktop-app" \
+            --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Uitpakken en CalcuBriefTool.exe (in de map) dubbelklikken; geen Python nodig."
+          sleep 10
 
-            aanwezig="$(gh release view app-download --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[].name")"
-            compleet=true
-            for bestand in "${bestanden[@]}"; do
-              if ! echo "$aanwezig" | grep -qx "$bestand"; then
-                echo "Cyclus $cyclus: $bestand nog niet zichtbaar op de release-pagina."
-                compleet=false
-              fi
-            done
+          echo "--- release direct na aanmaken (gh api, niet gh release view) ---"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/app-download"
 
-            if $compleet; then
-              echo "Beide bestanden staan op de release-pagina (cyclus $cyclus)."
-              exit 0
-            fi
+          for bestand in CalcuBriefTool-windows.zip CalcuBriefTool-mac.zip; do
+            echo "=== upload van $bestand ==="
+            gh release upload app-download "bestanden/$bestand" --repo "$GITHUB_REPOSITORY" --clobber
+            echo "exitcode van gh release upload voor $bestand: $?"
           done
-          echo "::error::Na meerdere volledige release-cycli stonden niet beide bestanden op de release-pagina."
-          exit 1
+
+          sleep 10
+          echo "--- release ná uploaden (gh api) ---"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/app-download"
+          echo "--- release ná uploaden (gh release view) ---"
+          gh release view app-download --repo "$GITHUB_REPOSITORY" --json assets
