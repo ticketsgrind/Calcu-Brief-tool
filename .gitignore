@@ -12,3 +12,5 @@ node_modules/
 
 # Servermeldingen van de .app-opstarter (alleen relevant bij een mislukte start)
 .calcubrief-server.log
+# Servermeldingen van de gebouwde .exe/.app zelf (server.py), zie CLAUDE.md
+calcubrief-log.txt

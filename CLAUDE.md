@@ -246,14 +246,22 @@ hierboven genoemde fallback bij een mislukt laadscherm) crasht zo'n build
 dan met een `AttributeError` — onzichtbaar, want er is geen console om iets
 te tonen: de app "doet niets", ook het laadscherm niet. `pythonw.exe`
 (`start-app.pyw`) heeft hetzelfde probleem, ook zonder frozen build. Fix:
-bovenin `server.py` wordt `sys.stdout`/`sys.stderr` vervangen door een
-stille sink (`os.devnull`) als ze `None` zijn, vóór er ergens geprint wordt;
-`main()` vangt daarnaast elke onverwachte opstartfout op en toont die als
-`tkinter.messagebox` wanneer `sys.frozen` waar is, zodat een toekomstige
-fout hier zichtbaar wordt in plaats van weer stil te falen. Kortom: **een
-"doet niets bij het opstarten"-melding voor de gebouwde app is typisch dít
-patroon** (een print/exception vóór het laadscherm), niet per se een fout in
-het laadscherm zelf.
+bovenin `server.py` wordt `sys.stdout`/`sys.stderr` vervangen als ze `None`
+zijn, vóór er ergens geprint wordt -- bij een gebouwde app naar
+`calcubrief-log.txt` naast de .exe/.app (niet naar een stille `os.devnull`-
+sink: dat loste de crash op maar maakte een volgend probleem hier juist
+onmogelijk te diagnosticeren, aangezien er dan letterlijk niets meer te zien
+is voor wie geen Python-omgeving heeft). Direct na die omwisseling wordt
+altijd één regel gelogd ("opgestart, <tijdstip>") — staat die regel er niet
+eens in bij een volgend probleem, dan is de app niet eens tot in `server.py`
+gekomen (bijv. tegengehouden door Windows/antivirus vóórdat Python draait),
+heel iets anders dan een fout die wél zo ver komt. `main()` vangt daarnaast
+elke onverwachte opstartfout op en toont die als `tkinter.messagebox`
+(inclusief verwijzing naar het logbestand) wanneer `sys.frozen` waar is.
+Kortom: **een "doet niets bij het opstarten"-melding voor de gebouwde app is
+typisch dít patroon** (een print/exception vóór het laadscherm) — check dan
+eerst of `calcubrief-log.txt` bestaat en wat erin staat, niet per se een
+fout in het laadscherm zelf.
 
 **Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only)
 dekt de eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af

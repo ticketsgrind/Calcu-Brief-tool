@@ -17,6 +17,7 @@ bereikbaar: er staan klant- en prijsgegevens in.
 from __future__ import annotations
 
 import argparse
+import datetime
 import json
 import mimetypes
 import os
@@ -39,20 +40,6 @@ from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
 from overdracht import zet_over
 
-# Een --windowed/--noconsole build (zowel de Windows-.exe als de Mac-.app,
-# zie build-app.yml) heeft geen console: sys.stdout/sys.stderr zijn dan None
-# in plaats van een writable stream. Een doodgewone print() (er staan er een
-# paar verderop, vóór het laadscherm/de browser worden geopend) crasht die
-# build dan meteen met een AttributeError -- onzichtbaar, want er is geen
-# console om de foutmelding te tonen: de app "doet niets", ook het laadscherm
-# niet, precies zoals gemeld. pythonw.exe (start-app.pyw) heeft hetzelfde
-# probleem, ook zonder frozen build. Vervang None daarom door een stille sink
-# vóórdat er ergens geprint wordt.
-if sys.stdout is None:
-    sys.stdout = open(os.devnull, "w")
-if sys.stderr is None:
-    sys.stderr = open(os.devnull, "w")
-
 if getattr(sys, "frozen", False):
     # Gebouwd met PyInstaller (--onefile/--windowed): de meegepakte data
     # (analyse/, config/, sjablonen/, data/, scherm/) staat dan niet naast dit
@@ -60,6 +47,41 @@ if getattr(sys, "frozen", False):
     WORTEL = Path(sys._MEIPASS)  # type: ignore[attr-defined]
 else:
     WORTEL = Path(__file__).resolve().parent
+
+# Een --windowed/--noconsole build (zowel de Windows-.exe als de Mac-.app,
+# zie build-app.yml) heeft geen console: sys.stdout/sys.stderr zijn dan None
+# in plaats van een writable stream. Een doodgewone print() (er staan er een
+# paar verderop, vóór het laadscherm/de browser worden geopend) crasht die
+# build dan meteen met een AttributeError -- onzichtbaar, want er is geen
+# console om de foutmelding te tonen: de app "doet niets", ook het laadscherm
+# niet. Vervang None daarom vóór er ergens geprint wordt -- bij een gebouwde
+# app naar een logbestand naast de .exe/.app (WORTEL wijst bij --onedir daar
+# al naartoe), zodat een volgend probleem hier wél terug te vinden is in
+# plaats van in het niets te verdwijnen zoals bij een simpele devnull-sink.
+# pythonw.exe (start-app.pyw) heeft hetzelfde None-probleem, ook zonder
+# frozen build; dat pad valt terug op devnull, want die opstarter heeft al
+# zijn eigen foutafhandeling (tkinter.messagebox) rond de aanroep van dit
+# bestand.
+if sys.stdout is None or sys.stderr is None:
+    log = None
+    if getattr(sys, "frozen", False):
+        try:
+            log = open(WORTEL / "calcubrief-log.txt", "a", encoding="utf-8")
+        except OSError:
+            log = None
+    if log is None:
+        log = open(os.devnull, "w")
+    if sys.stdout is None:
+        sys.stdout = log
+    if sys.stderr is None:
+        sys.stderr = log
+    # Eén regel, altijd, meteen: als calcubrief-log.txt straks zelfs deze
+    # ene regel niet bevat, is de app niet eens tot hier gekomen (bijv.
+    # geblokkeerd door Windows/antivirus vóórdat Python draait) -- iets heel
+    # anders dan een fout die wél hier gebeurt en dus WEL in dit bestand
+    # terechtkomt.
+    print(f"Calcu-Brief-tool: opgestart ({datetime.datetime.now()})")
+
 SCHERM_MAP = WORTEL / "scherm"
 DATA_MAP = WORTEL / "data"
 SJABLOON = WORTEL / "sjablonen" / "brief.docx"
@@ -470,7 +492,11 @@ def main() -> int:
                 from tkinter import messagebox
                 venster = tkinter.Tk()
                 venster.withdraw()
-                messagebox.showerror("Calcu-Brief-tool kon niet starten", str(fout))
+                messagebox.showerror(
+                    "Calcu-Brief-tool kon niet starten",
+                    f"{fout}\n\nMeer details staan in calcubrief-log.txt, "
+                    "in dezelfde map als CalcuBriefTool.exe/.app.",
+                )
             except Exception:
                 pass  # geen tkinter/beeldscherm beschikbaar; niets meer aan te doen
         raise
