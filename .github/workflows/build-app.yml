@@ -76,15 +76,35 @@ jobs:
           # gh release upload --clobber als een losse gh release delete-asset
           # bleken op dit release-object herhaaldelijk een 404 te geven op
           # een asset-ID die gh's eigen lijst-aanroep er vlak daarvoor nog
-          # wél voor teruggaf -- een inconsistentie aan GitHub's kant zelf,
-          # niet iets wat met een andere gh-aanroep op te lossen was. De
-          # downloadlink (.../releases/tag/app-download) blijft hetzelfde,
-          # want de tagnaam blijft gelijk.
+          # wél voor teruggaf -- een inconsistentie aan GitHub's kant zelf.
+          # Zelfs de upload zelf bleek daarna nog onbetrouwbaar: gh meldde
+          # succes (exit 0, geen foutmelding) terwijl het bestand niet op de
+          # release-pagina verscheen. Vandaar hieronder: expliciet even
+          # wachten na verwijderen/aanmaken (geef GitHub de tijd om bij te
+          # trekken), en na de upload ECHT navragen of het bestand er staat
+          # in plaats van gh's eigen exit-code te vertrouwen -- zo nodig een
+          # paar keer opnieuw proberen. De downloadlink
+          # (.../releases/tag/app-download) blijft hetzelfde, want de
+          # tagnaam blijft gelijk.
           gh release delete app-download --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
+          sleep 5
           gh release create app-download --repo "$GITHUB_REPOSITORY" \
             --title "Calcu-Brief-tool — desktop-app" \
             --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Uitpakken en CalcuBriefTool.exe (in de map) dubbelklikken; geen Python nodig."
-          gh release upload app-download dist/CalcuBriefTool-windows.zip --repo "$GITHUB_REPOSITORY"
+          sleep 3
+
+          bestand="CalcuBriefTool-windows.zip"
+          for poging in 1 2 3 4 5; do
+            gh release upload app-download "dist/$bestand" --repo "$GITHUB_REPOSITORY" || true
+            sleep 5
+            if gh release view app-download --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[].name" | grep -qx "$bestand"; then
+              echo "$bestand staat op de release-pagina (poging $poging)."
+              exit 0
+            fi
+            echo "Poging $poging: $bestand nog niet zichtbaar op de release-pagina, opnieuw proberen..."
+          done
+          echo "::error::$bestand kwam ook na meerdere pogingen niet op de release-pagina terecht."
+          exit 1
 
   macos:
     needs: windows  # voorkomt dat beide jobs tegelijk de release proberen aan te maken
@@ -120,4 +140,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           # De windows-job hierboven heeft de release al vers aangemaakt.
-          gh release upload app-download dist/CalcuBriefTool-mac.zip --repo "$GITHUB_REPOSITORY"
+          # Zie die job voor waarom hier écht wordt nagevraagd of het
+          # bestand aankwam in plaats van gh's exit-code te vertrouwen.
+          bestand="CalcuBriefTool-mac.zip"
+          for poging in 1 2 3 4 5; do
+            gh release upload app-download "dist/$bestand" --repo "$GITHUB_REPOSITORY" || true
+            sleep 5
+            if gh release view app-download --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[].name" | grep -qx "$bestand"; then
+              echo "$bestand staat op de release-pagina (poging $poging)."
+              exit 0
+            fi
+            echo "Poging $poging: $bestand nog niet zichtbaar op de release-pagina, opnieuw proberen..."
+          done
+          echo "::error::$bestand kwam ook na meerdere pogingen niet op de release-pagina terecht."
+          exit 1
