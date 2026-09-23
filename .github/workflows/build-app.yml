@@ -78,7 +78,13 @@ jobs:
           # De vorige build publiceerde nog een los CalcuBriefTool.exe (--onefile);
           # opruimen zodat er niet twee, verwarrend verschillende downloads naast elkaar staan.
           gh release delete-asset app-download CalcuBriefTool.exe --repo "$GITHUB_REPOSITORY" --yes || true
-          gh release upload app-download dist/CalcuBriefTool-windows.zip --repo "$GITHUB_REPOSITORY" --clobber
+          # --clobber (verwijderen + opnieuw uploaden in één aanroep) bleek
+          # onbetrouwbaar: meerdere builds rapporteerden hier succes zonder
+          # het bestand op de Release-pagina echt te vervangen (een oude
+          # asset bleef gewoon staan). Apart verwijderen en dan zonder
+          # --clobber uploaden werkt wel betrouwbaar.
+          gh release delete-asset app-download CalcuBriefTool-windows.zip --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release upload app-download dist/CalcuBriefTool-windows.zip --repo "$GITHUB_REPOSITORY"
 
   macos:
     needs: windows  # voorkomt dat beide jobs tegelijk de release proberen aan te maken
@@ -113,4 +119,6 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload app-download dist/CalcuBriefTool-mac.zip --repo "$GITHUB_REPOSITORY" --clobber
+          # Zie de windows-job hierboven: --clobber bleek onbetrouwbaar.
+          gh release delete-asset app-download CalcuBriefTool-mac.zip --repo "$GITHUB_REPOSITORY" --yes || true
+          gh release upload app-download dist/CalcuBriefTool-mac.zip --repo "$GITHUB_REPOSITORY"
