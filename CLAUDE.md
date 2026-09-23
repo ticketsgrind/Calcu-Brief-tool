@@ -159,6 +159,37 @@ pagina** als `gedeeld.js` draait (dus niet `scherm/brief.html`, dat is een
 eigen pagina zonder gedeelde scripts), wrap het dan ook in een IIFE, of zet
 het als module.
 
+## De autosave moet gelezen worden vóór de eerste `renderAll()`, niet erna
+
+`renderAll()` (`scherm/calculatie.js`) roept aan het eind altijd `CB.autosave()`
+aan — ook tijdens de allereerste berekening bij het opstarten van de
+calculatiestap, met dan nog de lege `nieuweStaat()`. `initCalculatie()` laadt
+de bewaarde staat daarom zelf, vóór die eerste `renderAll()`:
+
+    state = CB.leesAutosaveCalculatie() || nieuweStaat();
+
+**Dit stond eerder andersom en dat gaf een leeg calculatieblad bij elke
+terugkeer naar deze pagina** (de "← Calculatie"-link in `scherm/brief.html`,
+maar ook een gewone F5). De oude opzet liet `index.html` pas ná
+`CB.calc.klaar` de bewaarde staat inladen (`CB.laadAutosave()`, die
+`CB.calc.vulStaat()` aanriep) — maar `CB.calc.klaar` (dus `initCalculatie()`)
+was op dat moment allang minstens één keer door `renderAll()` heen geweest,
+die de dan nog lege `nieuweStaat()` al naar `localStorage` had weggeschreven.
+Het bewaarde project was dus alweer overschreven met lege staat vóórdat er
+ooit naar gekeken werd — de data stond op het moment van wegnavigeren nog
+prima in `localStorage`, maar was tegen de tijd dat er iets mee gedaan werd
+alweer weg.
+
+`CB.leesAutosaveCalculatie()` (`scherm/gedeeld.js`) is daarom bewust een pure
+leesfunctie zonder side-effect op `CB.calc` (in tegenstelling tot de oude
+`CB.laadAutosave()`, die naast lezen ook meteen `vulStaat()`+`renderAll()`
+aanriep) — `initCalculatie()` gebruikt het resultaat gewoon als startwaarde
+van `state`, en de daaropvolgende `bindMeta()`/.../`herbereken()`-reeks
+rendert daar vanzelf één keer overheen. Voeg je zelf iets toe dat de
+calculatiestaat ergens vroeg in het opstarten leest of overschrijft: doe dat
+vóór de eerste `renderAll()`/`herbereken()`-aanroep in `initCalculatie()`,
+niet erna vanuit `index.html`.
+
 ## Server-static-bestanden: het pad-voorvoegsel is verplicht
 
 `server.py` serveert `scherm/` en `data/` alleen onder hun eigen

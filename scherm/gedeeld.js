@@ -226,12 +226,23 @@ CB.autosave = () => {
   catch (e) { /* localStorage kan vol/uitgeschakeld zijn; geen ramp */ }
 };
 
-CB.laadAutosave = () => {
+// Puur lezen, geen side-effect op CB.calc -- gebruikt door initCalculatie()
+// (calculatie.js) om de startstaat te bepalen vóór de eerste renderAll().
+// Dat "vóór" is geen toeval: renderAll() roept zelf altijd CB.autosave() aan
+// (ook tijdens de allereerste berekening bij het opstarten, met dan nog de
+// lege nieuweStaat()) -- werd deze functie pas ná die eerste renderAll()
+// aangeroepen (zoals eerder gebeurde, via CB.calc.vulStaat() vanuit
+// index.html's CB.calc.klaar.then()), dan was de bewaarde autosave dus al
+// overschreven met lege staat vóórdat hij ooit gelezen werd. Dat gaf een
+// leeg calculatieblad bij elke terugkeer naar deze pagina (ook een gewone
+// F5), ook al stond de data nog prima in localStorage op het moment van
+// wegnavigeren.
+CB.leesAutosaveCalculatie = () => {
   let bewaard;
-  try { bewaard = localStorage.getItem(AUTOSAVE_SLEUTEL); } catch (e) { return; }
-  if (!bewaard) return;
+  try { bewaard = localStorage.getItem(AUTOSAVE_SLEUTEL); } catch (e) { return null; }
+  if (!bewaard) return null;
   try {
     const project = JSON.parse(bewaard);
-    if (project.calculatie) CB.calc.vulStaat(project.calculatie);
-  } catch (e) { /* corrupte autosave; gewoon leeg beginnen */ }
+    return project.calculatie || null;
+  } catch (e) { return null; /* corrupte autosave; gewoon leeg beginnen */ }
 };

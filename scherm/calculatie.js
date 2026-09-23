@@ -832,7 +832,7 @@ async function laadData() {
 async function initCalculatie() {
   CB.laadscherm.zetStatus('Materiaal- en prijsgegevens laden…');
   await laadData();
-  state = nieuweStaat();
+  state = CB.leesAutosaveCalculatie() || nieuweStaat();
   bindMeta(); bindInstallaties(); bindMateriaal(); bindUren();
   bindLijst('uitbestedingBody', 'uitbesteding'); bindLijst('equipmentBody', 'equipment');
   bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles();

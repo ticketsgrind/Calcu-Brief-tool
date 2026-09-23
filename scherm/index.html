@@ -296,7 +296,6 @@
     document.getElementById('btnStapBrief').addEventListener('click', gaNaarBrief);
 
     CB.calc.klaar.then(() => {
-      CB.laadAutosave();
       CB.laadscherm.verberg();
     }).catch(fout => {
       console.error('Opstarten van de calculatiestap mislukt:', fout);
