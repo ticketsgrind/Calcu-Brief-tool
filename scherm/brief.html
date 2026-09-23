@@ -294,7 +294,8 @@ body:not(.waarom) .tip{display:none}
     <button class="knop" id="knop-waarom" aria-pressed="false">
       <span class="stip"></span>Toon waarom</button>
     <button class="knop" id="knop-nieuw" type="button">Nieuw</button>
-    <button class="knop" id="knop-openen" type="button">Openen</button>
+    <button class="knop" id="knop-openen" type="button"
+            title="Een eerder met Opslaan bewaarde offerte (.json) heropenen. Voor een Word- of PDF-datablad: bij Technische specificaties.">Openen</button>
     <button class="knop" id="knop-opslaan" type="button">Opslaan</button>
     <input type="file" id="bestand-openen" accept=".json,application/json" hidden>
     <button class="knop hoofd" id="knop-word">Word-bestand maken</button>
@@ -543,7 +544,10 @@ const A={
   straat_huisnummer:"Spijksekweldijk 1", postcode:"4161BP", plaats:"Heukelum",
   briefdatum:new Date().toISOString().slice(0,10),
   projectnummer:"Q.1018394.6.01", ondertekenaar:"nick_vervoorn",
-  opsteller_initialen:"RdJ", sa_nummer:"35738",
+  // Leeg, met opzet: de referentie (Ref.) is geheel aan de opsteller. Een
+  // voorbeeldwaarde hier zou net als het kale "SA" van vroeger tekst tonen die
+  // niemand heeft ingetypt. Op verzoek van Lars (23 september 2026).
+  opsteller_initialen:"", sa_nummer:"",
   aanleiding:"onderhoud", adviseur:"Nick Vervoorn", datum_aanleiding:"20 maart",
   opdrachtnummer:"",
   locatieaanduiding:"uw twee slaapkamers en de keuken",
@@ -1451,6 +1455,14 @@ function bouwInstallaties(){
     k.appendChild(r1);
     k.appendChild(tekstveld("montagewijze","Montagewijze"));
     k.appendChild(tekstveld("type_binnendeel","Type binnendeel","code"));
+    if(inst.systeemsoort==="splitsystem"){
+      // Meerdere gelijke splitsystemen in één regel (bijvoorbeeld drie identieke
+      // wandmodellen) -- zonder dit veld bleef aantal_systemen op de terugval
+      // van 1 staan en schreef de brief altijd enkelvoud, ook als er meerdere
+      // werden aangeboden. Op verzoek van Lars (23 september 2026).
+      k.appendChild(keuzeveld("aantal_systemen","Aantal systemen",
+        [1,2,3,4,5,6,7,8,9,10].map(n=>[n,String(n)]),null,true));
+    }
     if(inst.systeemsoort!=="splitsystem"){
       const r2=el("div","rij");
       // Een multi-split draagt meer dan twee binnendelen; als lijst is dat

@@ -137,6 +137,27 @@ in die bronbestanden. Draai na zo'n wijziging:
 (een aangepaste versie van `ontwerp/ververs_prototype.py` uit de bronrepo,
 die hier `scherm/brief.html` bijwerkt in plaats van `ontwerp/prototype.html`).
 
+**Bijwerken na een wijziging in `ontwerp/prototype.html` zelf (de bronrepo
+`brieven-tool-schilt-bedrijven`), dus het formulier/de JS-logica, niet de
+tekst/het sjabloon.** `tools/ververs_brief_scherm.py` raakt alleen de
+ingebakken tekstblokken/sjabloon/logo aan (zie hierboven) — een wijziging in
+het prototype zelf (een nieuw veld, een andere standaardwaarde, een andere
+knoptekst) komt daar niet in mee, want `scherm/brief.html` is met de hand
+op prototype.html afgestemd, niet automatisch gegenereerd. Zo'n wijziging
+overzetten: kloon `brieven-tool-schilt-bedrijven` erbij (bijv. via
+`add_repo`), vergelijk `ontwerp/prototype.html` daar met `scherm/brief.html`
+hier (`diff`), en zet alleen de inhoudelijke wijzigingen daaruit over —
+**niet** de stukken die hier bewust al anders zijn (de calculatie-
+koppeling onderaan, de "← Calculatie"/"↺ Vanuit calculatie"-knoppen in de
+kop, en `bestandsnaam()`, alle drie hierboven al beschreven). Zo ook
+gedaan voor twee aanpassingen van Lars (23 september 2026): een leeg
+`opsteller_initialen`/`sa_nummer` in plaats van een voorbeeldwaarde, en een
+"Aantal systemen"-veld bij een splitsystem-installatie (het onderliggende
+sjabloon ondersteunde `regel.aantal_systemen` al voor meervoud/enkelvoud;
+alleen het formulierveld om het in te stellen ontbrak) — in beide gevallen
+bleek `analyse/teksten.yaml`/`sjablonen/brief.docx` zelf ongewijzigd, dus was
+`ververs_brief_scherm.py` hier niet nodig, alleen de handmatige patch.
+
 **De ingebakken "motor"/"word"-fallback (tussen `/*<motor>*/`...`/*</motor>*/`
 en `/*<word>*/`...`/*</word>*/`) is ongebruikte, maar bewust niet verwijderde
 code.** Die draait alleen als `fetch("app")` faalt (geen server) — in deze
