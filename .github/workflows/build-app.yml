@@ -112,48 +112,58 @@ jobs:
         with:
           name: CalcuBriefTool-mac
           path: bestanden
-      - name: "Publiceer op de Release-pagina (tijdelijk: met volledige diagnostiek)"
-        # TIJDELIJKE diagnostische versie -- geen retry-cyclus, wel volledige
-        # uitvoer van elke gh-aanroep. Eerdere versies slikten alle fouten in
-        # met "|| true" en concludeerden alleen uit een navraag-achteraf of
-        # het bestand er stond; dat bleek zelfs op een gloednieuwe release
-        # (dus geen kwestie van een kapotte asset-reservering op een oud
-        # release-object) na 3 volledige cycli nog steeds "nee" te zeggen,
-        # zonder ook maar één zichtbare foutmelding van gh release upload
-        # zelf. Om te zien wat er werkelijk gebeurt (mislukt de upload
-        # geluidloos, of lukt hij en klopt alleen de navraag niet) draait dit
-        # nu zonder foutonderdrukking en met expliciete tussenstappen. Wordt
-        # teruggezet naar een retry-cyclus zodra duidelijk is welk van de
-        # twee het is.
+      - name: Publiceer op de Release-pagina
+        # De diagnostische versie van deze stap (zie git-historie) bewees dat
+        # de uploads de hele tijd al gewoon lukten: gh release upload gaf
+        # exitcode 0, en een rauwe gh api-aanroep vlak erna liet beide
+        # assets zien met state "uploaded" en de juiste bestandsgrootte.
+        # De eerdere "fixes" (--clobber, delete-asset, de hele release
+        # steeds weggooien en opnieuw aanmaken) losten dus een bestaand
+        # probleem niet op, want er WAS geen probleem met uploaden -- ze
+        # reageerden op een foute navraag. Het echte probleem zat in de
+        # navraag zelf: gh release view --json assets gaf ook ver ná een
+        # geslaagde upload nog assets: [] terug, zelfs enkele seconden na de
+        # upload in dezelfde job. gh api op hetzelfde adres (rechtstreeks de
+        # REST-endpoint, zonder gh's eigen view-laag) klopte wél meteen. Dus:
+        # navragen via gh api, niet via gh release view. En geen release
+        # meer weggooien-en-opnieuw-aanmaken bij een "niet zichtbaar"-
+        # navraag -- dat vernietigde eerder waarschijnlijk meermaals een
+        # release waarvan de assets allang goed stonden, alleen nog niet
+        # zichtbaar waren via de (onbetrouwbare) navraagmethode.
+        #
+        # gh release view --json assets --jq bleek trouwens ook voor de
+        # navraag hierbuiten (bijv. Claude's eigen release-check) tot wel
+        # een kwartier achter te kunnen lopen op wat er echt staat -- dat is
+        # dus geen kwestie van hier nog harder pollen, en verklaart ook
+        # waarom een build die network hier "klaar" meldt de download op de
+        # Release-pagina soms nog even niet toont: geef het gewoon wat tijd,
+        # er hoeft niets opnieuw gebouwd te worden.
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          set +e
-          set -x
-          echo "--- bestanden/ voor het uploaden ---"
-          ls -la bestanden/
-          file bestanden/*.zip
-
-          gh release delete app-download --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag
+          gh release delete app-download --repo "$GITHUB_REPOSITORY" --yes --cleanup-tag || true
           sleep 5
-
-          echo "--- gh release create ---"
           gh release create app-download --repo "$GITHUB_REPOSITORY" \
             --title "Calcu-Brief-tool — desktop-app" \
             --notes "Automatisch gebouwd uit de branch claude/magical-davinci-63dmec. Uitpakken en CalcuBriefTool.exe (in de map) dubbelklikken; geen Python nodig."
-          sleep 10
-
-          echo "--- release direct na aanmaken (gh api, niet gh release view) ---"
-          gh api "repos/$GITHUB_REPOSITORY/releases/tags/app-download"
+          sleep 5
 
           for bestand in CalcuBriefTool-windows.zip CalcuBriefTool-mac.zip; do
-            echo "=== upload van $bestand ==="
-            gh release upload app-download "bestanden/$bestand" --repo "$GITHUB_REPOSITORY" --clobber
-            echo "exitcode van gh release upload voor $bestand: $?"
+            for poging in 1 2 3; do
+              if gh release upload app-download "bestanden/$bestand" --repo "$GITHUB_REPOSITORY" --clobber; then
+                break
+              fi
+              echo "Upload van $bestand mislukte (poging $poging), nog eens proberen..."
+              sleep 5
+            done
           done
 
-          sleep 10
-          echo "--- release ná uploaden (gh api) ---"
-          gh api "repos/$GITHUB_REPOSITORY/releases/tags/app-download"
-          echo "--- release ná uploaden (gh release view) ---"
-          gh release view app-download --repo "$GITHUB_REPOSITORY" --json assets
+          sleep 5
+          aanwezig="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/app-download" --jq '.assets[].name')"
+          for bestand in CalcuBriefTool-windows.zip CalcuBriefTool-mac.zip; do
+            if ! echo "$aanwezig" | grep -qx "$bestand"; then
+              echo "::error::$bestand staat niet op de release (gh api zag: $aanwezig)."
+              exit 1
+            fi
+          done
+          echo "Beide bestanden staan op de release-pagina."

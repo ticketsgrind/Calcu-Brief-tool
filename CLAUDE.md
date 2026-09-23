@@ -236,36 +236,44 @@ als workflow-artifact (`actions/upload-artifact`) — geen van beide raakt de
 Release-pagina zelf aan. Een aparte `publiceer`-job (`needs: [windows,
 macos]`, `ubuntu-latest`, ver goedkoper dan nog een Windows-/Mac-runner)
 haalt beide artifacts op (`actions/download-artifact`) en is de enige plek
-die `gh release` aanroept.
+die `gh release` aanroept — dat voorkomt dat "windows lukt, mac loopt vast"
+de mac-job voor een lastige keuze stelt over een release-object dat windows
+net had opgezet.
 
-**Waarom niet gewoon, zoals eerst, elke platform-job zijn eigen bestand op de
-release laten zetten.** Drie eerdere pogingen (`gh release upload --clobber`,
-een losse `gh release delete-asset` vooraf, en de hele release verwijderen +
-opnieuw aanmaken per platform-job) liepen allemaal op hetzelfde soort
-GitHub-kant-inconsistentie stuk. De doorslaggevende: een build die zelfs
-navroeg (`gh release view --json assets`) of het bestand er stond voordat hij
-succes meldde, kreeg op een vers aangemaakte release toch een release zonder
-enig asset — en de daaropvolgende herhaalpogingen (dezelfde upload nog een
-paar keer proberen) kregen steeds `HTTP 422: ReleaseAsset.name already
-exists`, terwijl `gh release view` bleef zeggen dat er niets stond. Ook een
-kwartier later nog. Dat is geen kwestie van even geduld hebben: GitHub had de
-bestandsnaam op dát ene release-object kennelijk permanent "gereserveerd"
-zonder ooit een geldig, zichtbaar asset te maken — een opnieuw-proberen-tegen-
-diezelfde-release liep daar dus altijd weer tegenaan.
+**Het echte probleem bleek de navraag, niet de upload.** Een aantal eerdere
+versies van deze stap (zie git-historie) trokken, op basis van `gh release
+view --json assets` die na een upload leeg bleef, de conclusie dat GitHub's
+release-API de upload zelf liet mislukken — met als "oplossing" steeds
+grovere pogingen: `--clobber`, een losse `gh release delete-asset` vooraf, en
+uiteindelijk de hele release bij elke mislukte navraag weggooien en opnieuw
+aanmaken. Een diagnostische versie van deze stap (zonder foutonderdrukking,
+met de rauwe JSON via `gh api repos/OWNER/REPO/releases/tags/app-download`
+in plaats van `gh release view`) liet uiteindelijk zien dat dit een
+verkeerde diagnose was: `gh release upload` gaf steeds gewoon exitcode 0, en
+`gh api` op diezelfde release liet **seconden** na de upload, in dezelfde
+job, al beide assets zien met `"state": "uploaded"` en de juiste
+bestandsgrootte. De uploads werkten dus de hele tijd al.
 
-De enige uitweg die wél werkte: de hele release weggooien en helemaal
-opnieuw beginnen zodra dit gebeurt, in plaats van te blijven proberen tegen
-een release die al een kapotte assetnaam-reservering heeft. Dat maakte een
-gedeelde publicatiestap nodig: zou `windows` zijn eigen asset succesvol
-plaatsen en dan zou `macos`'s eigen upload vastlopen, dan zou macos voor de
-keuze staan tussen de werkende windows-asset meenemen in een noodzakelijke
-volledige reset (en dus opnieuw moeten uploaden, wat weer tegen dezelfde
-inconsistentie kan aanlopen) of een eigen apart hersteltraject bouwen dat de
-windows-asset intussen zou kunnen beschadigen. Door de release-cyclus
-(verwijderen → aanmaken → allebei de bestanden uploaden → navragen) als één
-geheel te herhalen (tot 3 keer, met wachttijden ertussen) in één job die
-sowieso al bij allebei de bestanden kan, blijft er nooit een half-gepubliceerde
-release liggen waar een volgende poging weer overheen moet manoeuvreren. De
+`gh release view --json assets` zelf bleek het onbetrouwbare stuk: die bleef
+ook ver na een bewezen geslaagde upload nog `assets: []` teruggeven — zelfs
+een onafhankelijke navraag (niet via `gh`, een aparte losse API-aanroep)
+liet pas na zo'n **kwartier** de echte, juiste asset-lijst zien. Met andere
+woorden: de eerdere "fixes" reageerden op een navraagmethode die simpelweg
+traag/onbetrouwbaar is voor een net aangemaakte release, en loste daarmee
+niets op — erger nog, het herhaaldelijk weggooien-en-opnieuw-aanmaken van de
+hele release bij zo'n foute "nee" kan een release hebben vernietigd waarvan
+de assets allang goed stonden, alleen nog niet zichtbaar via die navraag.
+
+**De huidige opzet.** Eén keer verwijderen + aanmaken (geen herhaal-cyclus
+van de hele release meer), dan allebei de bestanden uploaden (met een kleine
+retry per bestand als de upload zelf een keer mislukt — niet als de navraag
+niets laat zien), en ná een korte wachttijd navragen via `gh api ...
+--jq '.assets[].name'` — nadrukkelijk niet via `gh release view --json
+assets`, want die bleek bij herhaling het onbetrouwbare stuk. Zie je zelf
+(bijv. via de GitHub API, of door meteen na een build de Release-pagina te
+verversen) dat een net gepubliceerd bestand er nog niet lijkt te staan: geef
+het gewoon een paar minuten, er hoeft niets opnieuw gebouwd of gepubliceerd
+te worden — de asset staat er wel, de weergave loopt alleen nog achter. De
 downloadlink (`.../releases/tag/app-download`) blijft ondertussen hetzelfde,
 want de tagnaam verandert niet.
 
