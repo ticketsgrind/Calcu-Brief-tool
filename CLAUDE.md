@@ -229,6 +229,46 @@ voor beide PyInstaller-modi identiek: `sys._MEIPASS` wijst bij `--onedir` naar
 de map naast de `.exe` in plaats van een tijdelijke uitpakmap, maar de code
 hoeft dat onderscheid niet te kennen.
 
+## De Release-pagina wordt door één losse job beheerd, na beide builds
+
+`windows` en `macos` in `build-app.yml` bouwen alleen en leveren hun zip af
+als workflow-artifact (`actions/upload-artifact`) — geen van beide raakt de
+Release-pagina zelf aan. Een aparte `publiceer`-job (`needs: [windows,
+macos]`, `ubuntu-latest`, ver goedkoper dan nog een Windows-/Mac-runner)
+haalt beide artifacts op (`actions/download-artifact`) en is de enige plek
+die `gh release` aanroept.
+
+**Waarom niet gewoon, zoals eerst, elke platform-job zijn eigen bestand op de
+release laten zetten.** Drie eerdere pogingen (`gh release upload --clobber`,
+een losse `gh release delete-asset` vooraf, en de hele release verwijderen +
+opnieuw aanmaken per platform-job) liepen allemaal op hetzelfde soort
+GitHub-kant-inconsistentie stuk. De doorslaggevende: een build die zelfs
+navroeg (`gh release view --json assets`) of het bestand er stond voordat hij
+succes meldde, kreeg op een vers aangemaakte release toch een release zonder
+enig asset — en de daaropvolgende herhaalpogingen (dezelfde upload nog een
+paar keer proberen) kregen steeds `HTTP 422: ReleaseAsset.name already
+exists`, terwijl `gh release view` bleef zeggen dat er niets stond. Ook een
+kwartier later nog. Dat is geen kwestie van even geduld hebben: GitHub had de
+bestandsnaam op dát ene release-object kennelijk permanent "gereserveerd"
+zonder ooit een geldig, zichtbaar asset te maken — een opnieuw-proberen-tegen-
+diezelfde-release liep daar dus altijd weer tegenaan.
+
+De enige uitweg die wél werkte: de hele release weggooien en helemaal
+opnieuw beginnen zodra dit gebeurt, in plaats van te blijven proberen tegen
+een release die al een kapotte assetnaam-reservering heeft. Dat maakte een
+gedeelde publicatiestap nodig: zou `windows` zijn eigen asset succesvol
+plaatsen en dan zou `macos`'s eigen upload vastlopen, dan zou macos voor de
+keuze staan tussen de werkende windows-asset meenemen in een noodzakelijke
+volledige reset (en dus opnieuw moeten uploaden, wat weer tegen dezelfde
+inconsistentie kan aanlopen) of een eigen apart hersteltraject bouwen dat de
+windows-asset intussen zou kunnen beschadigen. Door de release-cyclus
+(verwijderen → aanmaken → allebei de bestanden uploaden → navragen) als één
+geheel te herhalen (tot 3 keer, met wachttijden ertussen) in één job die
+sowieso al bij allebei de bestanden kan, blijft er nooit een half-gepubliceerde
+release liggen waar een volgende poging weer overheen moet manoeuvreren. De
+downloadlink (`.../releases/tag/app-download`) blijft ondertussen hetzelfde,
+want de tagnaam verandert niet.
+
 ## Laadscherm: het native filmpje is uitgeschakeld (crashte op een echte machine)
 
 **Wat er was geprobeerd.** Om het "duurt lang"-moment tussen dubbelklikken op
