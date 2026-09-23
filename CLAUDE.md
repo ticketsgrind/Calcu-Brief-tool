@@ -229,77 +229,75 @@ voor beide PyInstaller-modi identiek: `sys._MEIPASS` wijst bij `--onedir` naar
 de map naast de `.exe` in plaats van een tijdelijke uitpakmap, maar de code
 hoeft dat onderscheid niet te kennen.
 
-## Laadscherm: native (vóór de browser) + een overlay in de pagina
+## Laadscherm: het native filmpje is uitgeschakeld (crashte op een echte machine)
 
-**Waarom niet gewoon een pagina met het filmpje?** Eerdere versie opende de
-browser meteen naar zo'n pagina (`scherm/splash.html`, inmiddels verwijderd).
-Bleek niet te werken: het echte "duurt lang"-moment bij een gebouwde `.exe`
-is niet de tijd die de tool zelf nodig heeft (bibliotheek/calculatiegegevens
-laden is een kwestie van milliseconden), maar de tijd die de browser zelf
-nodig heeft om als apart programma op te starten — en tot die browser er is,
-kan geen enkele HTML-pagina iets laten zien. Dat gaf een "blauwe laadcirkel"
-van 10-20s met niets erachter, precies het probleem dat opgelost moest
-worden.
+**Wat er was geprobeerd.** Om het "duurt lang"-moment tussen dubbelklikken op
+de `.exe` en het openen van de browser (10-20s blauwe laadcirkel, met niets
+erachter) te dekken, speelde `server.py` vóór het openen van de browser
+`scherm/laadscherm.mp4` af als gif (`tk.PhotoImage(..., format="gif -index
+N")`) in een eigen, kaderloos tkinter-venster. De gif werd bij het bouwen
+gemaakt uit het filmpje via ffmpeg (`.github/workflows/build-app.yml`,
+inmiddels ook weer verwijderd).
 
-**Laag 1 — het native laadscherm**, `_toon_native_laadscherm()` in
-`server.py`, draait daarom vóórdat de browser wordt geopend, als een eigen,
-kaderloos venster (tkinter, stdlib, geen nieuwe afhankelijkheid). tkinter kan
-geen video afspelen, dus dit speelt `scherm/laadscherm.gif` (per frame via
-`tk.PhotoImage(..., format="gif -index N")`) — die gif bestaat alleen in een
-gebouwde `.exe`/`.app`, gemaakt uit `scherm/laadscherm.mp4` door een
-ffmpeg-stap in `.github/workflows/build-app.yml` (12 fps, moet gelijk
-blijven aan `LAADSCHERM_FPS` in `server.py`). Draai je vanuit de broncode
-(geen gif aanwezig), dan slaat `start()` dit laagje gewoon over en opent de
-browser zoals voorheen — `_native_laadscherm_pad()` geeft dan `None` terug.
-`serve_forever()` draait daarom op een eigen thread: tkinter's `mainloop()`
-moet op de hoofdthread (harde eis, vooral op macOS), en de server moet
-tegelijk al kunnen luisteren.
+**Waarom dat nu uitgeschakeld is.** Dit was letterlijk het enige stuk van de
+hele tool dat niet vanuit deze ontwikkelomgeving te testen was (geen
+tkinter, geen beeldscherm in de sandbox) — en het bleek op een echte
+Windows-machine de app te laten crashen vóórdat er iets te zien was. Niet op
+een manier die met een gewone `try`/`except` op te vangen was: het
+logbestand (zie hieronder) bevatte na zo'n mislukte poging geen enkele
+regel, ook niet de allereerste regel die altijd meteen bij het opstarten
+wordt weggeschreven — dat wijst op een harde, native crash (vermoedelijk in
+de Tcl/Tk-bibliotheek zelf) die het hele proces meeneemt vóórdat Python's
+eigen foutafhandeling of bestand-buffering nog kan draaien. Een oudere build
+van vóór dit laadscherm bestond (destijds nog `--onefile`, dus zonder de
+`_internal`-map met `tcl86t.dll`/`tk86t.dll`) werkte op diezelfde machine
+wel altijd probleemloos, wat dit bevestigde.
 
-**Dit is het enige stuk van de hele tool dat niet vanuit deze omgeving te
-testen was** (geen tkinter, geen beeldscherm in de sandbox waarin dit
-gebouwd is) — bij een wijziging hier dus extra voorzichtig zijn en op een
-echte Windows-/Mac-machine controleren. Elke fout in
-`_toon_native_laadscherm()` wordt in `start()` opgevangen: bij een probleem
-(geen tkinter, corrupte gif, geen beeldscherm) print het een waarschuwing en
-opent gewoon de browser, in plaats van de app te laten crashen op wat
-uiteindelijk maar een laadscherm is.
+Gezien dit al meerdere keren de hele app onbruikbaar maakte voor collega's,
+en niet op afstand te diagnosticeren viel (geen Windows-machine hier, en de
+fout omzeilt Python's eigen foutafhandeling), is dit weer uitgeschakeld:
+`server.py` opent na het opstarten van de server nu weer gewoon direct de
+browser (`threading.Timer(0.4, ...)`), zoals vóór dit filmpje er was.
+`scherm/laadscherm.mp4` staat nog gewoon in de repository (voor als dit ooit
+veiliger opnieuw wordt opgepakt, bijv. door het filmpje in een apart proces
+te tonen zodat een crash daar niet de hele app meeneemt), maar wordt niet
+meer meegepakt in de build (zie de "verwijder het filmpje"-stap in
+`build-app.yml`) en er is geen ffmpeg/gif-stap meer nodig.
 
-**Bekende valkuil hierin, die ook echt is misgegaan:** een `--windowed`/
-`--noconsole`-build (dus zowel de Windows-.exe als de Mac-.app) heeft geen
-console — `sys.stdout`/`sys.stderr` zijn dan `None`, geen writable stream.
-Een doodgewone `print()` (er stonden er een paar, o.a. vlak na het opstarten
-van de server, vóór het laadscherm/de browser worden geopend, én in de
-hierboven genoemde fallback bij een mislukt laadscherm) crasht zo'n build
+**De rest van de laadscherm-diagnostiek blijft wel relevant.** Een
+`--windowed`/`--noconsole`-build (zowel de Windows-.exe als de Mac-.app)
+heeft geen console — `sys.stdout`/`sys.stderr` zijn dan `None`, geen
+writable stream. Een doodgewone `print()` (er staan er een paar, vlak na het
+opstarten van de server, vóór de browser wordt geopend) crasht zo'n build
 dan met een `AttributeError` — onzichtbaar, want er is geen console om iets
-te tonen: de app "doet niets", ook het laadscherm niet. `pythonw.exe`
-(`start-app.pyw`) heeft hetzelfde probleem, ook zonder frozen build. Fix:
-bovenin `server.py` wordt `sys.stdout`/`sys.stderr` vervangen als ze `None`
-zijn, vóór er ergens geprint wordt -- bij een gebouwde app naar
-`calcubrief-log.txt` naast de .exe/.app (niet naar een stille `os.devnull`-
-sink: dat loste de crash op maar maakte een volgend probleem hier juist
-onmogelijk te diagnosticeren, aangezien er dan letterlijk niets meer te zien
-is voor wie geen Python-omgeving heeft). Direct na die omwisseling wordt
-altijd één regel gelogd ("opgestart, <tijdstip>") — staat die regel er niet
-eens in bij een volgend probleem, dan is de app niet eens tot in `server.py`
-gekomen (bijv. tegengehouden door Windows/antivirus vóórdat Python draait),
-heel iets anders dan een fout die wél zo ver komt. `main()` vangt daarnaast
-elke onverwachte opstartfout op en toont die als `tkinter.messagebox`
-(inclusief verwijzing naar het logbestand) wanneer `sys.frozen` waar is.
-Kortom: **een "doet niets bij het opstarten"-melding voor de gebouwde app is
-typisch dít patroon** (een print/exception vóór het laadscherm) — check dan
-eerst of `calcubrief-log.txt` bestaat en wat erin staat, niet per se een
-fout in het laadscherm zelf.
+te tonen: de app "doet niets". `pythonw.exe` (`start-app.pyw`) heeft
+hetzelfde probleem, ook zonder frozen build. Fix: bovenin `server.py` wordt
+`sys.stdout`/`sys.stderr` vervangen als ze `None` zijn, vóór er ergens
+geprint wordt -- bij een gebouwde app naar `calcubrief-log.txt` naast de
+.exe/.app (regel-gebufferd, niet naar een stille `os.devnull`-sink: dat
+loste de crash op maar maakte een volgend probleem juist onmogelijk te
+diagnosticeren). Direct na die omwisseling wordt altijd één regel gelogd
+("opgestart, <tijdstip>") — staat die regel er niet eens in bij een volgend
+probleem, dan is de app niet eens tot in `server.py` gekomen, of is
+midden in iets abrupt afgebroken (een harde/native crash, zoals hierboven
+bij het laadscherm) — allebei iets heel anders dan een gewone Python-fout,
+die wél in het logbestand terechtkomt vóórdat `main()`'s eigen
+`tkinter.messagebox`-foutmelding verschijnt (alleen wanneer `sys.frozen`
+waar is). Kortom: **een "doet niets bij het opstarten"-melding voor de
+gebouwde app** — check eerst of `calcubrief-log.txt` bestaat en wat erin
+staat (leeg bestand = harde crash, geen bestand = nog niet eens tot in
+`server.py` gekomen, een foutmelding erin = een gewone, opgevangen fout).
 
-**Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only)
-dekt de eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af
-zodra de browser eenmaal open is: verdwijnt pas als `CB.calc.klaar` is
-opgelost (zie de inline `<script>` onderaan dat bestand), dus na de
-materiaalcatalogus/YIMM/Panasonic/Daikin-data en de eerste `/bereken`-ronde.
-Voeg je een nieuwe async opstartstap toe aan de calculatiestap, neem die dan
-op in die `klaar`-promise, anders verdwijnt deze overlay te vroeg.
-`MINIMALE_DUUR_MS` staat hier laag (300ms, alleen om een flits-en-weg-effect
-te voorkomen) — het filmpje zelf hoort nu alleen bij laag 1. `scherm/brief.html`
-is een eigen pagina met zijn eigen (eenvoudigere) laadgedrag, zie hierboven.
+**De overlay in `scherm/index.html`** (`#laadscherm`, spinner-only) dekt de
+eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af zodra de
+browser eenmaal open is: verdwijnt pas als `CB.calc.klaar` is opgelost (zie
+de inline `<script>` onderaan dat bestand), dus na de materiaalcatalogus/
+YIMM/Panasonic/Daikin-data en de eerste `/bereken`-ronde. Voeg je een nieuwe
+async opstartstap toe aan de calculatiestap, neem die dan op in die
+`klaar`-promise, anders verdwijnt deze overlay te vroeg. `MINIMALE_DUUR_MS`
+staat hier laag (300ms, alleen om een flits-en-weg-effect te voorkomen).
+`scherm/brief.html` is een eigen pagina met zijn eigen (eenvoudigere)
+laadgedrag, zie hierboven.
 
 ## Git
 

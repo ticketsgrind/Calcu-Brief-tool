@@ -51,14 +51,18 @@ else:
 # Een --windowed/--noconsole build (zowel de Windows-.exe als de Mac-.app,
 # zie build-app.yml) heeft geen console: sys.stdout/sys.stderr zijn dan None
 # in plaats van een writable stream. Een doodgewone print() (er staan er een
-# paar verderop, vóór het laadscherm/de browser worden geopend) crasht die
-# build dan meteen met een AttributeError -- onzichtbaar, want er is geen
-# console om de foutmelding te tonen: de app "doet niets", ook het laadscherm
-# niet. Vervang None daarom vóór er ergens geprint wordt -- bij een gebouwde
-# app naar een logbestand naast de .exe/.app (WORTEL wijst bij --onedir daar
-# al naartoe), zodat een volgend probleem hier wél terug te vinden is in
-# plaats van in het niets te verdwijnen zoals bij een simpele devnull-sink.
-# pythonw.exe (start-app.pyw) heeft hetzelfde None-probleem, ook zonder
+# paar verderop, vóór de browser wordt geopend) crasht die build dan meteen
+# met een AttributeError -- onzichtbaar, want er is geen console om de
+# foutmelding te tonen: de app "doet niets". Vervang None daarom vóór er
+# ergens geprint wordt -- bij een gebouwde app naar een logbestand naast de
+# .exe/.app (WORTEL wijst bij --onedir daar al naartoe), zodat een volgend
+# probleem hier wél terug te vinden is in plaats van in het niets te
+# verdwijnen zoals bij een simpele devnull-sink. buffering=1 (regel-
+# gebufferd): zonder dit bleef een geschreven regel in het geheugen hangen
+# en verscheen hij niet in het bestand als het proces daarna abrupt afbrak
+# (bijv. een crash die niet via een gewone Python-exception loopt) -- precies
+# wat er gebeurde toen dit bestand leeg bleek terwijl er al wel iets geprint
+# was. pythonw.exe (start-app.pyw) heeft hetzelfde None-probleem, ook zonder
 # frozen build; dat pad valt terug op devnull, want die opstarter heeft al
 # zijn eigen foutafhandeling (tkinter.messagebox) rond de aanroep van dit
 # bestand.
@@ -66,7 +70,7 @@ if sys.stdout is None or sys.stderr is None:
     log = None
     if getattr(sys, "frozen", False):
         try:
-            log = open(WORTEL / "calcubrief-log.txt", "a", encoding="utf-8")
+            log = open(WORTEL / "calcubrief-log.txt", "a", encoding="utf-8", buffering=1)
         except OSError:
             log = None
     if log is None:
@@ -352,68 +356,6 @@ def _vrije_poort(voorkeur: int) -> int:
     raise SystemExit(f"geen vrije poort gevonden vanaf {voorkeur}")
 
 
-# Aantal beeldjes per seconde waarmee scherm/laadscherm.gif is gemaakt (zie
-# .github/workflows/build-app.yml) -- moet gelijk blijven aan de "fps"-waarde
-# in dat ffmpeg-commando, anders loopt de afspeelsnelheid hier uit de pas.
-LAADSCHERM_FPS = 12
-
-
-def _native_laadscherm_pad() -> Path | None:
-    """scherm/laadscherm.gif bestaat alleen in een gebouwde .exe/.app (zie de
-    ffmpeg-stap in de build-workflow) -- draai je vanuit de broncode, dan is
-    er geen gif en valt start() terug op gewoon de browser openen."""
-    gif = WORTEL / "scherm" / "laadscherm.gif"
-    return gif if gif.is_file() else None
-
-
-def _toon_native_laadscherm(gif_pad: Path) -> None:
-    """Speelt het laadscherm-filmpje (als gif, want tkinter kan geen video)
-    in een eigen, kaderloos venster op het bureaublad -- dit dekt precies het
-    stuk tussen dubbelklikken op de .exe en het openen van de browser, dat
-    een browserpagina nooit kan laten zien (er draait dan nog geen browser,
-    dus ook geen JavaScript). Blokkeert tot het filmpje één keer is
-    afgespeeld; roep dit dus aan vóórdat de browser wordt geopend, niet
-    ernaast. Elke fout (geen tkinter, geen beeldscherm, kapotte gif) komt
-    gewoon omhoog naar de aanroeper, die dan gewoon de browser opent."""
-    import tkinter as tk
-
-    root = tk.Tk()
-    root.title("Calcu-Brief-tool")
-    root.overrideredirect(True)  # geen titelbalk/randen -- een laadscherm, geen venster om te bedienen
-    root.attributes("-topmost", True)
-    root.configure(bg="#414B4D")
-
-    frames: list[tk.PhotoImage] = []
-    i = 0
-    while True:
-        try:
-            frames.append(tk.PhotoImage(file=str(gif_pad), format=f"gif -index {i}"))
-        except tk.TclError:
-            break
-        i += 1
-    if not frames:
-        root.destroy()
-        raise ValueError(f"{gif_pad} bevat geen leesbare beeldjes")
-
-    breedte, hoogte = frames[0].width(), frames[0].height()
-    scherm_b, scherm_h = root.winfo_screenwidth(), root.winfo_screenheight()
-    root.geometry(f"{breedte}x{hoogte}+{(scherm_b - breedte) // 2}+{(scherm_h - hoogte) // 2}")
-
-    label = tk.Label(root, image=frames[0], bd=0, bg="#414B4D")
-    label.pack()
-
-    frame_ms = round(1000 / LAADSCHERM_FPS)
-
-    def animeer(idx: int = 0) -> None:
-        label.configure(image=frames[idx])
-        root.after(frame_ms, animeer, (idx + 1) % len(frames))
-
-    animeer()
-    # Eén volledige lus, dan verder -- niet oneindig blijven doorspelen.
-    root.after(len(frames) * frame_ms, root.destroy)
-    root.mainloop()
-
-
 def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | None = None) -> int:
     # BRIEVENTOOL_BIBLIOTHEEK (bijv. een gedeelde OneDrive-map) blijft ook in
     # een gebouwde .exe/.app werken -- alleen als die niet gezet is, en er ook
@@ -440,28 +382,11 @@ def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | 
     print(f"Calcu-Brief-tool draait op {adres}")
     print(f"  {len(bibliotheek.blokken)} tekstblokken · stoppen met Ctrl-C")
 
-    # serve_forever() draait op een eigen thread, zodat de hoofdthread vrij is
-    # om (indien beschikbaar) het native laadscherm te tonen -- dat MOET op de
-    # hoofdthread draaien (tkinter-eis, vooral hard op macOS). Bibliotheek en
-    # calculatiegegevens staan hierboven al klaar, dus de server kan gewoon
-    # meteen gaan luisteren; er hoeft nergens op "gereed" gewacht te worden.
-    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
-    server_thread.start()
-
     if open_browser:
-        gif_pad = _native_laadscherm_pad()
-        if gif_pad is not None:
-            try:
-                _toon_native_laadscherm(gif_pad)
-            except Exception as fout:
-                print(f"Laadscherm kon niet getoond worden ({fout}); open direct de browser.",
-                      file=sys.stderr)
-            webbrowser.open(adres)
-        else:
-            threading.Timer(0.4, lambda: webbrowser.open(adres)).start()
+        threading.Timer(0.4, lambda: webbrowser.open(adres)).start()
 
     try:
-        server_thread.join()
+        server.serve_forever()
     except KeyboardInterrupt:
         print("\nGestopt.")
     finally:
@@ -484,8 +409,7 @@ def main() -> int:
         # Een --windowed/--noconsole build (zie de sys.stdout/sys.stderr-fix
         # hierboven) heeft geen console om een traceback op te tonen: zonder
         # dit vangnet lijkt de app dan simpelweg "niets te doen" bij een
-        # onverwachte opstartfout, precies zoals eerder gemeld. tkinter is
-        # toch al een afhankelijkheid (zie _toon_native_laadscherm).
+        # onverwachte opstartfout, precies zoals eerder gemeld.
         if getattr(sys, "frozen", False):
             try:
                 import tkinter
