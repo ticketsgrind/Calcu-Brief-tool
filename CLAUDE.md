@@ -166,6 +166,33 @@ voorvoegsel (`/scherm/app.js`, `/data/foo.json`) — nooit op de root. HTML/JS
 die naar deze bestanden verwijst moet dus `scherm/...` schrijven, niet een
 kale bestandsnaam (die zou naar `/bestand.js` resolven, wat een 404 geeft).
 
+## `CB.getJSON`/`CB.postJSON`: de foutafhandeling loopt uiteen, met opzet
+
+`CB.getJSON` (`scherm/gedeeld.js`) is alleen voor statische `/data/*.json`-
+bestanden en gooit een fout bij elke niet-2xx-status. `CB.postJSON` is voor
+de RPC-achtige endpoints (`/bereken`, `/overdracht`, `/brief`, ...) die
+bewust een niet-2xx-status mét een `{"fout": "..."}`-body teruggeven, die de
+aanroeper zelf afhandelt (bijv. `if (resultaat.fout) { CB.toast(...) }` in
+`calculatie.js`) — die blijft daarom werken ongeacht de statuscode. Verwar
+deze twee niet: een missend statisch bestand geeft in `server.py` óók een
+`{"fout": "onbekend adres"}`-body (dezelfde generieke 404-handler als voor
+elk onbekend pad), dus zonder de aparte, strengere controle in `getJSON` zou
+zo'n missend bestand stilzwijgend als (verkeerde) data zijn gebruikt in
+plaats van een duidelijke fout te geven — precies gebeurd bij het uitzoeken
+van een "laadscherm blijft oneindig draaien"-melding.
+
+**`CB.calc.klaar` (index.html) heeft daarom ook een `.catch()`, niet alleen
+een `.then()`.** Zonder die `.catch()` bleef het laadscherm-overlay bij zo'n
+mislukte data-ophaal-stap eindeloos draaien: de promise-keten wees dan
+gewoon nergens meer heen, en `CB.laadscherm.verberg()` (in de `.then()`)
+werd dus nooit aangeroepen — voor de gebruiker geen enkel verschil met
+"duurt gewoon nog even", met geen enkele aanwijzing wat er misging.
+`CB.laadscherm.toonFout(fout)` toont die fout nu in plaats daarvan in het
+laadscherm zelf. Voeg je een nieuwe async opstartstap toe aan de
+calculatiestap (zie ook de laadscherm-sectie hierboven): laat een fout
+daarin altijd omhoogkomen (gooi 'm, vang 'm niet stil weg) zodat hij hier
+terechtkomt, in plaats van een tweede stille-hang-plek te scheppen.
+
 ## De dubbelklik-opstarters gaan uit van hun plek in de projectmap
 
 `Calcu-Brief-tool.app` (Mac) en `start-app.pyw`/`start.bat` (Windows) vinden

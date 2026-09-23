@@ -11,15 +11,35 @@ CB.eur = n => (n === null || n === undefined || isNaN(n)) ? '—'
 CB.pct = n => (n === null || n === undefined || isNaN(n)) ? '—'
   : (n * 100).toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
+// Sommige RPC-verzoeken (/bereken, /overdracht, ...) antwoorden met een
+// niet-2xx-status én een JSON-body ({"fout": "..."}) die de aanroeper zelf
+// afhandelt -- postJSON blijft die dus ongeacht de statuscode teruggeven.
+// CB.getJSON is alleen voor statische /data/*.json-bestanden: een 404 daar
+// betekent altijd een genuine fout (bijv. een bestand dat in een gebouwde
+// .exe/.app onverhoopt niet is meegepakt), nooit een bewust "fout"-antwoord
+// om af te handelen -- en de 404-handler in server.py levert toevallig ook
+// gewoon geldige JSON ({"fout": "onbekend adres"}), dus zonder de eigen
+// statuscontrole hieronder zou zo'n missend bestand stilzwijgend als
+// (verkeerde) data worden gebruikt in plaats van een duidelijke fout te
+// geven.
 CB.postJSON = async (pad, lichaam) => {
   const respons = await fetch(pad, {
     method: 'POST', headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(lichaam || {}),
   });
-  return respons.json();
+  const tekst = await respons.text();
+  try {
+    return JSON.parse(tekst);
+  } catch (fout) {
+    throw new Error(`${pad} gaf geen geldig antwoord (${respons.status} ${respons.statusText})`);
+  }
 };
 
-CB.getJSON = async pad => (await fetch(pad)).json();
+CB.getJSON = async pad => {
+  const respons = await fetch(pad);
+  if (!respons.ok) throw new Error(`${pad} gaf ${respons.status} ${respons.statusText}`);
+  return respons.json();
+};
 
 CB.debounce = (fn, ms) => {
   let timer = null;
@@ -55,6 +75,20 @@ CB.laadscherm = {
       el.classList.add('klaar');
       setTimeout(() => el.remove(), 400);
     }, wachttijd);
+  },
+  // Zonder dit bleef het scherm bij een mislukte data-ophaal-stap eindeloos
+  // draaien: CB.calc.klaar.then(...) vuurt dan nooit (geen .catch() erop),
+  // en verberg() wordt dus ook nooit aangeroepen -- voor de gebruiker geen
+  // enkel verschil met "duurt gewoon nog even". Toon in plaats daarvan wat
+  // er misging, in de plek waar toch al naar gekeken wordt.
+  toonFout(fout) {
+    const spinner = document.querySelector('.laadscherm-spinner');
+    if (spinner) spinner.style.display = 'none';
+    const el = document.getElementById('laadschermStatus');
+    if (!el) return;
+    el.style.color = '#ffb4b4';
+    el.textContent = 'Er ging iets mis bij het laden: ' + (fout && fout.message || fout)
+      + '. Probeer de pagina te verversen (F5); blijft dit gebeuren, stuur deze melding door.';
   },
 };
 

@@ -17,13 +17,14 @@
 <body>
 
 <!--
-  Het laadscherm-filmpje zelf speelt in scherm/splash.html, wat de browser
-  altijd als eerste opent (zie server.py:start) en pas naar hier ("/")
-  doorschakelt zodra het filmpje is afgelopen. Deze overlay dekt alleen nog
-  de veel kortere, eigen data-ophaal-stap van de tool zelf af (materiaal-
-  catalogus/YIMM/Panasonic/Daikin, /keuzes, de eerste /bereken-ronde) -- voor
-  wie rechtstreeks op "/" uitkomt (bijv. een herlaadde pagina) is er dus nog
-  altijd iets te zien in plaats van een lege pagina.
+  Het laadscherm-filmpje zelf speelt native, vóór de browser al open is (zie
+  server.py:_toon_native_laadscherm). Deze overlay dekt alleen nog de veel
+  kortere, eigen data-ophaal-stap van de calculatiestap zelf af (materiaal-
+  catalogus/YIMM/Panasonic/Daikin, de eerste /bereken-ronde) -- voor wie
+  rechtstreeks op "/" uitkomt (bijv. een herlaadde pagina) is er dus nog
+  altijd iets te zien in plaats van een lege pagina. Mislukt die data-
+  ophaal-stap (zie CB.calc.klaar.catch() onderaan dit bestand), dan toont
+  dit scherm de fout in plaats van eindeloos te blijven draaien.
 -->
 <div id="laadscherm">
   <div class="laadscherm-merk">
@@ -286,6 +287,9 @@
     CB.calc.klaar.then(() => {
       CB.laadAutosave();
       CB.laadscherm.verberg();
+    }).catch(fout => {
+      console.error('Opstarten van de calculatiestap mislukt:', fout);
+      CB.laadscherm.toonFout(fout);
     });
   });
 </script>
