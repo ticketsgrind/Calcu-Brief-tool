@@ -237,6 +237,24 @@ echte Windows-/Mac-machine controleren. Elke fout in
 opent gewoon de browser, in plaats van de app te laten crashen op wat
 uiteindelijk maar een laadscherm is.
 
+**Bekende valkuil hierin, die ook echt is misgegaan:** een `--windowed`/
+`--noconsole`-build (dus zowel de Windows-.exe als de Mac-.app) heeft geen
+console — `sys.stdout`/`sys.stderr` zijn dan `None`, geen writable stream.
+Een doodgewone `print()` (er stonden er een paar, o.a. vlak na het opstarten
+van de server, vóór het laadscherm/de browser worden geopend, én in de
+hierboven genoemde fallback bij een mislukt laadscherm) crasht zo'n build
+dan met een `AttributeError` — onzichtbaar, want er is geen console om iets
+te tonen: de app "doet niets", ook het laadscherm niet. `pythonw.exe`
+(`start-app.pyw`) heeft hetzelfde probleem, ook zonder frozen build. Fix:
+bovenin `server.py` wordt `sys.stdout`/`sys.stderr` vervangen door een
+stille sink (`os.devnull`) als ze `None` zijn, vóór er ergens geprint wordt;
+`main()` vangt daarnaast elke onverwachte opstartfout op en toont die als
+`tkinter.messagebox` wanneer `sys.frozen` waar is, zodat een toekomstige
+fout hier zichtbaar wordt in plaats van weer stil te falen. Kortom: **een
+"doet niets bij het opstarten"-melding voor de gebouwde app is typisch dít
+patroon** (een print/exception vóór het laadscherm), niet per se een fout in
+het laadscherm zelf.
+
 **Laag 2 — de overlay in `scherm/index.html`** (`#laadscherm`, spinner-only)
 dekt de eigen, veel kortere data-ophaal-stap van de calculatiestap zelf af
 zodra de browser eenmaal open is: verdwijnt pas als `CB.calc.klaar` is

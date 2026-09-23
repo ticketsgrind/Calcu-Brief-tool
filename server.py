@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import mimetypes
+import os
 import re
 import socket
 import sys
@@ -37,6 +38,20 @@ from brieventool.samenstellen import SamenstelFout, stel_samen
 from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
 from overdracht import zet_over
+
+# Een --windowed/--noconsole build (zowel de Windows-.exe als de Mac-.app,
+# zie build-app.yml) heeft geen console: sys.stdout/sys.stderr zijn dan None
+# in plaats van een writable stream. Een doodgewone print() (er staan er een
+# paar verderop, vóór het laadscherm/de browser worden geopend) crasht die
+# build dan meteen met een AttributeError -- onzichtbaar, want er is geen
+# console om de foutmelding te tonen: de app "doet niets", ook het laadscherm
+# niet, precies zoals gemeld. pythonw.exe (start-app.pyw) heeft hetzelfde
+# probleem, ook zonder frozen build. Vervang None daarom door een stille sink
+# vóórdat er ergens geprint wordt.
+if sys.stdout is None:
+    sys.stdout = open(os.devnull, "w")
+if sys.stderr is None:
+    sys.stderr = open(os.devnull, "w")
 
 if getattr(sys, "frozen", False):
     # Gebouwd met PyInstaller (--onefile/--windowed): de meegepakte data
@@ -383,7 +398,6 @@ def start(poort: int = 8391, open_browser: bool = True, bibliotheek_map: Path | 
     # geen --bibliotheek is meegegeven, valt een gebouwde app terug op zijn
     # eigen meegepakte teksten.yaml (WORTEL) in plaats van naast een niet-
     # bestaand .py-bestand te zoeken (laad()'s eigen standaardmap()).
-    import os
     if bibliotheek_map is None and getattr(sys, "frozen", False) and not os.environ.get("BRIEVENTOOL_BIBLIOTHEEK"):
         bibliotheek_map = WORTEL
     try:
@@ -442,7 +456,24 @@ def main() -> int:
     ap.add_argument("--bibliotheek", type=Path,
                     help="map met teksten.yaml (standaard: BRIEVENTOOL_BIBLIOTHEEK of de projectmap)")
     keuzes = ap.parse_args()
-    return start(keuzes.poort, not keuzes.geen_browser, keuzes.bibliotheek)
+    try:
+        return start(keuzes.poort, not keuzes.geen_browser, keuzes.bibliotheek)
+    except Exception as fout:
+        # Een --windowed/--noconsole build (zie de sys.stdout/sys.stderr-fix
+        # hierboven) heeft geen console om een traceback op te tonen: zonder
+        # dit vangnet lijkt de app dan simpelweg "niets te doen" bij een
+        # onverwachte opstartfout, precies zoals eerder gemeld. tkinter is
+        # toch al een afhankelijkheid (zie _toon_native_laadscherm).
+        if getattr(sys, "frozen", False):
+            try:
+                import tkinter
+                from tkinter import messagebox
+                venster = tkinter.Tk()
+                venster.withdraw()
+                messagebox.showerror("Calcu-Brief-tool kon niet starten", str(fout))
+            except Exception:
+                pass  # geen tkinter/beeldscherm beschikbaar; niets meer aan te doen
+        raise
 
 
 if __name__ == "__main__":
