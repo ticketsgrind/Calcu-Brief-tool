@@ -52,7 +52,8 @@
   <span class="status" id="saveStatus"></span>
   <button class="secondary" id="btnNieuw">+ Nieuwe calculatie</button>
   <button class="secondary" id="btnOpenen">Calculatie openen…</button>
-  <button id="btnOpslaan">Calculatie opslaan als .json</button>
+  <span class="topbar-divider" aria-hidden="true"></span>
+  <button class="secondary" id="btnOpslaan">Calculatie opslaan als .json</button>
   <button class="secondary" id="btnCalculatieblad" title="Het ingevulde Excel-calculatieblad van de actieve optie downloaden">Calculatieblad downloaden</button>
   <input type="file" id="fileInput" accept="application/json" style="display:none">
 </header>
@@ -127,10 +128,10 @@
   </section>
 
   <section class="card" data-sectie-id="installaties">
-    <h2><span class="n">3</span> Installaties <span class="h2-summary" id="sum_installaties"></span><span class="chevron">▾</span></h2>
+    <h2><span class="n">3</span> Installaties <span class="h2-summary" id="sum_installaties"></span><span class="info-icon" id="installatiesApparatuurHint" style="display:none;" title="">ⓘ</span><span class="chevron">▾</span></h2>
     <div class="card-body">
-    <div class="hint" id="installatiesApparatuurHint" style="display:none;margin-bottom:10px;"></div>
     <div id="installatiesList"></div>
+    <div class="hint" id="installatiesHint" style="display:none;margin:8px 0 10px;">Merk, montagewijze en type binnendeel zijn ter documentatie bij de offerte — alleen Systeemsoort en de aantallen buiten-/binnendelen tellen mee in de automatische urenberekening.</div>
     <button class="btn ghost" id="btnInstallatieToevoegen">+ Installatie toevoegen</button>
     </div>
   </section>
@@ -147,8 +148,11 @@
     <button class="btn ghost small" style="margin-top:8px;" id="btnVrijeRegel">+ Eigen regel toevoegen (projectbestelling)</button>
     <div id="materiaalFavorieten" style="margin-top:14px;"></div>
 
-    <div class="section-sub" style="margin-top:16px;">Of blader door een onderdeel — handig als je de naam niet uit je hoofd weet</div>
-    <div id="materiaalSectieBrowser" class="grid cols-2"></div>
+    <button class="btn ghost small no-print" style="margin-top:14px;" id="materiaalSectieBrowserToggle" data-toggle="toonSectieBrowser">Bladeren per onderdeel tonen — handig als je de naam niet uit je hoofd weet</button>
+    <div id="materiaalSectieBrowserWrap" style="display:none;">
+      <div class="section-sub" style="margin-top:16px;">Blader door een onderdeel</div>
+      <div id="materiaalSectieBrowser" class="grid cols-2"></div>
+    </div>
 
     <div id="materiaalSecties" style="margin-top:12px;"></div>
     </div>

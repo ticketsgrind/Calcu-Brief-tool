@@ -416,10 +416,10 @@ function renderInstallaties() {
         </div>
         <div class="field"><label>Aantal buitendelen</label><input type="number" min="0" step="1" class="num-input" data-id="${inst.id}" data-field="aantalBuitendelen" value="${inst.aantalBuitendelen||0}"></div>
         <div class="field"><label>Aantal binnendelen</label><input type="number" min="0" step="1" class="num-input" data-id="${inst.id}" data-field="aantalBinnendelen" value="${inst.aantalBinnendelen||0}"></div>
-      </div>
-      <div class="hint" style="margin-top:8px;">Merk, montagewijze en type binnendeel zijn ter documentatie bij de offerte — alleen Systeemsoort en de aantallen buiten-/binnendelen tellen mee in de automatische urenberekening hieronder.</div>`;
+      </div>`;
     wrap.appendChild(div);
   });
+  document.getElementById('installatiesHint').style.display = state.installaties.length ? 'block' : 'none';
   renderInstallatiesApparatuurHint();
 }
 function renderInstallatiesApparatuurHint() {
@@ -429,8 +429,8 @@ function renderInstallatiesApparatuurHint() {
   let buiten = 0, binnen = 0;
   for (const i of state.installaties) { buiten += Number(i.aantalBuitendelen) || 0; binnen += Number(i.aantalBinnendelen) || 0; }
   const apparatuurAantal = state.materiaal.filter(r => r.sectie === 'APPARATUUR').reduce((s, r) => s + (Number(r.aantal) || 0), 0);
-  hintEl.style.display = 'block';
-  hintEl.textContent = `Ter info: hierboven staat in totaal ${buiten} buitendeel/-delen + ${binnen} binnendeel/-delen ingevuld (stuurt de urenberekening) — bij Materiaal → Apparatuur staan momenteel ${apparatuurAantal} stuk(s) apparatuur toegevoegd (stuurt de materiaalkosten). Deze twee hoeven niet gelijk te zijn, maar controleer ze even naast elkaar voordat de calculatie de deur uitgaat.`;
+  hintEl.style.display = 'inline-flex';
+  hintEl.title = `Ter info: hierboven staat in totaal ${buiten} buitendeel/-delen + ${binnen} binnendeel/-delen ingevuld (stuurt de urenberekening) — bij Materiaal → Apparatuur staan momenteel ${apparatuurAantal} stuk(s) apparatuur toegevoegd (stuurt de materiaalkosten). Deze twee hoeven niet gelijk te zijn, maar controleer ze even naast elkaar voordat de calculatie de deur uitgaat.`;
 }
 function renderFavorieten() {
   const wrap = document.getElementById('materiaalFavorieten');
@@ -452,6 +452,11 @@ function renderFavorieten() {
   }
 }
 function renderSectieBrowser() {
+  const toggleBtn = document.getElementById('materiaalSectieBrowserToggle');
+  const toonAlles = uiState.toonSectieBrowser;
+  document.getElementById('materiaalSectieBrowserWrap').style.display = toonAlles ? '' : 'none';
+  toggleBtn.textContent = toonAlles ? 'Bladeren per onderdeel verbergen' : 'Bladeren per onderdeel tonen — handig als je de naam niet uit je hoofd weet';
+  if (!toonAlles) return; // niets te bouwen zolang het dichtgeklapt is
   const wrap = document.getElementById('materiaalSectieBrowser');
   wrap.innerHTML = '';
   for (const sectie of MATERIAAL_SECTIES) {
@@ -557,7 +562,7 @@ function renderUren() {
   const sm = berekening.servicemonteurVoorstel;
   document.getElementById('sm_auto').value = `${sm.auto + sm.vrfIbs} u (regelaar ${sm.auto}u + VRF IBS ${sm.vrfIbs}u)`;
 }
-const uiState = { toonAlleUitbesteding: false, toonAlleEquipment: false };
+const uiState = { toonAlleUitbesteding: false, toonAlleEquipment: false, toonSectieBrowser: false };
 function renderLijst(lijst, tbodyId, totaalId, toonAlleKey) {
   const tbody = document.getElementById(tbodyId);
   tbody.innerHTML = '';
@@ -748,6 +753,10 @@ function bindInstallaties() {
   });
 }
 function bindMateriaal() {
+  document.getElementById('materiaalSectieBrowserToggle').addEventListener('click', () => {
+    uiState.toonSectieBrowser = !uiState.toonSectieBrowser;
+    renderAll();
+  });
   document.getElementById('materiaalFavorieten').addEventListener('click', e => {
     const btn = e.target.closest('[data-action="favoriet-toevoegen"]');
     if (!btn) return;
@@ -898,7 +907,7 @@ function bindBestellijst() {
 function bindCollapsibles() {
   for (const kop of document.querySelectorAll('#stapCalculatie .card > h2')) {
     kop.addEventListener('click', e => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.classList.contains('info-icon')) return;
       kop.closest('.card').classList.toggle('collapsed');
     });
   }

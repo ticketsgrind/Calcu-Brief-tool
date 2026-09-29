@@ -252,6 +252,38 @@ herstelmelding opent. Verander je iets aan de celverwijzingen in dit
 bestand: laat het eerste geëxporteerde bestand van deze functie door Lars
 (die wél Excel heeft) controleren voordat je verdere wijzigingen erop bouwt.
 
+## Opmaak-opschoning van de calculatiestap (29 september 2026)
+
+Vier kleine, puur visuele wijzigingen in `scherm/index.html`/`calculatie.js`/
+`stijl.css`, naar aanleiding van het doorlopen van een aantal verschillende
+calculaties (klein, groot/complex, meerdere opties) — geen van alle raakt
+`rekenkern.py` of de berekening zelf:
+
+- **De materiaal-sectie had drie parallelle manieren om een artikel toe te
+  voegen** (zoekbalk, snelkeuze-chips per sectie, én een altijd-open raster
+  van 10 dropdowns "OF BLADER DOOR EEN ONDERDEEL"). Dat laatste staat nu
+  dichtgeklapt achter een knop (`#materiaalSectieBrowserToggle`,
+  `uiState.toonSectieBrowser`) — hetzelfde "+ Meer standaardposten tonen"-
+  patroon dat Uitbesteding/Equipment al hadden. `renderSectieBrowser()` bouwt
+  de 10 selects nu ook pas als het scherm openstaat, niet meer bij elke
+  `renderAll()`.
+- **Elke installatiekaart herhaalde dezelfde uitlegzin** ("Merk, montagewijze
+  en type binnendeel zijn ter documentatie..."). Die staat nu één keer, na de
+  lijst installaties in plaats van per kaart (`#installatiesHint` in
+  `index.html`, weggehaald uit de per-kaart-template in
+  `renderInstallaties()`).
+- **De "8 buitendelen + 19 binnendelen"-toelichting** stond als permanente
+  alinea boven de installatiekaarten; dat is nu een klein (ⓘ)-icoontje naast
+  de sectiekop (`.info-icon`, native `title`-tooltip in plaats van
+  `textContent`) — vandaar ook de uitzondering voor `.info-icon` in
+  `bindCollapsibles()`, anders zou een klik erop de hele kaart dichtklappen.
+- **De kopbalk had 4 knoppen zonder groepering**, met alleen "Calculatie
+  opslaan als .json" toevallig blauw (geen inhoudelijke reden, gewoon de
+  originele stijl). Nieuw/Openen en Opslaan/Calculatieblad-downloaden staan nu
+  in twee visuele groepjes (`.topbar-divider`), alle vier in dezelfde
+  `.secondary`-stijl — geen van de vier is namelijk belangrijker dan de
+  andere drie.
+
 ## De briefstap is 1-op-1 overgenomen uit de losstaande brieventool
 
 `scherm/brief.html` is vrijwel een letterlijke kopie van
