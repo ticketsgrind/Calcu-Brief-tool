@@ -84,15 +84,19 @@ Zonder dubbelklik-opstarter kan het ook rechtstreeks:
   calculatie" daar) zet `overdracht.py` de calculatie om in een (deels
   ingevulde) aanvulling op het briefconcept — bestaande, met de hand
   ingevulde velden blijven staan. Directe overnames (datum, verkoopprijs,
-  merk, aantallen) worden gewoon ingevuld. Onzekere afleidingen — vooral de
-  vertaling van de calculatie se grove systeemsoort (VRF/RAC/PAC/Overig)
-  naar de fijnere indeling die de brief kent (splitsystem/multi-
-  splitsystem/vrf/warmtepomp/vloeistofkoelmachine) — worden na de overdracht
-  expliciet genoemd in een melding, ter controle. Wat de calculatie niet kan
-  weten (klanttype, adres, aanhef, facturering, ondertekenaar, ...) blijft
-  een gewoon, door `brieventool/controle.py` bewaakt formulierveld: er komt
-  geen Word-bestand totdat alles is ingevuld, en de melding noemt precies
-  wat er nog mist.
+  merk, aantallen) worden gewoon ingevuld. Het modelnummer ("Type binnendeel"
+  in de brief, bijv. "TZ50") komt van het artikel dat bij de installatie is
+  gekoppeld via "Model (uit materiaallijst)" — koppel je niets, dan blijft
+  dat veld leeg in plaats van de montage-categorie te tonen. Onzekere
+  afleidingen — vooral de vertaling van de calculatie se grove systeemsoort
+  (VRF/RAC/PAC/Overig) naar de fijnere indeling die de brief kent
+  (splitsystem/multi-splitsystem/vrf/warmtepomp/vloeistofkoelmachine) — en
+  velden die nog een eigen keuze vragen, worden na de overdracht expliciet
+  genoemd in een melding, ter controle. Wat de calculatie niet kan weten
+  (klanttype, adres, aanhef, facturering, ondertekenaar, ...) blijft een
+  gewoon, door `brieventool/controle.py` bewaakt formulierveld: er komt geen
+  Word-bestand totdat alles is ingevuld, en de melding noemt precies wat er
+  nog mist.
 - **Meerdere opties** (bijv. een Panasonic- en een Toshiba-uitvoering van
   dezelfde aanvraag): boven de calculatie kun je met "+ Optie toevoegen" een
   tweede, volledig losse calculatie aanmaken (eigen tabblad, dubbelklikken om
@@ -142,7 +146,7 @@ computer heeft het.
                          van de losstaande brieventool (zie "Herkomst")
     tools/ververs_brief_scherm.py   werkt scherm/brief.html bij na een wijziging
                          in analyse/teksten.yaml of sjablonen/brief.docx
-    tests/                257 tests (rekenkern, overdracht, calculatieblad, brieventool)
+    tests/                261 tests (rekenkern, overdracht, calculatieblad, brieventool)
     voorbeelden/          ingevulde offertes om mee te proberen (los van de calculatie)
 
 ## Tests

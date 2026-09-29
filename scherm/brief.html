@@ -263,6 +263,9 @@ body:not(.waarom) .tip{display:none}
 .foutbalk{width:100%;max-width:640px;background:var(--signal-soft);
   border:1px solid var(--signal);border-radius:8px;padding:10px 13px;
   font-size:12.5px;line-height:1.45;color:var(--signal)}
+.controleerbalk{width:100%;max-width:640px;background:var(--signal-soft);
+  border:1px solid var(--signal);border-radius:8px;padding:10px 13px;
+  margin-bottom:8px;font-size:12.5px;line-height:1.45;color:var(--signal)}
 .meldbalk{width:100%;max-width:640px;background:var(--accent-soft);
   border:1px solid var(--accent);border-radius:8px;padding:10px 13px;
   font-size:12.5px;line-height:1.45;color:var(--accent)}
@@ -1714,6 +1717,37 @@ function toonFout(tekst){
   balk.textContent=tekst;
 }
 
+/* Losse banner voor "vanuit de calculatie ingevuld, controleer dit" --
+   bewust GEEN toonFout(): vraagAanApp() (de briefvoorvertoning ophalen, hier
+   iets verderop) roept bij elke geslaagde ronde onvoorwaardelijk toonFout(null)
+   aan om een eerdere netwerkfout weg te vegen. Omdat vulVanuitCalculatie()
+   ver vers() aanroept vlak vóórdat deze melding wordt gezet, en die render
+   op zijn beurt (via de invoer-afhandeling) een nieuwe vraagAanApp()-ronde in
+   gang zet, veegde die latere toonFout(null) de "controleer dit"-melding hier
+   binnen een fractie van een seconde weer weg -- onbruikbaar voor een
+   gebruiker die op dat moment niet naar het scherm zit te staren. Zie
+   CLAUDE.md voor hoe dit ontdekt is (met een instrumentatie-testje, niet met
+   lezen alleen). */
+function toonControleer(tekst){
+  let balk=document.getElementById("controleerbalk");
+  if(!tekst){ if(balk)balk.remove(); return }
+  if(!balk){ balk=el("div","controleerbalk"); balk.id="controleerbalk";
+    document.querySelector(".briefkant").prepend(balk) }
+  balk.textContent=tekst;
+}
+
+const OVERDRACHT_VELDLABELS={organisatie:"Organisatie (bedrijfsnaam)",
+  systeemsoort:"systeemsoort",type_binnendeel:"type binnendeel (model)",
+  merk:"merk",montagewijze:"montagewijze"};
+function overdrachtPadNaarLabel(pad){
+  const m=pad.match(/^installaties\[(\d+)\]\.(.+)$/);
+  if(m){
+    const nr=Number(m[1])+1, veld=OVERDRACHT_VELDLABELS[m[2]]||m[2];
+    return `${veld} van installatie ${nr}`;
+  }
+  return OVERDRACHT_VELDLABELS[pad]||pad;
+}
+
 function toonMelding(tekst){
   // Geen alert(): een ingelijste pagina mag geen venster openen. De melding
   // verdwijnt vanzelf, zodat hij niet in de weg blijft staan.
@@ -1999,6 +2033,21 @@ const nieuweInstallatie=()=>({ruimte:"",eigen_kop:"",aantal_systemen:1,
   systeemsoort:"splitsystem",montagewijze:"",merk:MERKEN[0],
   type_binnendeel:"",aantal_binnendelen:2});
 
+// Basis voor een regel die UIT DE CALCULATIE komt (installatiesSamenvoegen
+// hieronder) -- bewust GEEN nieuweInstallatie(): dat sjabloon is bedoeld voor
+// een met de hand toegevoegde nieuwe regel (waar "Split"/Panasonic een
+// redelijk startpunt is om vanaf te typen), niet voor een overdracht. Laat
+// overdracht.py een veld bewust leeg (systeemsoort "keuze_nodig" bij een
+// calculatie-systeemsoort "Overig", of type_binnendeel zonder gekoppelde
+// materiaalregel), dan mag hier niet alsnog de sjabloonstandaard verschijnen
+// -- dat zou precies de gok zijn die overdracht.py juist weigerde te maken,
+// alleen dan onzichtbaar (het veld is niet meer leeg, dus de bestaande
+// ontbrekende-gegevens-controle ziet ook niets fout meer). Ontdekt met een
+// live test: een calculatie-installatie met systeemsoort "Overig" kwam zo in
+// de brief aan als een doodgewoon "Split"-systeem van het merk Panasonic.
+const legeOverdrachtInstallatie=()=>({ruimte:"",eigen_kop:"",
+  systeemsoort:"",montagewijze:"",merk:"",type_binnendeel:""});
+
 // De eerste keer (nog geen installaties uit de calculatie toegepast) worden
 // de voorbeeldinstallaties van A vervangen -- die overschrijven zou raar
 // weinig zeggende regels achterlaten (bijv. een handmatig ingevulde "ruimte"
@@ -2007,9 +2056,9 @@ const nieuweInstallatie=()=>({ruimte:"",eigen_kop:"",aantal_systemen:1,
 // samenvoegen, zodat die aanpassingen niet verloren gaan.
 function installatiesSamenvoegen(bestaand,overgenomen,vervangen){
   if(vervangen||!bestaand.length)
-    return overgenomen.map(regel=>Object.assign(nieuweInstallatie(),regel));
+    return overgenomen.map(regel=>Object.assign(legeOverdrachtInstallatie(),regel));
   return bestaand.map((regel,i)=>overgenomen[i]?Object.assign({},regel,overgenomen[i]):regel)
-    .concat(overgenomen.slice(bestaand.length).map(regel=>Object.assign(nieuweInstallatie(),regel)));
+    .concat(overgenomen.slice(bestaand.length).map(regel=>Object.assign(legeOverdrachtInstallatie(),regel)));
 }
 
 async function vulVanuitCalculatie(){
@@ -2040,15 +2089,25 @@ async function vulVanuitCalculatie(){
   A._vanuitCalculatieToegepast=true;
   ververs();
 
-  // Nooit stilzwijgend: dezelfde "afgeleid"-status als overdracht.py
-  // teruggeeft (zie de moduledocstring daar) wordt hier expliciet genoemd in
-  // plaats van weggelaten, ook al heeft dit scherm geen los badge-systeem
-  // per veld zoals de rest van de tool dat kent.
-  const controleren=overdracht.filter(v=>v.status==="afgeleid").map(v=>v.pad);
-  if(controleren.length)
-    toonFout("Vanuit de calculatie ingevuld — controleer: "+controleren.join(", ")+".");
-  else
+  // Nooit stilzwijgend: dezelfde "afgeleid"/"keuze_nodig"-status als
+  // overdracht.py teruggeeft (zie de moduledocstring daar) wordt hier
+  // expliciet genoemd in plaats van weggelaten, ook al heeft dit scherm geen
+  // los badge-systeem per veld zoals de rest van de tool dat kent. Een eigen
+  // banner (toonControleer, niet toonFout): vraagAanApp() hieronder veegt bij
+  // elke geslaagde briefvoorvertoning toonFout() leeg, en die ronde wordt
+  // door de ver vers() hierboven ook meteen weer in gang gezet -- met één
+  // gedeelde banner verdween deze melding daardoor voordat iemand hem las.
+  const afgeleid=overdracht.filter(v=>v.status==="afgeleid").map(v=>overdrachtPadNaarLabel(v.pad));
+  const keuzeNodig=overdracht.filter(v=>v.status==="keuze_nodig").map(v=>overdrachtPadNaarLabel(v.pad));
+  const delen=[];
+  if(afgeleid.length)delen.push("controleer: "+afgeleid.join(", "));
+  if(keuzeNodig.length)delen.push("nog zelf invullen: "+keuzeNodig.join(", "));
+  if(delen.length)
+    toonControleer("Vanuit de calculatie ingevuld — "+delen.join("; ")+".");
+  else{
+    toonControleer(null);
     toonMelding("Vanuit de calculatie ingevuld.");
+  }
 }
 
 document.getElementById("knop-vanuit-calculatie").onclick=()=>vulVanuitCalculatie();

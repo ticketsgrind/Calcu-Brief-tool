@@ -284,6 +284,97 @@ calculaties (klein, groot/complex, meerdere opties) — geen van alle raakt
   `.secondary`-stijl — geen van de vier is namelijk belangrijker dan de
   andere drie.
 
+## Vier gaten in de overdracht (29 september 2026), gevonden door 'm echt te draaien
+
+Op verzoek van Lars een beoordeling van de calculatie→brief-koppeling: komen
+montagewijze/type/model, Q-nummer/klantnaam, systeemsoort (enkelvoud/meervoud,
+wandmodel/cassette) goed over, en is duidelijk wat automatisch is ingevuld?
+Statisch lezen van `overdracht.py` zag er goed uit (het bestand is expliciet
+over "nooit gokken"); pas het écht draaien met een paar verschillende
+calculaties (Playwright, geen handmatig geklik) liet zien dat de praktijk op
+vier punten afweek van wat de code belooft. Alle vier zijn hierna gefixt.
+
+**1. De "controleer dit"-melding verdween zichzelf binnen een fractie van een
+seconde (`scherm/brief.html`).** `vulVanuitCalculatie()` riep na een overdracht
+`toonFout("...controleer: ...")` aan voor de "afgeleid"-velden -- maar
+`ver vers()`, vlak daarvóór al aangeroepen, zet op de achtergrond ook
+`vraagAanApp()` in gang (de briefvoorvertoning ophalen), en die functie doet
+bij succes onvoorwaardelijk `toonFout(null)` -- wat dezelfde banner alweer
+leegveegt zodra die ronde terugkomt. Aangetoond met een instrumentatie-test
+(`toonFout` tijdelijk gepatcht om aanroepen te loggen): de melding werd wel
+degelijk gezet, en een fractie later alweer gewist, zonder dat er ooit een
+mens naar had kunnen kijken. Fix: een eigen banner (`toonControleer()`/
+`#controleerbalk`, los van `#foutbalk`) die `vraagAanApp()` niet aanraakt. Bij
+diezelfde gelegenheid: de melding noemde rauwe paden ("installaties[0].
+systeemsoort") -- `overdrachtPadNaarLabel()` maakt daar "systeemsoort van
+installatie 1" van, en de melding noemt nu ook "keuze_nodig"-velden (zag er
+eerder helemaal niet in, alleen "afgeleid" telde mee) onder een apart
+"nog zelf invullen"-kopje.
+
+**2. Een "Overig"-installatie werd stilzwijgend een gewoon "Split"-systeem
+van het merk Panasonic (`installatiesSamenvoegen()` in `scherm/brief.html`).**
+Precies het geval waar `overdracht.py` NOOIT mag gokken (systeemsoort
+"keuze_nodig" bij "Overig": kan warmtepomp of vloeistofkoelmachine zijn) liet
+`regel["systeemsoort"]` bewust ongezet -- maar `installatiesSamenvoegen()`
+bouwde een nieuwe regel als `Object.assign(nieuweInstallatie(), regel)`, en
+`nieuweInstallatie()` se eigen sjabloon-standaard is
+`systeemsoort:"splitsystem", merk:MERKEN[0]` (Panasonic). Object.assign laat
+een sleutel die `regel` niet heeft gewoon op de standaardwaarde staan -- dus
+kwam een "Overig"-installatie zonder merk in de brief aan als een doodgewoon
+Split-systeem van Panasonic, aantoonbaar via `CB.calc.staat`/`A.installaties`
+in een live test. Erger: het veld is dan niet meer léég, dus de bestaande
+`controle.ontbrekende_gegevens()`-vangnet (die hier juist voor is uitgebreid,
+zie de `overdracht.py`-sectie hierboven) ziet niets fout meer -- een
+Word-bestand met een verzonnen systeemsoort én verzonnen merk zou zonder één
+waarschuwing de deur uit kunnen. Fix: een aparte, minimale
+`legeOverdrachtInstallatie()` als Object.assign-basis specifiek voor
+overdracht-regels (systeemsoort/montagewijze/merk/type_binnendeel leeg in
+plaats van een sjabloon-gok) -- `nieuweInstallatie()` zelf blijft ongewijzigd,
+want die standaardwaarden zijn juist wél passend voor een met de hand
+toegevoegde nieuwe regel (iemand gaat 'm toch invullen).
+
+**3. "Type binnendeel" in de brief is een productmodel (bijv. "TZ50"), geen
+montage-categorie.** `overdracht.py` kopieerde calculatie se
+`installatie.typeBinnendeel` (Kanaalunit/Cassetteunit/Wandunit/Vloerunit/
+Overig -- puur voor documentatie, telt niet mee in de urenberekening, zie
+"Installaties" hierboven) rechtstreeks naar de brief se `type_binnendeel`.
+Maar dat veld verwacht een echt modelnummer: het eigen voorbeeld in
+`scherm/brief.html` toont `type_binnendeel:"KIT-Z25-UFE"`, het formulier
+labelt het veld zelf als "Type binnendeel (code)", en `analyse/teksten.yaml`
+zet het letterlijk in de zin ("...fabrikaat Panasonic type
+{{ regel.type_binnendeel }}"). Live getest: dit gaf dus een brief met "...type
+Wandunit" in plaats van een echt modelnummer -- en dit stond als "direct"
+gemarkeerd (geen "controleer dit"-label), dus dit gleed sowieso stilletjes
+door, ook los van gat 1 hierboven.
+
+Op verzoek van Lars (29 september 2026): het juiste model staat al in de
+calculatie, alleen niet bij de installatie zelf -- het zit in de
+materiaallijst, zodra het via de zoekbalk of de Panasonic/Daikin-catalogus is
+toegevoegd (`voegMateriaalToe`/`voegPanasonicToe`/`voegDaikinToe` in
+`scherm/calculatie.js`, sectie APPARATUUR). Er was alleen nog geen koppeling
+tussen een installatiekaart en zo'n materiaalregel (met opzet: zie de
+`renderInstallatiesApparatuurHint()`-uitleg hieronder over waarom installaties
+en materiaal onafhankelijke lijsten zijn). Nieuw veld `installatie.materiaalId`
++ een "Model (uit materiaallijst)"-dropdown in de installatiekaart
+(`materiaalOptiesVoorInstallatie()`, gevuld met de APPARATUUR-regels van de
+huidige optie) legt die koppeling **expliciet** -- een keuze die de gebruiker
+zelf maakt, geen gok van de tool. `overdracht.py` se `_zet_installatie_over()`
+zoekt de gekoppelde regel op (`materiaal_op_id`, per calculatie-optie
+opgebouwd in `zet_meerdere_over()`) en gebruikt `artikelcode` (bijv.
+"KIT-TZ20-CKE"), of bij ontbreken daarvan `omschrijving`, als `type_binnendeel`
+-- status "direct" (het is een echte verwijzing, geen interpretatie). Zonder
+koppeling: "keuze_nodig" in plaats van de oude, foute categorie-doorgifte --
+dat veld blijft dus leeg totdat de gebruiker zelf koppelt of het in de brief
+met de hand invult, en de bestaande ontbrekende-gegevens-controle pikt een
+niet-gekoppelde installatie daardoor ook weer gewoon op.
+
+**Getest:** 4 nieuwe Python-tests (`tests/test_overdracht.py`,
+`TestTypeBinnendeelKoppeling`) voor de materiaal-koppeling, en uitgebreid
+live in de browser (Playwright) voor alle vier de gaten hierboven --
+inclusief een oud projectbestand zonder `materiaalId` (laadt gewoon, lege
+koppeling) en de calculatieblad-download (ongemoeid, raakt dit bestand niet
+aan).
+
 ## De briefstap is 1-op-1 overgenomen uit de losstaande brieventool
 
 `scherm/brief.html` is vrijwel een letterlijke kopie van

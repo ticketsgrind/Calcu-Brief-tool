@@ -345,6 +345,23 @@ function voegDaikinToe(a) {
   state.materiaal.push(materiaalRegelUitDaikin(a));
   renderAll();
 }
+function materiaalKoppelLabel(r) {
+  const code = r.artikelcode ? ` — ${r.artikelcode}` : '';
+  return `${r.omschrijving || '(geen omschrijving)'}${code}`;
+}
+function materiaalOptiesVoorInstallatie(huidigeMateriaalId) {
+  // Alleen APPARATUUR-regels: dat is waar een compleet systeem (eigen
+  // catalogus, Panasonic of Daikin) terechtkomt zodra het via de zoekbalk of
+  // de Panasonic/Daikin-catalogus is toegevoegd (zie voegMateriaalToe/
+  // voegPanasonicToe/voegDaikinToe hierboven) -- dit is dus de plek waar het
+  // echte modelnummer (bijv. "TZ50") vandaan komt, niet de grove "Type
+  // binnendeel"-categorie hieronder.
+  const kandidaten = state.materiaal.filter(r => r.sectie === 'APPARATUUR' && !r.afgeleid);
+  const opties = kandidaten.map(r =>
+    `<option value="${r.id}" ${r.id === huidigeMateriaalId ? 'selected' : ''}>${materiaalKoppelLabel(r).replace(/"/g, '&quot;')}</option>`
+  ).join('');
+  return `<option value="" ${!huidigeMateriaalId ? 'selected' : ''}>— geen koppeling —</option>${opties}`;
+}
 function materiaalRegelLabel(r) {
   if (r.bron === 'panasonic') {
     const a = DATA.panasonic.find(x => x.panasonic_id === r.panasonic_id);
@@ -412,6 +429,11 @@ function renderInstallaties() {
         <div class="field"><label>Type binnendeel</label>
           <select data-id="${inst.id}" data-field="typeBinnendeel">
             ${DATA.systemen.soort_binnendeel.map(s=>`<option ${s===inst.typeBinnendeel?'selected':''}>${s}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Model (uit materiaallijst)</label>
+          <select data-id="${inst.id}" data-field="materiaalId">
+            ${materiaalOptiesVoorInstallatie(inst.materiaalId)}
           </select>
         </div>
         <div class="field"><label>Aantal buitendelen</label><input type="number" min="0" step="1" class="num-input" data-id="${inst.id}" data-field="aantalBuitendelen" value="${inst.aantalBuitendelen||0}"></div>
@@ -726,7 +748,7 @@ function bindMeta() {
 }
 function bindInstallaties() {
   document.getElementById('btnInstallatieToevoegen').addEventListener('click', () => {
-    state.installaties.push({ id: newId(), systeemsoort: 'VRF', merk: '', montagewijze: '', typeBinnendeel: DATA.systemen.soort_binnendeel[0], aantalBuitendelen: 0, aantalBinnendelen: 0 });
+    state.installaties.push({ id: newId(), systeemsoort: 'VRF', merk: '', montagewijze: '', typeBinnendeel: DATA.systemen.soort_binnendeel[0], materiaalId: null, aantalBuitendelen: 0, aantalBinnendelen: 0 });
     renderAll();
   });
   const onInstallatieVeld = e => {

@@ -150,6 +150,58 @@ class TestSysteemsoortVertaling(unittest.TestCase):
         self.assertEqual(item.opties, ["warmtepomp", "vloeistofkoelmachine"])
 
 
+class TestTypeBinnendeelKoppeling(unittest.TestCase):
+    """"Type binnendeel" in de brief is een productmodel (bijv. "TZ50"), geen
+    montage-categorie -- calculatie se eigen "typeBinnendeel" (Kanaalunit/
+    Cassetteunit/...) mag daar dus nooit meer in terechtkomen. Het echte model
+    komt uit de gekoppelde materiaalregel (installatie.materiaalId, zie het
+    "Model (uit materiaallijst)"-veld in scherm/calculatie.js)."""
+
+    def _staat(self, materiaal_id=None, materiaal=None):
+        staat = rk.nieuwe_staat()
+        installatie = {"id": "a", "systeemsoort": "RAC", "merk": "Panasonic",
+                        "typeBinnendeel": "Wandunit", "aantalBinnendelen": 1, "aantalBuitendelen": 1}
+        if materiaal_id is not None:
+            installatie["materiaalId"] = materiaal_id
+        staat["installaties"] = [installatie]
+        staat["materiaal"] = materiaal or []
+        return staat
+
+    def test_gekoppelde_materiaalregel_met_artikelcode_wint_van_de_categorie(self):
+        staat = self._staat(materiaal_id="m1", materiaal=[
+            {"id": "m1", "sectie": "APPARATUUR", "aantal": 1, "prijs": 500,
+             "artikelcode": "TZ50", "omschrijving": "Panasonic TZ-serie 5.0kW"},
+        ])
+        offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertEqual(offerte["installaties"][0]["type_binnendeel"], "TZ50")
+        self.assertEqual(status_van(overdracht, "installaties[0].type_binnendeel").status, "direct")
+
+    def test_gekoppelde_materiaalregel_zonder_artikelcode_valt_terug_op_omschrijving(self):
+        staat = self._staat(materiaal_id="m1", materiaal=[
+            {"id": "m1", "sectie": "APPARATUUR", "aantal": 1, "prijs": 500, "artikelcode": None,
+             "omschrijving": "Kanaalunit XYZ 5.0kW"},
+        ])
+        offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertEqual(offerte["installaties"][0]["type_binnendeel"], "Kanaalunit XYZ 5.0kW")
+
+    def test_geen_koppeling_wordt_nooit_de_montagecategorie(self):
+        """De vroegere (foute) implementatie zette hier installatie["typeBinnendeel"]
+        ("Wandunit", een montage-categorie) rechtstreeks in de brief -- dat gaf
+        een brief met "...type Wandunit" in plaats van een echt modelnummer."""
+        staat = self._staat(materiaal_id=None)
+        offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertNotIn("type_binnendeel", offerte["installaties"][0])
+        item = status_van(overdracht, "installaties[0].type_binnendeel")
+        self.assertEqual(item.status, "keuze_nodig")
+
+    def test_koppeling_naar_niet_bestaand_materiaal_is_ook_keuze_nodig(self):
+        """Bijv. de gekoppelde regel is inmiddels uit de materiaallijst verwijderd."""
+        staat = self._staat(materiaal_id="spookregel", materiaal=[])
+        offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertNotIn("type_binnendeel", offerte["installaties"][0])
+        self.assertEqual(status_van(overdracht, "installaties[0].type_binnendeel").status, "keuze_nodig")
+
+
 class TestVeldenDieCalculatieNietKent(unittest.TestCase):
     """klanttype, adres, aanhef, facturering, etc. bestaan niet in de
     calculatie en horen dus ook niet in de overdracht te verschijnen -- ze
@@ -188,9 +240,14 @@ class TestSamenwerkingMetControle(unittest.TestCase):
         staat["meta"]["datum"] = "2026-09-01"
         staat["meta"]["qnummer"] = "Q.1080000.6.01"
         staat["installaties"] = [{"id": "a", "systeemsoort": "RAC", "merk": "Panasonic",
-                                  "montagewijze": "Wandmontage", "typeBinnendeel": "KIT-71PU3Z5",
+                                  "montagewijze": "Wandmontage", "typeBinnendeel": "Wandunit",
+                                  "materiaalId": "m2",
                                   "aantalBinnendelen": 1, "aantalBuitendelen": 1}]
-        staat["materiaal"] = [{"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000}]
+        staat["materiaal"] = [
+            {"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000},
+            {"id": "m2", "sectie": "APPARATUUR", "aantal": 1, "prijs": 800, "artikelcode": "KIT-71PU3Z5",
+             "omschrijving": "Panasonic KIT-71PU3Z5"},
+        ]
         staat["marge"]["projectPrice"] = 3000
         offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))
 

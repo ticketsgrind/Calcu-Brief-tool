@@ -138,9 +138,10 @@ def zet_meerdere_over(
 
     offerte_installaties: list[dict[str, Any]] = []
     for calc_staat, _ in paren:
+        materiaal_op_id = {m.get("id"): m for m in calc_staat.get("materiaal") or []}
         for installatie in calc_staat.get("installaties") or []:
             index = len(offerte_installaties)
-            regel, regel_overdracht = _zet_installatie_over(index, installatie)
+            regel, regel_overdracht = _zet_installatie_over(index, installatie, materiaal_op_id)
             offerte_installaties.append(regel)
             overdracht.extend(regel_overdracht)
     if offerte_installaties:
@@ -177,7 +178,9 @@ def zet_meerdere_over(
     return offerte, overdracht
 
 
-def _zet_installatie_over(index: int, installatie: dict[str, Any]) -> tuple[dict[str, Any], list[VeldOverdracht]]:
+def _zet_installatie_over(
+    index: int, installatie: dict[str, Any], materiaal_op_id: dict[Any, dict[str, Any]]
+) -> tuple[dict[str, Any], list[VeldOverdracht]]:
     regel: dict[str, Any] = {}
     overdracht: list[VeldOverdracht] = []
     voorvoegsel = f"installaties[{index}]"
@@ -191,9 +194,31 @@ def _zet_installatie_over(index: int, installatie: dict[str, Any]) -> tuple[dict
         regel["montagewijze"] = montagewijze
         overdracht.append(VeldOverdracht(f"{voorvoegsel}.montagewijze", "direct", "overgenomen"))
 
-    if installatie.get("typeBinnendeel"):
-        regel["type_binnendeel"] = installatie["typeBinnendeel"]
-        overdracht.append(VeldOverdracht(f"{voorvoegsel}.type_binnendeel", "direct", "overgenomen"))
+    # "Type binnendeel" in de brief is een productmodel (bijv. "TZ50"), geen
+    # montage-categorie -- calculatie se eigen "typeBinnendeel"-veld
+    # (Kanaalunit/Cassetteunit/...) is dat laatste en hoort hier dus NIET meer
+    # in te vloeien (deed het eerder wel, zie git-historie/CLAUDE.md: dat gaf
+    # een brief met "type Kanaalunit" in plaats van een echt modelnummer). Het
+    # echte model staat in de materiaallijst (materiaal_catalogus/Panasonic/
+    # Daikin) zodra dat via de zoekbalk is toegevoegd; `installatie.materiaalId`
+    # (scherm/calculatie.js, het nieuwe "Model (uit materiaallijst)"-veld) is
+    # de expliciete koppeling die de gebruiker daar zelf legt -- geen gok,
+    # gewoon een keuze die is doorgegeven.
+    materiaal_item = materiaal_op_id.get(installatie.get("materiaalId"))
+    model = (materiaal_item or {}).get("artikelcode") or (materiaal_item or {}).get("omschrijving")
+    if model:
+        regel["type_binnendeel"] = model
+        overdracht.append(VeldOverdracht(
+            f"{voorvoegsel}.type_binnendeel", "direct",
+            "overgenomen van het gekoppelde artikel in de materiaallijst"
+        ))
+    else:
+        overdracht.append(VeldOverdracht(
+            f"{voorvoegsel}.type_binnendeel", "keuze_nodig",
+            "geen materiaalregel gekoppeld in de calculatie (of de koppeling wijst nergens meer "
+            "naartoe) -- vul het modelnummer hier zelf in, of koppel bij Installaties in de "
+            "calculatie een artikel uit de materiaallijst"
+        ))
 
     aantal_buiten = installatie.get("aantalBuitendelen")
     aantal_binnen = installatie.get("aantalBinnendelen")
