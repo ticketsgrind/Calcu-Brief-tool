@@ -38,7 +38,7 @@ from brieventool.controle import melding, ontbrekende_gegevens
 from brieventool.samenstellen import SamenstelFout, stel_samen
 from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
-from overdracht import zet_over
+from overdracht import zet_meerdere_over
 
 if getattr(sys, "frozen", False):
     # Gebouwd met PyInstaller (--onefile/--windowed): de meegepakte data
@@ -163,15 +163,23 @@ class Bediening(BaseHTTPRequestHandler):
         return self._antwoord(200, resultaat)
 
     def _overdracht(self, gegevens: dict) -> None:
-        """Zet een calculatie-state om in een voorinvulling voor de brief.
+        """Zet één of meerdere calculatie-states om in een voorinvulling voor
+        de brief.
 
         Nooit een afgeronde brief: het antwoord is een (deels ingevuld)
         offerte-formulier plus de lijst velden die overgenomen/afgeleid zijn,
-        zodat het scherm kan laten zien wat gecontroleerd moet worden."""
-        staat = gegevens.get("calculatie") or {}
+        zodat het scherm kan laten zien wat gecontroleerd moet worden.
+
+        `opties` (een lijst calculatie-states, één per losse optie/calculatie,
+        zie overdracht.zet_meerdere_over) heeft voorrang; zonder `opties` valt
+        dit terug op het oudere `calculatie` (één state) voor compatibiliteit
+        met een scherm/brief.html dat nog geen meerdere opties stuurt."""
+        opties = gegevens.get("opties")
+        if opties is None:
+            opties = [gegevens.get("calculatie") or {}]
         try:
-            berekening = rk.bereken(staat, self.server.calc_gegevens)
-            offerte, overdracht = zet_over(staat, berekening, gegevens.get("klanttype"))
+            paren = [(staat, rk.bereken(staat, self.server.calc_gegevens)) for staat in opties]
+            offerte, overdracht = zet_meerdere_over(paren, gegevens.get("klanttype"))
         except (KeyError, TypeError, ValueError) as fout:
             return self._antwoord(400, {"fout": f"kan de overdracht niet maken: {fout}"})
         return self._antwoord(200, {

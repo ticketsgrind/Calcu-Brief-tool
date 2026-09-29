@@ -154,10 +154,27 @@ CB.toast = msg => {
 
 const PROJECT_MERK = 'calcu-brief-project';
 
+// Eén project kan meerdere losse calculaties ("opties") bevatten sinds
+// versie 2 (zie CLAUDE.md) -- vóór die tijd was er precies één `calculatie`.
+// Zet een geopend of bewaard projectbestand om naar een lijst opties, met
+// terugval op dat oudere formaat zodat een bestaand opgeslagen bestand of
+// browser-autosave gewoon blijft werken, als "Optie A". Geeft null terug als
+// het bestand geen van beide vormen heeft.
+CB.optiesUitProject = project => {
+  if (project && Array.isArray(project.opties) && project.opties.length) {
+    return project.opties.map(o => ({ naam: o.naam || 'Optie', staat: o.calculatie || CB.calc.nieuweStaat() }));
+  }
+  if (project && project.calculatie) {
+    return [{ naam: 'Optie A', staat: project.calculatie }];
+  }
+  return null;
+};
+
 CB.huidigProject = () => ({
   merk: PROJECT_MERK,
-  versie: 1,
-  calculatie: CB.calc.staat,
+  versie: 2,
+  opties: CB.calc.alleOpties().map(o => ({ naam: o.naam, calculatie: o.staat })),
+  actieveOptie: CB.calc.actieveOptieIndex,
 });
 
 CB.heeftInhoud = () => CB.calc.heeftInhoud();
@@ -167,7 +184,11 @@ CB.heeftInhoud = () => CB.calc.heeftInhoud();
 CB.veiligeBestandsnaamdeel = tekst => String(tekst || '').trim().replace(/[\\/:*?"<>|]+/g, '-');
 
 CB.projectBestandsnaam = () => {
-  const meta = CB.calc.staat.meta || {};
+  // Van de EERSTE optie: dat is ook waar overdracht.zet_meerdere_over()
+  // (Python) de projectbrede velden (klant, datum, Q-nummer) vandaan haalt --
+  // dezelfde regel hier houdt de bestandsnaam daarmee in lijn.
+  const eerste = CB.calc.alleOpties()[0];
+  const meta = (eerste && eerste.staat.meta) || {};
   const delen = [meta.klantnaam, meta.projectnaam].map(CB.veiligeBestandsnaamdeel).filter(Boolean);
   const naam = delen.length ? `Calculatie-${delen.join('-')}` : 'Calculatie';
   return naam + '.json';
@@ -201,7 +222,8 @@ CB.bindOpslaanOpenen = () => {
       if (project.merk !== PROJECT_MERK) {
         return CB.toast('Dit is geen calculatie-projectbestand.');
       }
-      CB.calc.vulStaat(project.calculatie || CB.calc.nieuweStaat());
+      const opties = CB.optiesUitProject(project) || [{ naam: 'Optie A', staat: CB.calc.nieuweStaat() }];
+      CB.calc.vulOpties(opties, project.actieveOptie || 0);
       CB.toast('Project geopend.');
     };
     lezer.readAsText(bestand);
@@ -209,7 +231,7 @@ CB.bindOpslaanOpenen = () => {
 
   document.getElementById('btnNieuw').addEventListener('click', () => {
     if (CB.heeftInhoud() && !confirm('Alles wissen? Niet-opgeslagen wijzigingen gaan dan verloren.')) return;
-    CB.calc.vulStaat(CB.calc.nieuweStaat());
+    CB.calc.vulOpties([{ naam: 'Optie A', staat: CB.calc.nieuweStaat() }], 0);
     CB.toast('Nieuw project gestart.');
   });
 };
@@ -236,13 +258,15 @@ CB.autosave = () => {
 // overschreven met lege staat vóórdat hij ooit gelezen werd. Dat gaf een
 // leeg calculatieblad bij elke terugkeer naar deze pagina (ook een gewone
 // F5), ook al stond de data nog prima in localStorage op het moment van
-// wegnavigeren.
-CB.leesAutosaveCalculatie = () => {
+// wegnavigeren. Geeft { opties, actieveOptie } terug (via CB.optiesUitProject,
+// dus ook met terugval op het oudere formaat vóór meerdere opties), of null.
+CB.leesAutosaveOpties = () => {
   let bewaard;
   try { bewaard = localStorage.getItem(AUTOSAVE_SLEUTEL); } catch (e) { return null; }
   if (!bewaard) return null;
   try {
     const project = JSON.parse(bewaard);
-    return project.calculatie || null;
+    const opties = CB.optiesUitProject(project);
+    return opties ? { opties, actieveOptie: project.actieveOptie || 0 } : null;
   } catch (e) { return null; /* corrupte autosave; gewoon leeg beginnen */ }
 };

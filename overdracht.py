@@ -81,48 +81,98 @@ def zet_over(calc_staat: dict[str, Any], berekening: dict[str, Any],
     brieventool.samenstellen.stel_samen / brieventool.controle.ontbrekende_gegevens,
     `overdracht` is de lijst VeldOverdracht-items voor de "controleer dit"-
     weergave in het scherm.
+
+    Dunne ingang van `zet_meerdere_over()` hieronder, voor het gewone geval van
+    precies één calculatie. Zie daar voor de meerdere-opties-variant (twee of
+    meer losse calculaties die samen één brief met "pos. A"/"pos. B" moeten
+    worden).
+    """
+    return zet_meerdere_over([(calc_staat, berekening)], klanttype)
+
+
+def zet_meerdere_over(
+    paren: list[tuple[dict[str, Any], dict[str, Any]]],
+    klanttype: str | None = None,
+) -> tuple[dict[str, Any], list[VeldOverdracht]]:
+    """Zoals `zet_over()`, maar voor één of meerdere calculaties tegelijk.
+
+    Elke calculatie in `paren` is een (calc_staat, berekening)-paar, in de
+    volgorde waarin ze in de brief moeten komen. Bij precies één paar is de
+    uitkomst identiek aan `zet_over()` op dat paar (geen "positie" op de
+    prijsregel). Bij meerdere paren wordt elke installatielijst na elkaar
+    geplakt (op verzoek van Lars, 29 september 2026: "2 losse calculaties" die
+    samen in één brief komen), en krijgt elke prijsregel een positie ("pos.
+    A", "pos. B", ...) volgens de volgorde in `paren` -- dat is een al
+    bestaand, al werkend mechanisme in de brieftool (zie de
+    "+ Prijspositie toevoegen"-knop in scherm/brief.html en het
+    prijs_regel_positie-blok in analyse/teksten.yaml), hier alleen automatisch
+    ingevuld in plaats van met de hand. Aan het Word-sjabloon of de tekstblokken
+    hoeft dus niets te veranderen.
+
+    Projectbrede velden (datum, Q-nummer, klantnaam) komen uitsluitend uit de
+    EERSTE calculatie: die velden horen bij het project als geheel, niet bij
+    een individuele optie, en in de praktijk deelt een nieuw toegevoegde optie
+    die gegevens toch al met de eerste (scherm/calculatie.js vult ze bij het
+    aanmaken van een nieuwe optie alvast voor).
     """
     offerte: dict[str, Any] = {}
     overdracht: list[VeldOverdracht] = []
+    meerdere_opties = len(paren) > 1
 
-    meta = calc_staat.get("meta") or {}
-    if meta.get("datum"):
-        offerte["briefdatum"] = meta["datum"]
-        overdracht.append(VeldOverdracht("briefdatum", "direct", "overgenomen uit de projectdatum"))
-    if meta.get("qnummer"):
-        offerte["projectnummer"] = meta["qnummer"]
-        overdracht.append(VeldOverdracht("projectnummer", "direct", "overgenomen uit het Q-nummer"))
-    if meta.get("klantnaam"):
-        offerte["organisatie"] = meta["klantnaam"]
-        overdracht.append(VeldOverdracht(
-            "organisatie", "afgeleid",
-            "overgenomen uit de klantnaam van de calculatie -- controleer of dit de "
-            "bedrijfsnaam is (bij een particuliere klant hoort deze juist leeg te blijven "
-            "en de naam bij achternaam/aanspreekvorm)."
-        ))
+    if paren:
+        meta = paren[0][0].get("meta") or {}
+        if meta.get("datum"):
+            offerte["briefdatum"] = meta["datum"]
+            overdracht.append(VeldOverdracht("briefdatum", "direct", "overgenomen uit de projectdatum"))
+        if meta.get("qnummer"):
+            offerte["projectnummer"] = meta["qnummer"]
+            overdracht.append(VeldOverdracht("projectnummer", "direct", "overgenomen uit het Q-nummer"))
+        if meta.get("klantnaam"):
+            offerte["organisatie"] = meta["klantnaam"]
+            overdracht.append(VeldOverdracht(
+                "organisatie", "afgeleid",
+                "overgenomen uit de klantnaam van de calculatie -- controleer of dit de "
+                "bedrijfsnaam is (bij een particuliere klant hoort deze juist leeg te blijven "
+                "en de naam bij achternaam/aanspreekvorm)."
+            ))
 
     offerte_installaties: list[dict[str, Any]] = []
-    for index, installatie in enumerate(calc_staat.get("installaties") or []):
-        regel, regel_overdracht = _zet_installatie_over(index, installatie)
-        offerte_installaties.append(regel)
-        overdracht.extend(regel_overdracht)
+    for calc_staat, _ in paren:
+        for installatie in calc_staat.get("installaties") or []:
+            index = len(offerte_installaties)
+            regel, regel_overdracht = _zet_installatie_over(index, installatie)
+            offerte_installaties.append(regel)
+            overdracht.extend(regel_overdracht)
     if offerte_installaties:
         offerte["installaties"] = offerte_installaties
 
-    marge = berekening.get("marge") or {}
-    verkoopprijs = marge.get("verkoopprijs")
-    if verkoopprijs is not None:
+    prijsregels: list[dict[str, Any]] = []
+    for volgnummer, (_, berekening) in enumerate(paren):
+        marge = berekening.get("marge") or {}
+        verkoopprijs = marge.get("verkoopprijs")
+        if verkoopprijs is None:
+            continue
         particulier = klanttype == "particulier"
         bedrag = verkoopprijs * (1 + BTW_PERCENTAGE_PARTICULIER) if particulier else verkoopprijs
-        offerte["prijssoort"] = "totaalprijs"
-        offerte["prijsregels"] = [{"bedrag": round(bedrag, 2)}]
+        prijsregel: dict[str, Any] = {"bedrag": round(bedrag, 2)}
+        if meerdere_opties:
+            # A, B, C, ... naar volgorde in `paren` -- niet naar hoeveel
+            # prijsregels er uiteindelijk zijn, anders zou een nog niet
+            # doorgerekende eerste optie de tweede optie foutief "pos. A" laten
+            # heten in plaats van "pos. B".
+            prijsregel["positie"] = f"pos. {chr(65 + volgnummer)}"
+        prijsregels.append(prijsregel)
         reden = (
             "de verkoopprijs zoals berekend in stap 1 (calculatie), plus 21% btw voor "
             "de particuliere klant -- wordt hier niet herberekend, alleen de btw is erbij opgeteld"
             if particulier else
             "de verkoopprijs zoals berekend in stap 1 (calculatie) -- wordt hier niet herberekend"
         )
-        overdracht.append(VeldOverdracht("prijsregels[0].bedrag", "direct", reden))
+        overdracht.append(VeldOverdracht(f"prijsregels[{len(prijsregels) - 1}].bedrag", "direct", reden))
+
+    if prijsregels:
+        offerte["prijssoort"] = "totaalprijs"
+        offerte["prijsregels"] = prijsregels
 
     return offerte, overdracht
 

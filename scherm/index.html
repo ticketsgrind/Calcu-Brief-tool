@@ -66,6 +66,12 @@
 <!-- ============================== STAP 1: CALCULATIE ============================== -->
 <div class="stap actief" data-stap="calculatie" id="stapCalculatie">
 
+  <!-- Meerdere losse calculaties ("opties") binnen dit project, bijv. een
+       Panasonic- en een Toshiba-uitvoering -- komen bij "naar de brief" samen
+       terecht als pos. A/pos. B in één brief (zie CLAUDE.md). Volledig
+       gerenderd door scherm/calculatie.js (renderOptieBalk/bindOpties). -->
+  <div class="optie-balk no-print" id="optieBalk"></div>
+
   <div class="warn-banner no-print" id="incompleteWarning" style="display:none;"></div>
 
   <section class="card" data-sectie-id="projectgegevens">

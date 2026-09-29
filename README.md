@@ -93,6 +93,14 @@ Zonder dubbelklik-opstarter kan het ook rechtstreeks:
   een gewoon, door `brieventool/controle.py` bewaakt formulierveld: er komt
   geen Word-bestand totdat alles is ingevuld, en de melding noemt precies
   wat er nog mist.
+- **Meerdere opties** (bijv. een Panasonic- en een Toshiba-uitvoering van
+  dezelfde aanvraag): boven de calculatie kun je met "+ Optie toevoegen" een
+  tweede, volledig losse calculatie aanmaken (eigen tabblad, dubbelklikken om
+  te hernoemen). Bij het overstappen naar de brief komen alle opties samen in
+  één brief terecht: de installaties na elkaar, en de prijs per optie als een
+  eigen prijspositie ("pos. A", "pos. B", ...) — precies zoals dat al kon
+  voor een brief met meerdere prijsposities, nu automatisch ingevuld in
+  plaats van met de hand.
 
 ## Project opslaan/openen
 

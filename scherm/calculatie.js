@@ -56,8 +56,18 @@ let uid = 1;
 const newId = () => 'calcid' + (uid++);
 
 let DATA = null;      // catalogi, geladen bij init() uit /data/*.json
-let state = null;     // de calculatie-invoer
+let state = null;     // de calculatie-invoer van de ACTIEVE optie
 let berekening = null; // laatste antwoord van POST /bereken (null tot de eerste ronde klaar is)
+
+// Eén project kan meerdere losse calculaties ("opties") bevatten, bijv. een
+// Panasonic- en een Toshiba-uitvoering van dezelfde aanvraag -- die komen bij
+// "naar de brief" samen terecht als pos. A/pos. B in één brief (overdracht.py
+// zet_meerdere_over(), zie CLAUDE.md). `state` blijft de invoer van precies
+// de actieve optie; `opties[i].staat` is alleen actueel voor de NIET-actieve
+// opties (bewaarActieveOptie() synchroniseert `state` erin terug vóór elk
+// gebruik van de volledige lijst).
+let opties = [{ naam: 'Optie A', staat: null }];
+let actieveOptieIndex = 0;
 
 function nieuweStaat() {
   return {
@@ -82,11 +92,99 @@ function nieuweStaat() {
   };
 }
 
-function heeftInhoud() {
-  const s = state;
+/* ------------------------------------- opties ------------------------------------- */
+// `state` is steeds de invoer van de actieve optie; dit zet 'm terug in
+// `opties` vóór elk gebruik van de volledige lijst (wisselen, opslaan,
+// verwijderen, tellen) -- zonder dit zou de niet-actieve helft van `opties`
+// een verouderde snapshot blijven.
+function bewaarActieveOptie() {
+  if (opties[actieveOptieIndex]) opties[actieveOptieIndex].staat = state;
+}
+
+function wisselOptie(index) {
+  if (index === actieveOptieIndex || !opties[index]) return;
+  bewaarActieveOptie();
+  actieveOptieIndex = index;
+  state = opties[actieveOptieIndex].staat;
+  berekening = null; laatstVerzonden = null;
+  renderOptieBalk();
+  renderAll();
+}
+
+function optieToevoegen() {
+  bewaarActieveOptie();
+  const nieuw = nieuweStaat();
+  // Projectgegevens (klant, adres, Q-nummer, ...) horen bij het project als
+  // geheel, niet bij één optie -- overnemen scheelt dubbel intypen. De rest
+  // (installaties, materiaal, uren, ...) start leeg: dit is een volledig
+  // losse, zelfstandige calculatie, geen variant die iets deelt. Op verzoek
+  // van Lars (29 september 2026).
+  nieuw.meta = Object.assign({}, state.meta);
+  opties.push({ naam: 'Optie ' + String.fromCharCode(65 + opties.length), staat: nieuw });
+  wisselOptie(opties.length - 1);
+}
+
+function optieVerwijderen(index) {
+  if (opties.length <= 1 || !opties[index]) return; // altijd minstens één optie
+  if (staatHeeftInhoud(index === actieveOptieIndex ? state : opties[index].staat)
+      && !confirm(`${opties[index].naam} verwijderen? Niet-opgeslagen wijzigingen daarin gaan dan verloren.`)) return;
+  opties.splice(index, 1);
+  if (actieveOptieIndex >= opties.length) actieveOptieIndex = opties.length - 1;
+  else if (index < actieveOptieIndex) actieveOptieIndex--;
+  state = opties[actieveOptieIndex].staat;
+  berekening = null; laatstVerzonden = null;
+  renderOptieBalk();
+  renderAll();
+}
+
+function optieHernoemen(index, naam) {
+  const schoon = String(naam || '').trim();
+  if (schoon && opties[index]) opties[index].naam = schoon;
+  renderOptieBalk();
+  CB.autosave();
+}
+
+function renderOptieBalk() {
+  const balk = document.getElementById('optieBalk');
+  if (!balk) return;
+  const tabs = opties.map((optie, i) => `
+    <div class="optie-tab${i === actieveOptieIndex ? ' actief' : ''}" data-index="${i}" title="Dubbelklik om te hernoemen">
+      <span class="optie-naam">${optie.naam}</span>
+      ${opties.length > 1 ? `<button class="optie-verwijder" type="button" data-action="verwijder-optie" data-index="${i}" title="Deze optie verwijderen">✕</button>` : ''}
+    </div>`).join('');
+  balk.innerHTML = tabs + `<button class="btn ghost small" type="button" id="btnOptieToevoegen"
+    title="Een tweede, volledig losse calculatie toevoegen -- bijv. voor een alternatief aanbod met een ander fabricaat. Komt bij &quot;naar de brief&quot; samen met de andere opties terecht als pos. A/pos. B.">+ Optie toevoegen</button>`;
+}
+
+function bindOpties() {
+  const balk = document.getElementById('optieBalk');
+  balk.addEventListener('click', e => {
+    const verwijderKnop = e.target.closest('[data-action="verwijder-optie"]');
+    if (verwijderKnop) { optieVerwijderen(Number(verwijderKnop.dataset.index)); return; }
+    if (e.target.closest('#btnOptieToevoegen')) { optieToevoegen(); return; }
+    const tab = e.target.closest('.optie-tab');
+    if (tab) wisselOptie(Number(tab.dataset.index));
+  });
+  balk.addEventListener('dblclick', e => {
+    const tab = e.target.closest('.optie-tab');
+    if (!tab) return;
+    const index = Number(tab.dataset.index);
+    const nieuweNaam = prompt('Naam voor deze optie:', opties[index].naam);
+    if (nieuweNaam !== null) optieHernoemen(index, nieuweNaam);
+  });
+}
+
+function staatHeeftInhoud(s) {
   return s.installaties.length > 0 || s.materiaal.length > 0
     || Object.values(s.meta).some(Boolean)
     || s.marge.projectPrice !== null;
+}
+// Kijkt over alle opties heen, niet alleen de actieve -- anders zou "Nieuw"/
+// "Openen" een ingevulde tweede optie zonder waarschuwing kunnen wegvegen
+// alleen omdat toevallig de eerste, lege optie in beeld stond.
+function heeftInhoud() {
+  bewaarActieveOptie();
+  return opties.some(o => staatHeeftInhoud(o.staat));
 }
 
 function nonNegatief(waarde) {
@@ -832,10 +930,19 @@ async function laadData() {
 async function initCalculatie() {
   CB.laadscherm.zetStatus('Materiaal- en prijsgegevens laden…');
   await laadData();
-  state = CB.leesAutosaveCalculatie() || nieuweStaat();
+  const bewaard = CB.leesAutosaveOpties();
+  if (bewaard) {
+    opties = bewaard.opties.map(o => ({ naam: o.naam, staat: o.staat }));
+    actieveOptieIndex = Math.min(Math.max(bewaard.actieveOptie || 0, 0), opties.length - 1);
+  } else {
+    opties = [{ naam: 'Optie A', staat: nieuweStaat() }];
+    actieveOptieIndex = 0;
+  }
+  state = opties[actieveOptieIndex].staat;
   bindMeta(); bindInstallaties(); bindMateriaal(); bindUren();
   bindLijst('uitbestedingBody', 'uitbesteding'); bindLijst('equipmentBody', 'equipment');
-  bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles();
+  bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles(); bindOpties();
+  renderOptieBalk();
   CB.laadscherm.zetStatus('Rekenkern voorbereiden…');
   await herbereken();
 }
@@ -843,7 +950,25 @@ async function initCalculatie() {
 CB.calc = {
   get staat() { return state; },
   nieuweStaat,
-  vulStaat(nieuw) { state = nieuw; berekening = null; laatstVerzonden = null; renderAll(); },
+  // Vervangt de HELE lijst opties (bijv. bij "Nieuw project" of het openen
+  // van een bestand) -- voor een enkele optie tussentijds bijwerken (Openen/
+  // Nieuw binnen dezelfde sessie), niet voor het wisselen tussen bestaande
+  // opties (zie wisselOptie hierboven, via de tabbalk).
+  vulOpties(nieuweOpties, actieveIndex) {
+    opties = nieuweOpties.map(o => ({ naam: o.naam || 'Optie', staat: o.staat }));
+    actieveOptieIndex = Math.min(Math.max(actieveIndex || 0, 0), opties.length - 1);
+    state = opties[actieveOptieIndex].staat;
+    berekening = null; laatstVerzonden = null;
+    renderOptieBalk();
+    renderAll();
+  },
+  // Voor CB.huidigProject()/autosave: alle opties, met de actieve staat
+  // gesynchroniseerd (zie bewaarActieveOptie).
+  alleOpties() {
+    bewaarActieveOptie();
+    return opties.map(o => ({ naam: o.naam, staat: o.staat }));
+  },
+  get actieveOptieIndex() { return actieveOptieIndex; },
   heeftInhoud,
   render: () => renderAll(),
   klaar: null,

@@ -15,7 +15,7 @@ from brieventool import laad
 from brieventool.controle import ontbrekende_gegevens
 from brieventool.samenstellen import stel_samen
 from calculatie import rekenkern as rk
-from overdracht import zet_over
+from overdracht import zet_meerdere_over, zet_over
 
 WORTEL = Path(__file__).resolve().parent.parent
 GEGEVENS = rk.laad_gegevens()
@@ -211,6 +211,92 @@ class TestSamenwerkingMetControle(unittest.TestCase):
         brief = stel_samen(offerte, laad(WORTEL))
         self.assertIn(str(round(rk.bereken(staat, GEGEVENS)["marge"]["verkoopprijs"], 2)).split(".")[0],
                       "".join(brief.regels("prijs")).replace(".", ""))
+
+
+class TestMeerdereOpties(unittest.TestCase):
+    """Meerdere losse calculaties samen naar één brief (pos. A/pos. B, ...).
+
+    Zie de moduledocstring bij zet_meerdere_over() voor het waarom: dit
+    hergebruikt de al bestaande, al werkende prijspositie-mechaniek van de
+    brieftool (analyse/teksten.yaml/scherm/brief.html), niet iets nieuws."""
+
+    def _paar(self, installaties=None, projectprice=3000, **meta):
+        staat = rk.nieuwe_staat()
+        staat["meta"].update(meta)
+        if installaties is not None:
+            staat["installaties"] = installaties
+        staat["materiaal"] = [{"id": "m1", "sectie": "X", "aantal": 1, "prijs": 1000}]
+        staat["marge"]["projectPrice"] = projectprice
+        return staat, rk.bereken(staat, GEGEVENS)
+
+    def test_één_paar_is_identiek_aan_zet_over(self):
+        staat, berekening = self._paar()
+        via_zet_over = zet_over(staat, berekening, klanttype="particulier")
+        via_meerdere = zet_meerdere_over([(staat, berekening)], klanttype="particulier")
+        self.assertEqual(via_zet_over, via_meerdere)
+        # Met precies één optie geen "positie" -- dat zou een normale,
+        # enkelvoudige brief onnodig een "pos. A"-label geven.
+        self.assertNotIn("positie", via_meerdere[0]["prijsregels"][0])
+
+    def test_twee_opties_krijgen_pos_a_en_pos_b(self):
+        paar_a, _ = self._paar(projectprice=3000)
+        paar_b, _ = self._paar(projectprice=5000)
+        offerte, _ = zet_meerdere_over([
+            (paar_a, rk.bereken(paar_a, GEGEVENS)),
+            (paar_b, rk.bereken(paar_b, GEGEVENS)),
+        ])
+
+        posities = [regel["positie"] for regel in offerte["prijsregels"]]
+        self.assertEqual(posities, ["pos. A", "pos. B"])
+        self.assertNotEqual(offerte["prijsregels"][0]["bedrag"], offerte["prijsregels"][1]["bedrag"])
+
+    def test_installaties_van_beide_opties_komen_na_elkaar_met_doorlopende_index(self):
+        inst_a = [{"id": "a", "merk": "Panasonic", "montagewijze": "Wandmontage",
+                   "typeBinnendeel": "KIT-71PU3Z5", "systeemsoort": "RAC", "aantalBinnendelen": 1}]
+        inst_b = [{"id": "b", "merk": "Toshiba", "montagewijze": "Wandmontage",
+                   "typeBinnendeel": "RAS-B13", "systeemsoort": "RAC", "aantalBinnendelen": 1}]
+        staat_a, berekening_a = self._paar(installaties=inst_a)
+        staat_b, berekening_b = self._paar(installaties=inst_b)
+
+        offerte, overdracht = zet_meerdere_over([(staat_a, berekening_a), (staat_b, berekening_b)])
+
+        self.assertEqual(len(offerte["installaties"]), 2)
+        self.assertEqual(offerte["installaties"][0]["merk"], "Panasonic")
+        self.assertEqual(offerte["installaties"][1]["merk"], "Toshiba")
+        # De tweede installatie hoort index 1 te dragen in de overdracht-paden,
+        # niet weer index 0 (dat zou de eerste optie overschrijven in de
+        # "controleer dit"-weergave).
+        self.assertTrue(any(v.pad == "installaties[1].merk" for v in overdracht))
+
+    def test_projectbrede_velden_komen_alleen_uit_de_eerste_optie(self):
+        staat_a, berekening_a = self._paar(datum="2026-09-01", qnummer="Q.1", klantnaam="Klant A")
+        staat_b, berekening_b = self._paar(datum="2026-09-02", qnummer="Q.2", klantnaam="Klant B")
+
+        offerte, _ = zet_meerdere_over([(staat_a, berekening_a), (staat_b, berekening_b)])
+
+        self.assertEqual(offerte["briefdatum"], "2026-09-01")
+        self.assertEqual(offerte["projectnummer"], "Q.1")
+        self.assertEqual(offerte["organisatie"], "Klant A")
+
+    def test_optie_zonder_projectprice_slaat_geen_gat_in_de_positieletters(self):
+        # De eerste optie heeft nog geen prijs (nog niet klaar), de tweede wel
+        # -- die moet toch "pos. B" heten, niet alsnog "pos. A" omdat hij de
+        # enige met een prijsregel is.
+        staat_a = rk.nieuwe_staat()
+        staat_b, berekening_b = self._paar(projectprice=4200)
+
+        offerte, _ = zet_meerdere_over([
+            (staat_a, rk.bereken(staat_a, GEGEVENS)),
+            (staat_b, berekening_b),
+        ])
+
+        self.assertEqual(len(offerte["prijsregels"]), 1)
+        self.assertEqual(offerte["prijsregels"][0]["positie"], "pos. B")
+
+    def test_lege_lijst_geeft_lege_offerte(self):
+        offerte, overdracht = zet_meerdere_over([])
+        self.assertEqual(offerte, {})
+        self.assertEqual(overdracht, [])
 
 
 if __name__ == "__main__":

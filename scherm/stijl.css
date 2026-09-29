@@ -55,6 +55,22 @@ header.topbar .status{font-size:12px; opacity:.85;}
 .stappen button.actief .stapnr{background:var(--blauw); color:#fff;}
 .stappen button:disabled{cursor:not-allowed; opacity:.5;}
 
+/* Meerdere losse calculaties ("opties") binnen één project, bijv. een
+   Panasonic- en een Toshiba-uitvoering die samen als pos. A/pos. B in één
+   brief komen (zie CLAUDE.md). Bewust een losse tabbalk i.p.v. mee in
+   .stappen: dit is intern aan de calculatiestap, geen aparte pagina. */
+.optie-balk{display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin:0 0 14px;}
+.optie-tab{
+  display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
+  background:var(--paper); border:1px solid var(--border); font-size:13px; font-weight:700;
+  color:var(--tekst-zwak); cursor:pointer; user-select:none;
+}
+.optie-tab.actief{color:var(--blauw); border-color:var(--blauw); background:#eef2fc;}
+.optie-verwijder{
+  background:none; border:none; color:inherit; opacity:.55; cursor:pointer; font-size:12px; padding:0; line-height:1;
+}
+.optie-verwijder:hover{opacity:1;}
+
 main{max-width:1180px; margin:0 auto; padding:18px 16px 80px;}
 .stap{display:none;}
 .stap.actief{display:block;}

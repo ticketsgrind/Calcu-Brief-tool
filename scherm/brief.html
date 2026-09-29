@@ -1059,14 +1059,12 @@ async function maakWordBestand(secties){
 // en de brief) horen dezelfde klantnaam/projectnaam in hun bestandsnaam te
 // dragen -- zie CALCULATIE_CONCEPT_SLEUTEL verderop. Zonder bekend
 // calculatieproject (bijv. de brief los gebruikt) valt dit terug op de
-// oorspronkelijke naamgeving.
+// oorspronkelijke naamgeving. Bij meerdere opties (zie calculatieOptiesOphalen
+// verderop) telt alleen de EERSTE mee -- dezelfde regel als
+// overdracht.zet_meerdere_over() (Python) voor de projectbrede velden.
 function projectMetaVanCalculatie(){
-  try{
-    const bewaard=localStorage.getItem(CALCULATIE_CONCEPT_SLEUTEL);
-    if(!bewaard)return null;
-    const project=JSON.parse(bewaard);
-    return (project&&project.calculatie&&project.calculatie.meta)||null;
-  }catch(_){ return null }
+  const opties=calculatieOptiesOphalen();
+  return (opties&&opties[0]&&opties[0].meta)||null;
 }
 function veiligeNaamdeel(t){
   return String(t||"").trim().replace(/[\\/:*?"<>|]+/g,"-");
@@ -1980,12 +1978,20 @@ const CALCULATIE_CONCEPT_SLEUTEL="calcubrief.concept";
 // "Vanuit calculatie" moet klikken -- dat werd eerder gemist.
 const NAVIGATIE_VLAG="calcubrief.naarBrief";
 
-function calculatieStaatOphalen(){
+// Eén of meerdere losse calculaties ("opties" sinds versie 2, zie CLAUDE.md)
+// -- met terugval op het oudere formaat (vóór meerdere opties: één vlakke
+// `calculatie`) zodat een oudere autosave/bestand gewoon blijft werken.
+// Geeft een array calculatiestaten terug (nooit leeg als er iets gevonden
+// is), of null als er geen calculatieproject bekend is.
+function calculatieOptiesOphalen(){
   try{
     const bewaard=localStorage.getItem(CALCULATIE_CONCEPT_SLEUTEL);
     if(!bewaard)return null;
     const project=JSON.parse(bewaard);
-    return (project&&project.calculatie)||null;
+    if(project&&Array.isArray(project.opties)&&project.opties.length)
+      return project.opties.map(o=>o.calculatie).filter(Boolean);
+    if(project&&project.calculatie)return [project.calculatie];
+    return null;
   }catch(_){ return null }
 }
 
@@ -2007,8 +2013,8 @@ function installatiesSamenvoegen(bestaand,overgenomen,vervangen){
 }
 
 async function vulVanuitCalculatie(){
-  const staat=calculatieStaatOphalen();
-  if(!staat){
+  const opties=calculatieOptiesOphalen();
+  if(!opties){
     toonFout("Geen calculatieproject gevonden — vul eerst iets in bij stap 1 (Calculatie).");
     return;
   }
@@ -2016,7 +2022,7 @@ async function vulVanuitCalculatie(){
   try{
     antwoord=await fetch("overdracht",{method:"POST",
       headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({calculatie:staat,klanttype:A.klanttype})});
+      body:JSON.stringify({opties:opties,klanttype:A.klanttype})});
   }catch(_){
     toonFout("Kon de calculatiegegevens niet ophalen; is de tool nog verbonden?");
     return;

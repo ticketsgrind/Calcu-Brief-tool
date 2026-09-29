@@ -67,6 +67,73 @@ Wordt klanttype pas ná de eerste overdracht ingesteld, dan klopt het bedrag
 dus nog niet totdat de overdracht opnieuw wordt toegepast (de knop "↺ Vanuit
 calculatie" in `scherm/brief.html`).
 
+## Meerdere opties (bijv. Panasonic vs. Toshiba) in één project
+
+Eén project kan meerdere volledig losse calculaties bevatten — "opties", elk
+met een eigen tabblad boven de calculatie (`#optieBalk` in `scherm/index.html`,
+gerenderd door `renderOptieBalk()`/`bindOpties()` in `scherm/calculatie.js`).
+Op verzoek van Lars (29 september 2026): "Het zijn dan 2 losse calculaties...
+welke dan worden samengevoegd in één brief. In de brief zul je dan zien bij
+aanbieding optie A en optie B, en bij totaalprijs ook pos. A en pos. B." Elke
+optie is bewust **volledig zelfstandig** — geen gedeelde installaties/uren/
+uitbesteding tussen opties, op de projectgegevens (klant, adres, Q-nummer) na
+(zie hieronder) — dit is dus geen variant-op-dezelfde-calculatie, maar
+letterlijk een tweede, eigen calculatie ernaast.
+
+**Aan de briefkant hoefde hiervoor niets te veranderen.** Een voorbeeldbrief
+van Lars liet zien dat "pos. A"/"pos. B"-prijsregels en een eigen kopregel per
+installatie-alternatief allebei al bestaande, al werkende mechanismen zijn in
+de brieftool (zie `voorbeelden/zakelijk-cassette-meervoud.yaml`, het
+`prijs_regel_positie`-blok in `analyse/teksten.yaml`, en de knop
+"+ Prijspositie toevoegen" in `scherm/brief.html`) — een meerdere-opties-brief
+was dus altijd al te maken, alleen niet vanuit de calculatiekant. Aan
+`analyse/teksten.yaml`, `brieventool/samenstellen.py` of het Word-sjabloon is
+voor deze functie dan ook niets gewijzigd.
+
+**`overdracht.zet_meerdere_over()`** (`overdracht.py`) is de nieuwe, bredere
+ingang; `zet_over()` is er nu een dunne wrapper omheen voor het geval van
+precies één calculatie (identieke uitkomst, geen "positie" op de prijsregel —
+dat zou een gewone, enkelvoudige brief onnodig een "pos. A"-label geven). Bij
+twee of meer calculaties: installaties van alle opties worden na elkaar
+geplakt (met doorlopende index voor de "controleer dit"-paden, dus niet per
+optie herstartend bij 0), en elke optie krijgt een prijsregel met een positie
+("pos. A", "pos. B", ... naar volgorde in de lijst, niet naar hoeveel opties
+uiteindelijk een prijs hebben — anders zou een nog niet doorgerekende eerste
+optie de tweede foutief "pos. A" laten heten). Projectbrede velden (datum,
+Q-nummer, klantnaam) komen uitsluitend uit de EERSTE optie; zie de reden
+hieronder.
+
+**`server.py`'s `/overdracht`** accepteert `opties` (een lijst calculatie-
+states) met voorrang boven het oudere `calculatie` (één state), voor
+compatibiliteit met een eventueel nog niet-bijgewerkt scherm.
+
+**Aan de calculatiekant** (`scherm/calculatie.js`) is `state` nog steeds de
+invoer van precies de ACTIEVE optie — dat hield de rest van dit al grote
+bestand ongemoeid. `opties`/`actieveOptieIndex` zijn er los naast gezet, met
+`bewaarActieveOptie()` die `state` voor gebruik terugschrijft in
+`opties[actieveOptieIndex].staat`. Een nieuwe optie krijgt de projectgegevens
+(`meta`: klant, adres, Q-nummer, ...) van de optie waar hij vandaan werd
+aangemaakt vooraf ingevuld — dat is precies waarom `overdracht.py` hierboven
+alleen naar de EERSTE optie voor die velden kijkt: in de praktijk delen alle
+opties toch al dezelfde projectgegevens. Installaties/materiaal/uren/etc.
+starten voor een nieuwe optie wél leeg — dat is het hele punt van "volledig
+losse calculatie".
+
+**Het projectbestand (versie 2)** bewaart nu `opties: [{naam, calculatie},
+...]` + `actieveOptie` in plaats van één vlakke `calculatie` (versie 1).
+`CB.optiesUitProject()` (`scherm/gedeeld.js`) zet een geopend of bewaard
+bestand om naar de nieuwe vorm, met terugval op het oude formaat (als
+"Optie A") zodat een bestaand opgeslagen bestand of browser-autosave van vóór
+deze functie gewoon blijft werken. `scherm/brief.html`'s
+`calculatieOptiesOphalen()` (voorheen `calculatieStaatOphalen()`, enkelvoud)
+doet hetzelfde aan de briefkant, en stuurt bij "↺ Vanuit calculatie" nu de
+hele lijst opties naar `/overdracht` in plaats van precies één calculatie.
+
+**Naamgeving van de opties** ("Optie A", "Optie B", ..., met dubbelklik op de
+tab om te hernoemen) is puur voor de gebruiker zelf, om tabs uit elkaar te
+houden — de "pos. A"/"pos. B"-lettering in de brief volgt altijd de volgorde
+in de lijst, nooit de zelfgekozen naam.
+
 ## De briefstap is 1-op-1 overgenomen uit de losstaande brieventool
 
 `scherm/brief.html` is vrijwel een letterlijke kopie van
