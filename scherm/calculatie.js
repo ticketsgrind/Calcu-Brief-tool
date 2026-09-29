@@ -904,6 +904,47 @@ function bindCollapsibles() {
   }
 }
 
+/* Het ingevulde Excel-calculatieblad (het oorspronkelijke bedrijfssjabloon)
+   voor de ACTIEVE optie -- zie calculatie/calculatieblad.py op de server.
+   Net als /overdracht en /brief is dit een POST die een rechtstreeks
+   antwoord geeft (hier: de bytes van het .xlsx-bestand), geen CB.postJSON
+   (die parset altijd als JSON, zie CLAUDE.md se uitleg van CB.getJSON/
+   postJSON) -- bij een fout stuurt de server wél gewoon JSON terug, vandaar
+   de Content-Type-controle hieronder (zelfde patroon als brief.html se
+   haalWordVanApp()). */
+function calculatiebladBestandsnaam() {
+  const delen = [state.meta.klantnaam, state.meta.projectnaam].map(CB.veiligeBestandsnaamdeel).filter(Boolean);
+  const basis = delen.length ? `Calculatieblad-${delen.join('-')}` : 'Calculatieblad';
+  const naam = opties.length > 1 ? `${basis}-${CB.veiligeBestandsnaamdeel(opties[actieveOptieIndex].naam)}` : basis;
+  return naam + '.xlsx';
+}
+function bindCalculatiebladKnop() {
+  const knop = document.getElementById('btnCalculatieblad');
+  knop.addEventListener('click', async () => {
+    const oud = knop.textContent;
+    knop.disabled = true; knop.textContent = 'Bezig…';
+    try {
+      const antwoord = await fetch('/calculatieblad', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(state),
+      });
+      const soort = antwoord.headers.get('Content-Type') || '';
+      if (soort.includes('json')) throw new Error((await antwoord.json()).fout || 'onbekende fout');
+      const blob = await antwoord.blob();
+      const naam = calculatiebladBestandsnaam();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = naam;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+      CB.toast('Calculatieblad gedownload als ' + naam);
+    } catch (fout) {
+      CB.toast('Het calculatieblad kon niet gemaakt worden: ' + fout.message);
+    } finally {
+      knop.disabled = false; knop.textContent = oud;
+    }
+  });
+}
+
 /* ==================================== INIT ==================================== */
 async function laadData() {
   const [materiaal_catalogus, yimm, parkeertarieven, omzetbonus, systemen, panasoncRac, panasonicPac, daikin] = await Promise.all([
@@ -941,7 +982,7 @@ async function initCalculatie() {
   state = opties[actieveOptieIndex].staat;
   bindMeta(); bindInstallaties(); bindMateriaal(); bindUren();
   bindLijst('uitbestedingBody', 'uitbesteding'); bindLijst('equipmentBody', 'equipment');
-  bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles(); bindOpties();
+  bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles(); bindOpties(); bindCalculatiebladKnop();
   renderOptieBalk();
   CB.laadscherm.zetStatus('Rekenkern voorbereiden…');
   await herbereken();

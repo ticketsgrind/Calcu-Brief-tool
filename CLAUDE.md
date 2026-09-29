@@ -134,6 +134,124 @@ tab om te hernoemen) is puur voor de gebruiker zelf, om tabs uit elkaar te
 houden — de "pos. A"/"pos. B"-lettering in de brief volgt altijd de volgorde
 in de lijst, nooit de zelfgekozen naam.
 
+## Het ingevulde Excel-calculatieblad downloaden (`calculatie/calculatieblad.py`)
+
+Op verzoek van Lars (29 september 2026, samen met de meerdere-opties-feature
+hierboven): naast de calculatie in de tool zelf, ook een gevuld exemplaar van
+het **oorspronkelijke Excel-bedrijfssjabloon** (`Template_Calculatieblad.xltx`,
+door Lars aangeleverd, nu in `sjablonen/`) kunnen downloaden — "een ingevuld
+calculatieblad (zoals wij eerst gebruikte)". De knop "Calculatieblad
+downloaden" (`scherm/index.html`, naast "Calculatie opslaan als .json")
+stuurt de ACTIEVE optie se `state` naar `POST /calculatieblad`
+(`server.py`/`_calculatieblad`), die `calculatie/calculatieblad.py` aanroept
+en de bytes van het resulterende `.xlsx`-bestand teruggeeft; de bestandsnaam
+komt client-side tot stand (`calculatiebladBestandsnaam()` in
+`scherm/calculatie.js`), net als bij het JSON-projectbestand.
+
+**Per optie, niet gecombineerd.** Anders dan de brief (die alle opties
+samenvoegt) is het calculatieblad altijd de export van precies één optie —
+het sjabloon kent geen "meerdere opties"-begrip (dat is een verzinsel van
+deze samenvoeging, alleen aan de briefkant), en "2 losse calculaties" (Lars
+se eigen woorden) betekent hier dus ook gewoon 2 losse calculatiebladen: de
+knop exporteert de optie die op dat moment open staat.
+
+**Waarom kale ZIP+XML-manipulatie, net als `brieventool/sjabloon.py`.** Deze
+ontwikkelomgeving kan geen `pip install openpyxl` doen (het sandbox-
+netwerkbeleid blokkeert PyPI: "Host not in allowlist") en heeft ook geen
+werkende LibreOffice Calc (`libreoffice-calc` staat niet naast `soffice`
+zelf geïnstalleerd — zelfs een kaal, met de hand in elkaar gezet .xlsx-
+bestand faalt hier met "source file could not be loaded"). Dat dwong tot
+dezelfde aanpak die `sjabloon.py` al voor het Word-sjabloon gebruikt: de
+`.xltx` is een ZIP met XML erin, en een cel overschrijven is tekst-vervanging
+in die XML (`SheetSchrijver` in `calculatieblad.py`), niet een aparte
+bibliotheek. Dat maakt het ook meteen consistent met hoe deze repo al Office-
+bestanden genereert — geen nieuwe afhankelijkheid voor een taak die dit
+project al eerder zonder kon.
+
+**Elke cel die geld of uren voorstelt komt letterlijk uit
+`rekenkern.bereken()`, nooit uit een Excel-formule die iets opnieuw
+uitrekent.** Dit is dezelfde "één plek per berekening"-regel bovenaan dit
+bestand, hier toegepast op de export: het sjabloon staat vol SUM/PRODUCT/
+VLOOKUP-formules die in de oorspronkelijke, losstaande Excel-tool de hele
+marge-opbouw deden. Die laten we bewust met rust qua *resultaat* — een
+formule laten staan die op basis van onze letterlijke invoercellen (aantal,
+tarief, ...) toevallig hetzelfde uitkomt was voor een aantal triviale
+optel-/vermenigvuldigsommen (`H = PRODUCT(aantal, prijs)`, dezelfde categorie
+als `regelTotaal`/`lijstTotaal` in `scherm/calculatie.js`) best verdedigbaar
+geweest, maar bleek in de praktijk een risico: een uitbestedingsregel zonder
+bekende prijs staat in het sjabloon als tekst `"op aanvraag"`, en
+`PRODUCT(aantal, "op aanvraag")` kan een `#VALUE!`-fout geven die vervolgens
+via de SUM-keten (`H417` → `Quotation sheet!R48` → `R59` → `R61` → ... →
+`R76`) de hele verkoopprijs zou besmetten. Daarom schrijft `calculatieblad.py`
+voor elke rij die het aanraakt (materiaal, uitbesteding, equipment, uren,
+de hele marge-opbouw op Quotation sheet) de kant-en-klare waarde uit
+`rekenkern.bereken()` direct in de cel, met de formule (`<f>`) verwijderd —
+zie de moduledocstring voor de volledige redenering. De enige plekken die
+zelf nog optellen zijn `calculatieblad.py` se eigen sectie-subtotalen
+(`_sectie_totalen`) en de leesbare uren-uitsplitsing per monteur-regel
+(`_monteur_termen`) — allebei met dezelfde triviale rekenkern-bouwstenen
+(`rk.installatie_totalen`, `rk.leiding_meters`, ...), nooit een eigen
+rekenregel.
+
+**Scope: alleen de bladen "Calculatie" en "Quotation sheet" worden
+aangeraakt.** De overige 14 tabbladen (Info, Mat. lijst, Budget voor admin,
+YIMM, Parkeertarieven, ...) zijn óf pure naslag die niets met dit project te
+maken heeft (YIMM, Parkeertarieven, Systemen, ...), óf een blad dat zelf via
+een formule uit Quotation sheet/Calculatie put (Mat. lijst, Budget voor
+admin) — voor dat laatste geval hoeft `calculatieblad.py` die formules niet
+te snappen of te dupliceren: zodra Excel het bestand opent (`fullCalcOnLoad`
+staat aan, zie hieronder) rekent het die vanzelf door op basis van de
+inmiddels bevroren Calculatie-/Quotation-cellen. Bewust NIET geprobeerd: Mat.
+lijst zelf al gevuld opleveren — dat blad gebruikt `FILTER`/`SORT`/`IMAGE()`
+(Excel-365-only), functies die hier toch niet te verifiëren zijn (zie
+hieronder) en die weinig toevoegen aan wat de tool se eigen "bestellijst"-
+knop (`scherm/calculatie.js`) al biedt.
+
+**Rijnummers komen uit `data/materiaal_catalogus.json`'s `row`-veld**, niet
+uit een aparte opzoektabel in `calculatieblad.py` zelf — dat veld staat er al
+sinds het overzetten van de rekenkern (zie "Materiaal" in
+`analyse/01-rekenbladen-per-tabblad.md` van de losstaande calculatietool-
+repo) en wijst per definitie naar precies de Excel-rij waar dat artikel
+oorspronkelijk vandaan kwam. Voor uitbesteding/equipment bestaat zo'n veld
+niet (die lijsten hebben geen rijnummer in hun Python-representatie); daarom
+een losse naam→rij-koppeling (`UITBESTEDING_RIJEN`/`EQUIPMENT_RIJEN`) voor de
+vaste standaardregels, met de 5 resp. 4 "lege" rijen aan het eind van elk
+blok (412-416/424-428) voor eigen, met de hand toegevoegde regels. **Meer
+eigen regels dan er lege rijen zijn?** Die extra regels krijgen dan geen
+zichtbare rij in het blad — maar de TOTAALCEL (`H417`/`H429`) komt
+rechtstreeks uit `rekenkern.bereken()`, dus het bedrag klopt hoe dan ook,
+alleen de post-per-post-zichtbaarheid in het blad niet. Dat is in de
+praktijk een zeldzame situatie (13 standaardregels + 5 eigen regels is al
+ruim) en geen half werk: liever een correct totaal met een onvolledige
+uitsplitsing dan een crash.
+
+**`xl/calcChain.xml` wordt verwijderd** (plus zijn `Content_Types`- en
+`workbook.xml.rels`-vermelding) in plaats van bijgewerkt: dat bestand is
+Excel se eigen "volgorde om formules te herberekenen"-cache, en na het
+verwijderen van zoveel formules zou het alleen nog verwijzingen naar
+niet-bestaande formules bevatten — een klassieke bron van een "we hebben een
+probleem met deze inhoud gevonden"-herstelmelding bij het openen. Excel bouwt
+'m vanzelf opnieuw op. **`fullCalcOnLoad="1"`** wordt aan `xl/workbook.xml`
+toegevoegd zodat de overgebleven formules (in de ongemoeide bladen, en de
+paar triviale doorverwijzingen die wél bleven staan, zoals `Quotation
+sheet!J6 = Calculatie!B2`) bij het openen vers doorrekenen op basis van de nu
+bevroren cellen, in plaats van een verouderd gecachet nulletje te tonen. Het
+`.xltx`-sjabloon-contenttype in `[Content_Types].xml` wordt omgezet naar een
+gewone `.xlsx`-werkmap (anders opent Excel het resultaat als "nieuw document
+gebaseerd op dit sjabloon" in plaats van als het bestand zelf).
+
+**Getest zonder Excel of een werkende LibreOffice Calc.** Deze
+ontwikkelomgeving heeft geen van beide (zie hierboven) — `tests/
+test_calculatieblad.py` toetst daarom zelf, met dezelfde kale
+`zipfile`/`xml.etree`-aanpak als de module gebruikt, dat (a) het resultaat
+welgevormde XML blijft en geen `calcChain.xml` meer bevat, en (b) elke cel
+die de module beschrijft letterlijk de waarde bevat die `rekenkern.bereken()`
+voor diezelfde staat teruggeeft. Dat bewijst dat de cel-toewijzingen kloppen;
+het bewijst niet dat Excel het bestand ook daadwerkelijk zonder
+herstelmelding opent. Verander je iets aan de celverwijzingen in dit
+bestand: laat het eerste geëxporteerde bestand van deze functie door Lars
+(die wél Excel heeft) controleren voordat je verdere wijzigingen erop bouwt.
+
 ## De briefstap is 1-op-1 overgenomen uit de losstaande brieventool
 
 `scherm/brief.html` is vrijwel een letterlijke kopie van

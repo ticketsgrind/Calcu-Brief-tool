@@ -38,6 +38,7 @@ from brieventool.controle import melding, ontbrekende_gegevens
 from brieventool.samenstellen import SamenstelFout, stel_samen
 from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
+from calculatie.calculatieblad import CalculatiebladFout, schrijf_calculatieblad
 from overdracht import zet_meerdere_over
 
 if getattr(sys, "frozen", False):
@@ -140,6 +141,8 @@ class Bediening(BaseHTTPRequestHandler):
 
         if pad == "/bereken":
             return self._bereken(gegevens)
+        if pad == "/calculatieblad":
+            return self._calculatieblad(gegevens)
         if pad == "/overdracht":
             return self._overdracht(gegevens)
         if pad == "/brief":
@@ -161,6 +164,25 @@ class Bediening(BaseHTTPRequestHandler):
         except (KeyError, TypeError, ValueError) as fout:
             return self._antwoord(400, {"fout": f"kan de calculatie niet doorrekenen: {fout}"})
         return self._antwoord(200, resultaat)
+
+    def _calculatieblad(self, staat: dict) -> None:
+        """Het ingevulde Excel-calculatieblad (het oorspronkelijke
+        bedrijfssjabloon) voor één calculatie-staat -- zie
+        calculatie/calculatieblad.py. Ook hier geldt: elke cel die geld of
+        uren voorstelt komt letterlijk uit rekenkern.bereken(), nooit uit
+        een Excel-formule die iets opnieuw uitrekent."""
+        try:
+            inhoud = schrijf_calculatieblad(staat, self.server.calc_gegevens)
+        except (KeyError, TypeError, ValueError, CalculatiebladFout) as fout:
+            return self._antwoord(400, {"fout": f"kan het calculatieblad niet maken: {fout}"})
+
+        self.send_response(200)
+        self.send_header("Content-Type",
+                         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        self.send_header("Content-Disposition", 'attachment; filename="calculatieblad.xlsx"')
+        self.send_header("Content-Length", str(len(inhoud)))
+        self.end_headers()
+        self.wfile.write(inhoud)
 
     def _overdracht(self, gegevens: dict) -> None:
         """Zet één of meerdere calculatie-states om in een voorinvulling voor

@@ -101,6 +101,11 @@ Zonder dubbelklik-opstarter kan het ook rechtstreeks:
   eigen prijspositie ("pos. A", "pos. B", ...) — precies zoals dat al kon
   voor een brief met meerdere prijsposities, nu automatisch ingevuld in
   plaats van met de hand.
+- **Calculatieblad downloaden**: de knop "Calculatieblad downloaden" in stap 1
+  levert een ingevuld exemplaar van het oorspronkelijke Excel-bedrijfssjabloon
+  op (zoals vóór deze tool met de hand werd bijgehouden) voor de calculatie
+  die op dat moment open staat — bij meerdere opties dus per optie een eigen
+  bestand, net zoals dat vroeger ook altijd losse Excel-bestanden waren.
 
 ## Project opslaan/openen
 
@@ -122,11 +127,13 @@ computer heeft het.
     start.command / .bat  dezelfde opstart, wél met zichtbare terminal/console (handig bij problemen)
     calculatie/
       rekenkern.py        de rekenkern (marge, uren, afgeleide materiaalregels)
+      calculatieblad.py    vult het Excel-bedrijfssjabloon met de uitkomst van rekenkern
     overdracht.py         zet een calculatie om in een aanvulling op het briefconcept
     brieventool/          tekstblokken kiezen, invullen, Word-bestand schrijven
     analyse/teksten.yaml  de brieftekst zelf (152 blokken) — geen codewijziging nodig
     config/ondertekenaars.yaml   ondertekenaars + bedrijfsgegevens
     sjablonen/brief.docx  het Word-sjabloon (gegenereerd, niet met de hand bewerken)
+    sjablonen/Template_Calculatieblad.xltx   het Excel-bedrijfssjabloon (ongewijzigd, door Lars aangeleverd)
     bronbrieven/          de 16 lege bronsjablonen waaraan de opmaak is nagemeten
     data/                 calculatie-stamgegevens (materiaalcatalogus, YIMM, Panasonic/Daikin, tarieven)
     scherm/
@@ -135,7 +142,7 @@ computer heeft het.
                          van de losstaande brieventool (zie "Herkomst")
     tools/ververs_brief_scherm.py   werkt scherm/brief.html bij na een wijziging
                          in analyse/teksten.yaml of sjablonen/brief.docx
-    tests/                231 tests (rekenkern, overdracht, brieventool)
+    tests/                257 tests (rekenkern, overdracht, calculatieblad, brieventool)
     voorbeelden/          ingevulde offertes om mee te proberen (los van de calculatie)
 
 ## Tests
