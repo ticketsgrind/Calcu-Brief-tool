@@ -31,17 +31,16 @@ aanleiding: onderhoud
 adviseur: Nick Vervoorn
 datum_aanleiding: 20 maart
 locatieaanduiding: uw twee slaapkamers en de keuken
-model_binnenunit: wand
 opstelling_buitenunit: muursteun
 condensafvoer: natuurlijk_verloop
 bediening: infrarood
 technische_specificaties: uitgeschreven
-systeemsoort: multi-splitsystem
 installaties:
   - ruimte: de slaapkamer op de eerste verdieping en de keuken
     aantal_systemen: 1
     systeemsoort: multi-splitsystem
     montagewijze: wand/vloermontage
+    model_binnenunit: wand
     merk: Panasonic
     type_binnendeel: "CS-TZ35CKEW (1x), CS-Z35CFEAW (1x)"
     aantal_binnendelen: 2
@@ -51,6 +50,7 @@ installaties:
     aantal_systemen: 1
     systeemsoort: splitsystem
     montagewijze: vloermontage
+    model_binnenunit: vloer
     merk: Panasonic
     type_binnendeel: KIT-Z25-UFE
 prijssoort: totaalprijs

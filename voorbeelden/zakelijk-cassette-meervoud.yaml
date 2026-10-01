@@ -23,7 +23,6 @@ datum_aanleiding: 18 augustus
 locatieaanduiding: uw vestiging te Meerkerk
 plaats_project: Meerkerk
 
-model_binnenunit: cassette
 opstelling_buitenunit: plat_dak
 condensafvoer: riolering_derden
 bediening: bedraad
@@ -39,12 +38,14 @@ installaties:
     aantal_systemen: 2
     systeemsoort: splitsystem
     montagewijze: plafondinbouwmontage
+    model_binnenunit: cassette
     merk: Panasonic
     type_binnendeel: KIT-71PU3Z5
   - ruimte: de vergaderruimte
     aantal_systemen: 1
     systeemsoort: splitsystem
     montagewijze: plafondinbouwmontage
+    model_binnenunit: cassette
     merk: Panasonic
     type_binnendeel: KIT-50PU3Z5
 

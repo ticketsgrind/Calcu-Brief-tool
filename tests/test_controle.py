@@ -52,7 +52,7 @@ class TestOntbrekendeGegevens(unittest.TestCase):
     def test_installatie_zonder_gegevens(self):
         kaal = offerte(installaties=[{"systeemsoort": "splitsystem"}])
         self.assertEqual(ontbrekende_gegevens(kaal),
-                         ["het merk", "het type binnendeel"])
+                         ["het merk", "het type binnendeel", "het model binnenunit"])
 
     def test_installatie_zonder_systeemsoort(self):
         # Zonder systeemsoort matcht geen enkel blok in "systeemomschrijving";

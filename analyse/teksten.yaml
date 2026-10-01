@@ -274,10 +274,25 @@ blokken:
 # ===========================================================================
 # 11. SYSTEEMOMSCHRIJVING  (per model binnenunit, enkelvoud + meervoud)
 # ===========================================================================
+# De blokken die bij het model van de binnenunit horen (wand/cassette/kanaal/
+# vloer/plafondonderbouw) staan sinds 30 september 2026 in de sectie
+# `specificatie` en werken op `regel.model_binnenunit` in plaats van op het
+# vroegere, hele-brief-brede `model_binnenunit`. Zo krijgt elke installatieregel
+# zijn eigen omschrijving, vlak achter zijn eigen specificatietekst -- eerder
+# koos de brief maar één model voor de hele brief, ook als er bijvoorbeeld een
+# wandmodel én een cassette-installatie op dezelfde offerte stonden. Zie
+# analyse/vragen.md, punt 15 (Lars, 30 september 2026) -- een voorbeeldbrief
+# waarin de cassette-omschrijving direct na de eerste regel staat en de
+# wand-omschrijving direct na de tweede.
+#
+# systeem_opbouw_*, storingscontact_* en verse_lucht_* hieronder blijven wél
+# hele-brief-breed (sectie: systeemomschrijving): die komen in de brief maar
+# één keer voor, ná alle installatieregels -- zo staat het ook in de
+# voorbeeldbrief -- en er is geen voorbeeld dat ze per regel anders zou moeten.
 
 - id: systeem_wand_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'wand' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'wand' and regel.aantal_binnenunits == 1"
   bron: wand enkelvoud.dotx
   tekst: >
     De binnenunit is ontworpen voor montage hoog aan de wand, hierdoor wordt de
@@ -285,8 +300,8 @@ blokken:
     luchtverdeling in de ruimte wordt gecreëerd.
 
 - id: systeem_wand_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'wand' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'wand' and regel.aantal_binnenunits > 1"
   bron: wand meervoud.dotx
   tekst: >
     De binnenunits zijn ontworpen voor montage hoog aan de wand, hierdoor wordt de
@@ -294,24 +309,24 @@ blokken:
     luchtverdeling in de ruimte wordt gecreëerd.
 
 - id: systeem_wand_zwenk_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'wand' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'wand' and regel.aantal_binnenunits == 1"
   bron: wand enkelvoud.dotx
   tekst: >
     De binnenunit is voorzien van een automatisch mechanisme dat voortdurend de
     hoek waaronder de luchtstroom wordt uitgeblazen verandert.
 
 - id: systeem_wand_zwenk_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'wand' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'wand' and regel.aantal_binnenunits > 1"
   bron: wand meervoud.dotx
   tekst: >
     De binnenunits zijn voorzien van een automatisch mechanisme dat voortdurend de
     hoek waaronder de luchtstroom wordt uitgeblazen verandert.
 
 - id: systeem_cassette_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'cassette' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'cassette' and regel.aantal_binnenunits == 1"
   bron: cassette enkelvoud.dotx
   tekst: >
     De binnenunit is uitgevoerd als zogenaamde cassette-unit en is speciaal
@@ -319,8 +334,8 @@ blokken:
     systeemplafond hiervoor bedraagt 30 cm.
 
 - id: systeem_cassette_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'cassette' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'cassette' and regel.aantal_binnenunits > 1"
   bron: cassette meervoud.dotx
   tekst: >
     De binnenunits zijn uitgevoerd als zogenaamde cassette-units en zijn speciaal
@@ -328,8 +343,8 @@ blokken:
     systeemplafond hiervoor bedraagt 30 cm.
 
 - id: systeem_cassette_schoepen
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'cassette'"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'cassette'"
   bron: cassette enkelvoud.dotx, uitgewerkt-2.docx
   tekst: >
     Door de speciale vorm van de luchtgeleidende schoepen wordt de geconditioneerde
@@ -337,20 +352,20 @@ blokken:
     met de ruimtelucht wordt bereikt.
 
 - id: systeem_kanaal_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'kanaal' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'kanaal' and regel.aantal_binnenunits == 1"
   bron: kanaal enkelvoud.dotx
   tekst: "De binnenunit is speciaal ontworpen voor plaatsing boven het verlaagd plafond."
 
 - id: systeem_kanaal_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'kanaal' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'kanaal' and regel.aantal_binnenunits > 1"
   bron: kanaal meervoud.dotx, VRF.dotx
   tekst: "De binnenunits zijn speciaal ontworpen voor plaatsing boven het verlaagd plafond."
 
 - id: systeem_vloer_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'vloer' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'vloer' and regel.aantal_binnenunits == 1"
   bron: VRF.dotx
   tekst: >
     De binnenunit is speciaal ontworpen laag aan de muur waardoor de
@@ -358,8 +373,8 @@ blokken:
     de ruimte wordt verdeeld.
 
 - id: systeem_vloer_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'vloer' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'vloer' and regel.aantal_binnenunits > 1"
   bron: multi split.dotx
   tekst: >
     De binnenunits zijn speciaal ontworpen laag aan de muur waardoor de
@@ -367,8 +382,8 @@ blokken:
     de ruimte wordt verdeeld.
 
 - id: systeem_plafondonderbouw_enkel
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'plafondonderbouw' and aantal_binnenunits == 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'plafondonderbouw' and regel.aantal_binnenunits == 1"
   bron: VRF.dotx, uitgewerkt-6.pdf
   tekst: >
     De binnenunit is speciaal ontworpen voor montage direct onder het plafond
@@ -376,8 +391,8 @@ blokken:
     gelijkmatig in de ruimte wordt verdeeld.
 
 - id: systeem_plafondonderbouw_meervoud
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'plafondonderbouw' and aantal_binnenunits > 1"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'plafondonderbouw' and regel.aantal_binnenunits > 1"
   bron: multi split.dotx
   tekst: >
     De binnenunits zijn speciaal ontworpen voor montage direct onder het plafond
@@ -385,8 +400,8 @@ blokken:
     gelijkmatig in de ruimte wordt verdeeld.
 
 - id: systeem_kanaal_toevoer
-  sectie: systeemomschrijving
-  voorwaarde: "model_binnenunit == 'kanaal'"
+  sectie: specificatie
+  voorwaarde: "regel.model_binnenunit == 'kanaal'"
   bron: VRF.dotx, uitgewerkt-1.docx
   tekst: >
     Vanaf de binnenunits wordt de lucht, door middel van een geïsoleerd

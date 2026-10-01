@@ -113,7 +113,9 @@ class TestWitruimteVolgtDeBronbrief(unittest.TestCase):
     een staat, de functieregels van de drie ondertekenaars staan in het
     sjabloon onder elkaar terwijl onze brief er een kiest, en de twee koppen
     van de werkzaamhedenlijst krijgen sinds 17 september 2026 op verzoek van
-    Lars een lege regel eronder terwijl de bronbrief daar niets zet.
+    Lars een lege regel eronder terwijl de bronbrief daar niets zet. Sinds 30
+    september 2026 geldt dat ook voor de laatste "inclusief"-regel, vlak vóór
+    de kop "Niet tot onze werkzaamheden behoren:".
     """
 
     UITZONDERINGEN = {
@@ -125,6 +127,7 @@ class TestWitruimteVolgtDeBronbrief(unittest.TestCase):
         "Technisch Commercieel Adviseur",
         "De installatie is aangeboden inclusief:",
         "Niet tot onze werkzaamheden behoren:",
+        "inbedrijfstelling van de apparatuur.",
     }
 
     def witregels(self, paragrafen):

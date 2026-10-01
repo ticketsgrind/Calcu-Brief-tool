@@ -730,6 +730,95 @@ neem die dan op in die `klaar`-promise, anders verdwijnt deze overlay te
 vroeg. `scherm/brief.html` is een eigen pagina met zijn eigen (eenvoudigere)
 laadgedrag, zie hierboven.
 
+## Synchronisatie met de losstaande brieventool (30 september 2026)
+
+Op verzoek van Lars: twee commits uit `brieven-tool-schilt-bedrijven` (sinds
+het laatste syncpunt, `c3b8aef`) overgezet naar deze tool. Dezelfde procedure
+als eerder in dit bestand beschreven onder "De briefstap is 1-op-1
+overgenomen" — kloon de bronrepo erbij, vergelijk, zet de inhoudelijke
+wijzigingen over, laat de hier bewust-andere stukken (calculatie-koppeling,
+"← Calculatie"/"↺ Vanuit calculatie", `bestandsnaam()`, en nu ook de
+Fase-5-materiaalId-koppeling hierboven) met rust.
+
+**Wat er over kwam: de systeemomschrijving kiest nu per installatieregel, niet
+meer voor de hele brief.** Tot deze wijziging had een offerte-breed veld
+`model_binnenunit` (wand/cassette/kanaal/vloer/plafondonderbouw/vrf) dat
+bepaalde welke van de `systeem_*`-blokken in `analyse/teksten.yaml` meegaan —
+dus bij een brief met bijvoorbeeld zowel een cassette- als een
+wandmodel-installatie kreeg je maar één van de twee omschrijvingen, nooit
+allebei. `model_binnenunit` is nu een veld per installatieregel:
+- `brieventool/samenstellen.py`: de 14 `systeem_*`-blokken staan nu in de
+  sectie `specificatie` (die al herhaalt per installatie, zie `LOOPSECTIES`)
+  in plaats van `systeemomschrijving` (eenmalig voor de hele brief), met hun
+  `voorwaarde` voorzien van een `regel.`-voorvoegsel. Nieuwe functie
+  `_verrijk_installatie()` voegt `aantal_binnenunits`/`aantal_buitenunits` per
+  regel toe (voorheen alleen voor de hele brief in `_bouw_context`), want het
+  enkelvoud/meervoud van de omschrijving ("De binnenunit is" vs. "De
+  binnenunits zijn") moet nu ook per regel kloppen. `systeem_opbouw_*`,
+  `storingscontact_*` en `verse_lucht_*` blijven bewust wél offerte-breed —
+  daar is geen voorbeeld dat ze per regel zouden moeten verschillen.
+- `brieventool/controle.py`: `("model_binnenunit", "het model binnenunit")`
+  toegevoegd aan `INSTALLATIEVELDEN`, náást de al bestaande, combinatie-tool-
+  specifieke `systeemsoort`-regel — zonder dit veld matcht voor die
+  installatieregel geen enkel `systeem_*`-blok meer, net zo'n stil gat als
+  het eerdere systeemsoort-gat.
+- `scherm/brief.html`: dezelfde wijzigingen 1-op-1 overgezet naar de
+  JS-motor/-formulier-kant (zie "`scherm/*.js` staan zonder modules naast
+  elkaar" resp. de uitleg over het motor/word-blok hierboven) — `model_binnenunit`
+  is nu een keuzeveld per installatiekaart (`bouwInstallaties()`) in plaats
+  van een document-breed veld in de groep "Uitvoering", en `bouwContext()`/
+  `redenVan()` spiegelen `_verrijk_installatie()` resp. het nieuwe
+  `regel.`-voorvoegsel in de "waarom staat dit blok hier"-tip.
+
+**Bijkomende fix: altijd een witregel vóór "Niet tot onze werkzaamheden
+behoren:".** `samenstellen.py`'s `_zet_witregels()` liet tot nu toe alleen de
+kopregel van "... inclusief:" een lege regel erna krijgen; de laatste regel
+van dat stuk (vlak vóór de kop van "... exclusief:") kreeg er geen, dus de
+twee stukken van de werkzaamhedenlijst stonden aaneengesloten. Nu krijgt ook
+die laatste regel een witregel erna (`LAATSTE_AANEENGESLOTEN`-constante
+vervallen, de voorwaarde is nu gewoon "eerste of laatste regel van het
+stuk") — hetzelfde gespiegeld in `scherm/brief.html`'s `zetWitregels()`.
+
+**`overdracht.py` kreeg er zelf ook iets bij: een `typeBinnendeel`→
+`model_binnenunit`-vertaling.** Met het nieuwe per-regel veld in de brief
+heeft calculatie se eigen `installatie.typeBinnendeel`
+(Kanaalunit/Casetteunit/Plafondonderbouw/Wandunit/Vloerunit/Overig,
+`data/systemen.json`) nu een natuurlijke bestemming — dezelfde montage-
+categorie, alleen anders gespeld. `MODEL_BINNENUNIT_VERTALING` (naast de
+bestaande `MONTAGEWIJZE_VERTALING`) vertaalt 1-op-1, status "direct" (geen
+aanname, alleen een naam die verschilt). "Overig" heeft geen eenduidig
+brief-equivalent en blijft daarom "keuze_nodig" met alle zes opties, nooit
+een gok — dezelfde "nooit gokken, wel afleiden"-regel als de rest van dit
+bestand. `legeOverdrachtInstallatie()` kreeg `model_binnenunit:""` erbij
+(anders zou `nieuweInstallatie()`'s sjabloonstandaard "wand" stilzwijgend
+verschijnen bij een "Overig"-installatie, precies het gat dat Fase 5
+hierboven al dichtte voor `systeemsoort`/`merk`/`type_binnendeel`), en
+`OVERDRACHT_VELDLABELS` een `model_binnenunit`-label voor de
+controleerbalk-melding.
+
+Niet overgezet (uitgesloten omdat dit repo-interne documentatie van de
+bronrepo is die hier geen tegenhanger heeft): `analyse/skelet.md`,
+`analyse/variabelen.md`, `analyse/vragen.md` — deze combinatietool heeft geen
+`analyse/`-map behalve `teksten.yaml` zelf; dit bestand hier is de
+documentatie-plek voor de combinatietool.
+
+**Getest:** `tools/ververs_brief_scherm.py` gedraaid na de `teksten.yaml`-
+wijziging (regenereert alleen de ingebakken BLOKKEN-JSON-blob in
+`scherm/brief.html`, het Word-sjabloon zelf was ongewijzigd). De drie
+bestaande voorbeeldbestanden (`voorbeelden/particulier-wand-enkelvoud.yaml`,
+`toets-uitgewerkt-3.yaml`, `zakelijk-cassette-meervoud.yaml`) kregen
+`model_binnenunit` per installatieregel in plaats van offerte-breed, 1-op-1
+gelijk aan de bronrepo. Bestaande tests in `tests/test_samenstellen.py`/
+`test_controle.py`/`test_werkzaamheden.py` bijgewerkt naar de nieuwe
+verwachte uitvoer, plus nieuwe tests: `test_systeemomschrijving_volgt_de_eigen_regel`
+(een cassette- én een wandmodel-installatie op één brief, allebei met hun
+eigen, correcte omschrijving) en `TestModelBinnenunitVertaling` in
+`tests/test_overdracht.py` (alle vijf categorieën vertalen direct, "Overig"
+vraagt een keuze). 265 tests slagen. Live gecontroleerd met Playwright: twee
+installaties (Casetteunit/Wandunit) via de calculatie, overdracht naar de
+brief, en de briefvoorvertoning bevat zowel de cassette- als de
+wand-omschrijving (voorheen zou er maar één zijn getoond).
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

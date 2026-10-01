@@ -202,6 +202,44 @@ class TestTypeBinnendeelKoppeling(unittest.TestCase):
         self.assertEqual(status_van(overdracht, "installaties[0].type_binnendeel").status, "keuze_nodig")
 
 
+class TestModelBinnenunitVertaling(unittest.TestCase):
+    """Sinds de brieventool-wijziging van 30 september 2026 kiest de
+    systeemomschrijving per installatieregel (brieventool/samenstellen.py,
+    _verrijk_installatie) i.p.v. voor de hele brief -- de brief heeft daarvoor
+    een "model_binnenunit" per regel nodig. Calculatie se eigen "typeBinnendeel"
+    (Kanaalunit/Casetteunit/Plafondonderbouw/Wandunit/Vloerunit/Overig) is
+    dezelfde montage-categorie, alleen anders gespeld, dus een directe
+    vertaling -- geen aanname, dus geen "afgeleid"."""
+
+    def _staat(self, type_binnendeel):
+        staat = rk.nieuwe_staat()
+        staat["installaties"] = [{"id": "a", "systeemsoort": "RAC", "merk": "Panasonic",
+                                   "typeBinnendeel": type_binnendeel,
+                                   "aantalBinnendelen": 1, "aantalBuitendelen": 1}]
+        return staat
+
+    def test_elke_categorie_vertaalt_direct(self):
+        for calc_categorie, brief_model in [
+            ("Kanaalunit", "kanaal"), ("Casetteunit", "cassette"),
+            ("Plafondonderbouw", "plafondonderbouw"), ("Wandunit", "wand"),
+            ("Vloerunit", "vloer"),
+        ]:
+            with self.subTest(calc_categorie):
+                staat = self._staat(calc_categorie)
+                offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+                self.assertEqual(offerte["installaties"][0]["model_binnenunit"], brief_model)
+                self.assertEqual(
+                    status_van(overdracht, "installaties[0].model_binnenunit").status, "direct")
+
+    def test_overig_heeft_geen_eenduidig_model_en_vraagt_een_keuze(self):
+        staat = self._staat("Overig")
+        offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertNotIn("model_binnenunit", offerte["installaties"][0])
+        item = status_van(overdracht, "installaties[0].model_binnenunit")
+        self.assertEqual(item.status, "keuze_nodig")
+        self.assertEqual(item.opties, ["wand", "cassette", "kanaal", "vloer", "plafondonderbouw", "vrf"])
+
+
 class TestVeldenDieCalculatieNietKent(unittest.TestCase):
     """klanttype, adres, aanhef, facturering, etc. bestaan niet in de
     calculatie en horen dus ook niet in de overdracht te verschijnen -- ze
@@ -225,6 +263,13 @@ class TestSamenwerkingMetControle(unittest.TestCase):
                                   "typeBinnendeel": "X", "aantalBinnendelen": 1, "aantalBuitendelen": 1}]
         offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))
         self.assertIn("de systeemsoort", ontbrekende_gegevens(offerte))
+
+    def test_keuze_nodig_model_binnenunit_wordt_als_ontbrekend_gezien(self):
+        staat = rk.nieuwe_staat()
+        staat["installaties"] = [{"id": "a", "systeemsoort": "RAC", "merk": "Daikin",
+                                  "typeBinnendeel": "Overig", "aantalBinnendelen": 1, "aantalBuitendelen": 1}]
+        offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertIn("het model binnenunit", ontbrekende_gegevens(offerte))
 
     def test_multi_splitsystem_vraagt_alsnog_om_het_type_buitendeel(self):
         # De calculatie kent geen "type buitendeel"-veld; dat blijft dus altijd

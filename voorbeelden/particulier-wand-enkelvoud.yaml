@@ -20,7 +20,6 @@ aanleiding: aanvraag
 datum_aanleiding: 12 augustus
 locatieaanduiding: uw woning
 
-model_binnenunit: wand
 opstelling_buitenunit: muursteun
 condensafvoer: natuurlijk_verloop
 bediening: infrarood
@@ -32,6 +31,7 @@ installaties:
     aantal_systemen: 1
     systeemsoort: splitsystem
     montagewijze: wandmontage
+    model_binnenunit: wand
     merk: Panasonic
     type_binnendeel: KIT-TZ35CKE
     aantal_binnendelen: 1

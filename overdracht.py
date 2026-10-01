@@ -31,6 +31,18 @@ gemarkeerd, nooit stilzwijgend overgenomen. VRF wordt vrf. "Overig" kan
 zowel warmtepomp als vloeistofkoelmachine zijn en is met de calculatiedata
 niet te onderscheiden; dat wordt altijd "keuze_nodig" met beide opties, nooit
 een gok tussen de twee.
+
+Model-binnenunit-vertaling (sinds de brieventool-wijziging van 30 september
+2026: de systeemomschrijving in de brief kiest voortaan per installatieregel
+in plaats van voor de hele brief, zie brieventool/samenstellen.py en
+analyse/teksten.yaml). Calculatie se "typeBinnendeel" (Kanaalunit/Casetteunit/
+Plafondonderbouw/Wandunit/Vloerunit/Overig, data/systemen.json) is precies
+dezelfde montage-categorie als de brief se "model_binnenunit"
+(kanaal/cassette/plafondonderbouw/wand/vloer/vrf) -- alleen de spelling en de
+taal verschillen, er wordt niets geïnterpreteerd. Daarom "direct", net als
+montagewijze hieronder. "Overig" heeft geen eenduidig equivalent in de brief
+(geen van de zes brief-modellen dekt het) en blijft daarom "keuze_nodig" met
+alle zes opties, nooit een gok.
 """
 
 from __future__ import annotations
@@ -56,9 +68,18 @@ MONTAGEWIJZE_VERTALING = {
     "Vloermontage": "vloermontage",
 }
 
+MODEL_BINNENUNIT_VERTALING = {
+    "Kanaalunit": "kanaal",
+    "Casetteunit": "cassette",
+    "Plafondonderbouw": "plafondonderbouw",
+    "Wandunit": "wand",
+    "Vloerunit": "vloer",
+}
+
 OVERIG_OPTIES = ["warmtepomp", "vloeistofkoelmachine"]
 RAC_PAC_OPTIES = ["splitsystem", "multi-splitsystem"]
 ALLE_SYSTEEMSOORTEN = ["splitsystem", "multi-splitsystem", "vrf", "warmtepomp", "vloeistofkoelmachine"]
+ALLE_MODELLEN_BINNENUNIT = ["wand", "cassette", "kanaal", "vloer", "plafondonderbouw", "vrf"]
 
 
 BTW_PERCENTAGE_PARTICULIER = 0.21
@@ -193,6 +214,22 @@ def _zet_installatie_over(
     if montagewijze:
         regel["montagewijze"] = montagewijze
         overdracht.append(VeldOverdracht(f"{voorvoegsel}.montagewijze", "direct", "overgenomen"))
+
+    # Welke systeemomschrijving deze installatieregel in de brief krijgt (zie
+    # brieventool/samenstellen.py, _verrijk_installatie, sinds 30 september
+    # 2026) -- calculatie se typeBinnendeel is dezelfde montage-categorie,
+    # alleen anders gespeld, dus een directe vertaling, geen aanname.
+    model_binnenunit = MODEL_BINNENUNIT_VERTALING.get(installatie.get("typeBinnendeel"))
+    if model_binnenunit:
+        regel["model_binnenunit"] = model_binnenunit
+        overdracht.append(VeldOverdracht(f"{voorvoegsel}.model_binnenunit", "direct", "overgenomen"))
+    else:
+        overdracht.append(VeldOverdracht(
+            f"{voorvoegsel}.model_binnenunit", "keuze_nodig",
+            f"calculatie-type binnendeel {installatie.get('typeBinnendeel')!r} heeft geen "
+            f"eenduidig model binnenunit in de brief -- kies er zelf een",
+            opties=ALLE_MODELLEN_BINNENUNIT,
+        ))
 
     # "Type binnendeel" in de brief is een productmodel (bijv. "TZ50"), geen
     # montage-categorie -- calculatie se eigen "typeBinnendeel"-veld

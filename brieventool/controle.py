@@ -41,10 +41,18 @@ VASTE_VELDEN: list[tuple[str, str]] = [
 # viel niet op zolang het formulier nog niet bestond en elke offerte met de
 # hand in YAML werd geschreven; met een formulier waar dit veld vergeten kan
 # worden moet die controle er staan, net als bij merk en type binnendeel.
+#
+# model_binnenunit staat erbij sinds 30 september 2026: de systeemomschrijving
+# koos tot dan toe één wandmodel/cassette/kanaal/.../vrf-tekst voor de hele
+# brief; sinds elke installatieregel zijn eigen model_binnenunit heeft (zie
+# brieventool/samenstellen.py, _verrijk_installatie) matcht zonder dit veld
+# geen enkel systeem_*-blok meer voor díe regel, net zo stilzwijgend als het
+# systeemsoort-gat hierboven.
 INSTALLATIEVELDEN: list[tuple[str, str]] = [
     ("systeemsoort", "de systeemsoort"),
     ("merk", "het merk"),
     ("type_binnendeel", "het type binnendeel"),
+    ("model_binnenunit", "het model binnenunit"),
 ]
 
 

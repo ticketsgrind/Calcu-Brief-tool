@@ -141,13 +141,13 @@ def stel_samen(offerte: Mapping[str, Any], bib: Bibliotheek) -> Brief:
 KOPSECTIES_AANEEN = ("geadresseerde", "betreft", "aanhef")
 
 # De werkzaamhedenlijst: de opsommingsregels staan tegen elkaar aan, zonder
-# lege regel na de kop erboven -- behalve de kop zelf, die krijgt er wél een.
-# Ook tussen de twee koppen ("... inclusief:" -> "Niet tot onze ... behoren:")
-# komt geen lege regel, en pas na de allerlaatste opsommingsregel weer wel.
-# Op verzoek van Lars (17 september 2026); wijkt af van de bronbrieven, die
-# nergens in dit stuk een lege regel zetten.
+# lege regel na de kop erboven -- behalve de kop zelf, en de laatste regel van
+# elk van de twee stukken ("... inclusief:" en "Niet tot onze ... behoren:"),
+# die allebei wél een lege regel erna krijgen. Zo staat er ook altijd een
+# witregel vóór "Niet tot onze werkzaamheden behoren:". Op verzoek van Lars
+# (17 en 30 september 2026); wijkt af van de bronbrieven, die nergens in dit
+# stuk een lege regel zetten.
 AANEENGESLOTEN_SECTIES = ("werkzaamheden_inclusief", "werkzaamheden_exclusief")
-LAATSTE_AANEENGESLOTEN = "werkzaamheden_exclusief"
 
 
 def _zet_witregels(alineas: list[Alinea], sectie: str = "") -> list[Alinea]:
@@ -169,9 +169,7 @@ def _zet_witregels(alineas: list[Alinea], sectie: str = "") -> list[Alinea]:
                 for nummer, alinea in enumerate(alineas)]
     if sectie in AANEENGESLOTEN_SECTIES:
         laatste = len(alineas) - 1
-        return [replace(alinea, witregel_erna=(
-                    nummer == 0                                     # na de kop
-                    or (nummer == laatste and sectie == LAATSTE_AANEENGESLOTEN)))
+        return [replace(alinea, witregel_erna=(nummer == 0 or nummer == laatste))
                 for nummer, alinea in enumerate(alineas)]
 
     uit: list[Alinea] = []
@@ -437,7 +435,7 @@ def _bouw_context(offerte: Mapping[str, Any], bib: Bibliotheek) -> dict[str, Any
         ctx["postcode"] = postcode(str(offerte["postcode"]))
 
     ctx["prijsregels"] = [_verrijk_prijsregel(r) for r in prijsregels]
-    ctx["installaties"] = installaties
+    ctx["installaties"] = [_verrijk_installatie(i) for i in installaties]
 
     for veld in ("meerprijs_coating", "meerprijs_ral", "meerprijs_advies", "totaalprijs"):
         if offerte.get(veld) is not None:
@@ -489,11 +487,29 @@ def _specificatietekst(offerte: Mapping[str, Any]) -> str:
         raise SamenstelFout(f"technische specificaties: {fout}") from fout
 
 
+def _verrijk_installatie(regel: Mapping[str, Any]) -> dict[str, Any]:
+    """Voegt aan een installatieregel toe hoeveel binnen- en buitendelen hij zelf aanbiedt.
+
+    Nodig sinds de systeemomschrijving (`regel.model_binnenunit`) niet meer het
+    enkelvoud/meervoud van de hele brief volgt maar dat van deze ene regel: een
+    offerte met een cassette-installatie van vier units én een wandmodel-
+    installatie van twee units schrijft "De binnenunits zijn ... cassette-units"
+    en "De binnenunits zijn ... aan de wand" -- allebei meervoud, ieder op
+    grond van zijn eigen regel, niet van de zes units samen. Zie
+    analyse/vragen.md (Lars, 30 september 2026).
+    """
+    binnen, buiten = _aantallen(regel)
+    return dict(regel, aantal_binnenunits=binnen, aantal_buitenunits=buiten)
+
+
 def _aantallen(regel: Mapping[str, Any]) -> tuple[int, int]:
     """Hoeveel binnen- en buitendelen een installatieregel aanbiedt.
 
-    Hier hangt het enkelvoud/meervoud van de hele brief aan: "De binnenunit is"
-    tegenover "De binnenunits zijn", en hetzelfde voor de buitenunit.
+    Hier hangt het enkelvoud/meervoud aan: "De binnenunit is" tegenover "De
+    binnenunits zijn", en hetzelfde voor de buitenunit -- zowel voor de hele
+    brief (de som over alle regels, in `_bouw_context`) als voor één losse
+    regel (`_verrijk_installatie`, voor de systeemomschrijving die bij het
+    model van díe regel hoort).
 
     Een splitsysteem is per definitie een binnendeel op een buitendeel, dus
     telt daar het aantal systemen. Een multi-split of VRF heeft meerdere
