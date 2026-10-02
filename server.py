@@ -38,7 +38,7 @@ from brieventool.controle import melding, ontbrekende_gegevens
 from brieventool.samenstellen import SamenstelFout, stel_samen
 from brieventool.sjabloon import SjabloonFout, schrijf_docx
 from calculatie import rekenkern as rk
-from calculatie.calculatieblad import CalculatiebladFout, schrijf_calculatieblad
+from calculatie.calculatieblad import CalculatiebladFout, lees_calculatieblad, schrijf_calculatieblad
 from overdracht import zet_meerdere_over
 
 if getattr(sys, "frozen", False):
@@ -143,6 +143,8 @@ class Bediening(BaseHTTPRequestHandler):
             return self._bereken(gegevens)
         if pad == "/calculatieblad":
             return self._calculatieblad(gegevens)
+        if pad == "/calculatieblad/importeer":
+            return self._calculatieblad_importeer(gegevens)
         if pad == "/overdracht":
             return self._overdracht(gegevens)
         if pad == "/brief":
@@ -183,6 +185,26 @@ class Bediening(BaseHTTPRequestHandler):
         self.send_header("Content-Length", str(len(inhoud)))
         self.end_headers()
         self.wfile.write(inhoud)
+
+    def _calculatieblad_importeer(self, gegevens: dict) -> None:
+        """Het omgekeerde van /calculatieblad: een al ingevuld Excel-
+        calculatieblad (dit sjabloon, met de hand ingevuld in de
+        oorspronkelijke, losstaande Excel-tool, of hier zelf eerder
+        gedownload) terug inlezen tot een calculatie-staat -- zie
+        calculatie.calculatieblad.lees_calculatieblad() voor de precieze
+        omgekeerde celtabel en waarom losse installatieregels daar niet uit
+        te herleiden zijn. `inhoud` is het bestand base64-gecodeerd, net als
+        bij /datablad."""
+        import base64
+        try:
+            rauw = base64.b64decode(gegevens.get("inhoud") or "", validate=True)
+        except Exception:
+            return self._antwoord(200, {"fout": "het bestand kwam beschadigd aan"})
+        try:
+            staat, waarschuwingen = lees_calculatieblad(rauw, self.server.calc_gegevens)
+        except CalculatiebladFout as fout:
+            return self._antwoord(200, {"fout": str(fout)})
+        return self._antwoord(200, {"staat": staat, "waarschuwingen": waarschuwingen})
 
     def _overdracht(self, gegevens: dict) -> None:
         """Zet één of meerdere calculatie-states om in een voorinvulling voor

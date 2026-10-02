@@ -975,6 +975,126 @@ allemaal unieke ids; typen in een Uitbesteding-aantal-veld laat de focus op
 diezelfde regel staan. Volledige Python-testsuite (265 tests) ongewijzigd en
 nog steeds groen -- ook deze wijziging raakt alleen `scherm/calculatie.js`.
 
+## Een al ingevuld Excel-calculatieblad weer INLADEN (`calculatie.calculatieblad.lees_calculatieblad`, 2 oktober 2026)
+
+Op verzoek van Lars: "Calculatie openen" kon tot nu toe alleen het eigen
+`.json`-projectbestand van deze tool openen, terwijl alle bestaande
+calculaties in het Excel-bedrijfssjabloon staan (hetzelfde
+`Template_Calculatieblad.xltx` dat `calculatie/calculatieblad.py` hierboven
+al vult voor de downloadknop) -- zodat voor een bestaande calculatie alsnog
+snel een brief gemaakt kan worden, moet zo'n al ingevuld `.xlsx`-bestand ook
+weer in te laden zijn. Nieuwe knop **"Calculatieblad importeren…"**
+(`scherm/index.html`, naast "Calculatie openen…"), nieuw endpoint
+**`POST /calculatieblad/importeer`** (`server.py`, base64-gecodeerd bestand
+net als `/datablad`), nieuwe functie **`lees_calculatieblad()`** in
+`calculatie/calculatieblad.py`.
+
+**Het vertrekpunt is de letterlijk omgekeerde celtabel van
+`schrijf_calculatieblad()`** (dezelfde module, hierboven al uitgebreid
+gedocumenteerd): elke cel die daar een eigen, overschrijfbare INVOER is, is
+hier een leesbare bron voor een state-veld; elke cel die daar een
+AFGELEIDE/berekende waarde is (`B5`/`B6`/`B9`, de "definitief"-formules in de
+uren-sectie, `F440`/`F443`, alle Quotation-sheet-totalen) wordt bewust NIET
+gelezen -- die komt vanzelf weer goed zodra `rekenkern.bereken()` op de
+geïmporteerde staat draait. Dezelfde "één plek per berekening"-regel
+bovenaan dit bestand, nu toegepast op import: een rekenkern-uitkomst wordt
+hier nooit teruggelezen alsof het invoer was.
+
+**Moet twee heel verschillende soorten bestanden aankunnen.** Een bestand dat
+deze tool zelf exporteerde (platte getallen/`inlineStr`, zie
+`SheetSchrijver`) is het makkelijke geval; de eigenlijke reden van bestaan is
+een ECHT, met de hand in de oorspronkelijke, losstaande Excel-tool ingevuld
+bestand -- en dat laat de sjabloonformules doorgaans gewoon intact (iemand
+vult het in zoals een willekeurig Excel-bestand) en gebruikt voor tekst bijna
+altijd shared strings (`t="s"`, een verwijzing naar `xl/sharedStrings.xml`)
+in plaats van inline-tekst. **`SheetLezer`** leest daarom altijd de door
+Excel laatst gecachte `<v>`/tekstwaarde van een cel, ongeacht of die cel een
+formule heeft -- voor een cel die zelf nooit wordt overschreven (zoals de
+"definitief"-uren, die in het KALE sjabloon een `ROUNDUP(...)`-formule zijn,
+geverifieerd door het sjabloon zelf uit te pakken en na te lezen, zie
+git-geschiedenis) is dat precies de waarde die Excel bij de laatste keer
+opslaan ook liet zien. **`_sheet_pad()`** zoekt het tabblad bovendien altijd
+op NAAM (`"Calculatie"`/`"Quotation sheet"`, via `workbook.xml` +
+`workbook.xml.rels`) in plaats van op de huidige `sheet5.xml`/`sheet4.xml`
+van de schrijfkant hierboven te vertrouwen -- een jarenlang met de hand
+bijgehouden bestand kan een andere interne bestandsvolgorde hebben gekregen,
+ook al heet het tabblad voor de gebruiker nog steeds hetzelfde.
+
+**Niet herleidbaar: losse installatieregels.** `_vul_installaties`
+exporteert per systeemsoort alleen het TOTAAL aantal buiten-/binnendelen
+(`B12/13`, `B16/17`, `B20/21`, `B24/25`) -- zo legde de oorspronkelijke,
+losstaande Excel-tool dit al vast vóórdat deze tool bestond, met vier vaste
+slots ("SOORT INSTALLATIE 1" t/m "4" = VRF/RAC/PAC/Overig, bevestigd door het
+kale sjabloon zelf uit te pakken). Er is geen cel die vastlegt uit hoeveel
+LOSSE installaties (elk met een eigen merk/montagewijze/model) dat totaal is
+opgebouwd. Import maakt daarom per systeemsoort met een niet-nul totaal
+precies ÉÉN synthetische installatieregel aan met dat totaal, en laat
+merk/montagewijze/model bewust leeg -- nooit een gok welke installatie(s) dat
+totaal vormen. De geretourneerde `waarschuwingen`-lijst (zie hieronder) noemt
+dit altijd expliciet zodra er installaties zijn geïmporteerd, zodat
+"controleer dit" behouden blijft zonder dat er ergens een los
+badge-per-veld-systeem bij hoefde (dezelfde aanpak als de
+"controleer dit"-melding bij de calculatie→brief-overdracht hierboven).
+
+**Niet herleidbaar (bewust, al sinds de exportkant): materiaal zonder
+`row`.** `_vul_materiaal` slaat een materiaalregel zonder `row`-veld al over
+bij het EXPORTEREN (geen Excel-rij om in te schrijven) -- dat raakt specifiek
+een via de Panasonic/Daikin-zoekbalk toegevoegd artikel (`bron:
+"panasonic"/"daikin"`, geen `row`) en een vrije PROJECTBESTELLING-regel. Zo'n
+regel is dus ook bij het weer INLEZEN nooit terug te vinden: hetzelfde,
+al bestaande gat in beide richtingen, geen nieuwe beperking van deze functie.
+In de praktijk raakt dit vooral calculaties die al in déze tool zijn gemaakt
+met de nieuwere Panasonic/Daikin-zoekfunctie (die bestond niet in de
+oorspronkelijke Excel-tool) -- een ECHTE historische Excel-calculatie had het
+model altijd al rechtstreeks in een van de vrije, naamloze APPARATUUR-rijen
+staan (`data/materiaal_catalogus.json` se rijen 37-46 e.d. hebben
+`omschrijving: null`, precies de vrije rijen waar iemand in Excel het
+model+de prijs met de hand intypte) -- en díe rijen hebben wél een `row` en
+komen dus gewoon mee, D/E/F/A-kolom en al.
+
+**Herkent een bewuste override, verzint er nooit zelf een.**
+`A343`/`A356`/`A377` (servicemonteur/hoofd-/hulpmonteur "definitief") zijn in
+het sjabloon zelf `ROUNDUP(...)`-formules die het automatische voorstel
+uitrekenen -- maar met de hand te overschrijven (vandaar de
+`override`-velden in `rekenkern.nieuwe_staat()`). Om "nooit aangeraakt" van
+"bewust overschreven" te onderscheiden herberekent de import het voorstel
+opnieuw (`rk.servicemonteur_voorstel()`/`rk.monteur_voorstel()`) met de dan
+al geïmporteerde installaties/materiaal/instellingen/overig, en vergelijkt
+dat met de gelezen waarde: wijken ze (met een kleine afrondingsmarge) af,
+dan was het een override en komt die met de echte waarde mee; komen ze
+overeen, dan blijft `override` gewoon `None` -- een rondje export→import mag
+nooit op zichzelf al een calculatie "overschreven" laten lijken die dat niet
+was.
+
+**Onherkende waarden (moeilijkheidsgraad/provincie/bonusklant/provisieklant)
+vallen terug op de bijbehorende `rekenkern.nieuwe_staat()`-standaardwaarde,
+nooit een gok** -- met een leesbare waarschuwing in de geretourneerde lijst,
+zelfde "nooit gokken, wel een duidelijke melding"-regel als `overdracht.py`.
+Een `R71` (verkoopprijs) van letterlijk `0` wordt ook behandeld als "nog niet
+ingevuld" (`None`): het kale sjabloon begint daar zelf al op `0` te staan,
+niet te onderscheiden van een bewust ingevulde prijs van nul euro (die in de
+praktijk nooit voorkomt).
+
+**Getest zonder een door Lars aangeleverd, écht ingevuld voorbeeldbestand.**
+Deze implementatie is opgebouwd uit een handmatige inspectie van het kale
+`Template_Calculatieblad.xltx` zelf (uitgepakt en nagelezen: shared strings,
+welke cellen een formule hebben, de exacte rijlabels) plus rondje-tests
+(`tests/test_calculatieblad.py`, `TestInlezenRondje`): een staat exporteren,
+weer inlezen, en controleren dat `rekenkern.bereken()` op de geïmporteerde
+staat dezelfde marge/uren teruggeeft als op de oorspronkelijke -- voor alles
+wat wél herleidbaar is (zie hierboven voor wat bewust niet is). **Eén test
+(`TestInlezenEchteSjabloon`) leest het kale sjabloonbestand zelf** (dus geen
+door deze module zelf geschreven bestand) -- dat gebruikt al overal ECHTE
+shared strings en laat zijn formules intact, de dichtstbijzijnde benadering
+van een écht ingevuld bestand die hier zonder een voorbeeld van Lars te
+krijgen is. Dat bewijst dat de celverwijzingen kloppen en dat shared-strings/
+formule-cellen correct worden gelezen; het bewijst niet dat een jarenlang met
+de hand bijgehouden bestand geen rijen heeft verplaatst, extra tabbladen
+heeft gekregen, of op een andere manier afwijkt van dit ene sjabloon. **Stuur
+hier je eerste paar echt ingevulde calculatiebladen doorheen voordat je
+hierop vertrouwt voor belangrijk werk** -- precies dezelfde voorzichtigheid
+die bij de downloadkant hierboven ook al gold, nu voor de andere richting.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

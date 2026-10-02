@@ -37,6 +37,8 @@ nodig, en consistent met hoe deze repo Office-bestanden al genereert.
 
 from __future__ import annotations
 
+import datetime
+import io
 import re
 import zipfile
 from pathlib import Path
@@ -584,8 +586,6 @@ def schrijf_calculatieblad(
     inhoud[WORKBOOK] = _workbook_met_fullcalc(inhoud[WORKBOOK].decode("utf-8")).encode("utf-8")
     del inhoud[CALC_CHAIN]
 
-    import io
-
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zout:
         for naam in namen:
@@ -593,3 +593,422 @@ def schrijf_calculatieblad(
                 continue
             zout.writestr(naam, inhoud[naam])
     return buf.getvalue()
+
+
+# ============================================================================
+# Een al ingevuld calculatieblad terug INLEZEN naar een calculatie-staat.
+# ============================================================================
+#
+# Op verzoek van Lars (2 oktober 2026): alle bestaande calculaties staan al
+# in dit Excel-sjabloon (zoals vóór deze tool met de hand werd bijgehouden),
+# dus naast het hierboven beschreven downloaden moet een al ingevulde
+# .xlsx ook weer INGELADEN kunnen worden -- zodat voor een bestaande
+# calculatie alsnog snel een brief gemaakt kan worden.
+#
+# **Het vertrekpunt is exact de omgekeerde celtabel van schrijf_calculatieblad
+# hierboven** -- elke cel die _vul_* daar als eigen, overschrijfbare INVOER
+# beschrijft, is hier een leesbare bron voor een state-veld; elke cel die
+# daar een AFGELEIDE/berekende waarde is (bijv. B5/B6/B9, de "definitief"-
+# formules in de uren-sectie, F440/F443, alle Quotation-sheet-totalen) wordt
+# hier bewust NIET gelezen -- die komt vanzelf weer goed zodra
+# rekenkern.bereken() op de geïmporteerde staat draait. Dat is dezelfde
+# "één plek per berekening"-regel als de rest van dit bestand, nu toegepast
+# op import: wij lezen nooit een rekenkern-uitkomst terug als ware het invoer.
+#
+# **Moet zowel een bestand aankunnen dat deze tool zelf exporteerde (platte
+# getallen/`inlineStr`, zie SheetSchrijver hierboven) als een ECHT met de
+# hand ingevuld bestand uit de oorspronkelijke, losstaande Excel-tool** --
+# en dat laatste is de eigenlijke reden voor dit bestaan: zo'n bestand laat de
+# formules van het sjabloon over het algemeen gewoon intact (iemand vult het
+# gewoon in zoals een willekeurig Excel-bestand) en gebruikt voor tekst bijna
+# altijd shared strings (`t="s"`, een verwijzing naar `xl/sharedStrings.xml`)
+# in plaats van inline-tekst -- SheetLezer hieronder leest daarom altijd de
+# gecachte `<v>`/tekstwaarde die Excel bij een cel bewaart, ongeacht of die
+# cel een formule heeft: dat is precies wat Excel bij de laatste keer
+# opslaan ook liet zien, en voor een formuleset die een eigen invoerveld
+# alleen maar doorrekent (bijv. A343 = ROUNDUP(...)) is dat exact de waarde
+# die we willen -- zie _lees_uren hieronder voor hoe we die vervolgens
+# onderscheiden van een bewuste handmatige override.
+#
+# **Niet herleidbaar: losse installatieregels.** schrijf_calculatieblad
+# exporteert per systeemsoort alleen het TOTAAL aantal buiten-/binnendelen
+# (B12/13, B16/17, B20/21, B24/25) -- zo deed de oorspronkelijke, losstaande
+# Excel-tool dit al vóór deze tool bestond; er is geen cel die vastlegt uit
+# hoeveel LOSSE installaties (met een eigen merk/montagewijze/model) die
+# totalen zijn opgebouwd. Import maakt daarom per systeemsoort met een
+# niet-nul totaal precies ÉÉN synthetische installatieregel aan met dat
+# totaal, en laat merk/montagewijze/model bewust leeg -- nooit een gok welke
+# installatie(s) dat totaal vormen. De geretourneerde waarschuwingenlijst
+# noemt dit altijd expliciet zodra er installaties zijn geïmporteerd.
+
+# Shared strings (xl/sharedStrings.xml): <si><t>...</t></si> per string, index
+# = positie in dat bestand. Een <si> kan de tekst in meerdere <r><t>-runs
+# opsplitsen (rich text/verschillende opmaak binnen één cel); die runs worden
+# hier weer aaneengeplakt, de opmaak zelf doet er voor een celwaarde niet toe.
+_SI_PATROON = re.compile(r"<si>(.*?)</si>", re.DOTALL)
+_T_PATROON = re.compile(r"<t[^>]*>(.*?)</t>", re.DOTALL)
+
+
+def _tekst_unescape(s: str) -> str:
+    return (s.replace("&lt;", "<").replace("&gt;", ">")
+             .replace("&quot;", '"').replace("&apos;", "'")
+             .replace("&amp;", "&"))
+
+
+def _laad_shared_strings(inhoud: dict[str, bytes]) -> list[str]:
+    ruw = inhoud.get("xl/sharedStrings.xml")
+    if not ruw:
+        return []
+    xml = ruw.decode("utf-8")
+    return [_tekst_unescape("".join(_T_PATROON.findall(si.group(1))))
+            for si in _SI_PATROON.finditer(xml)]
+
+
+def _sheet_pad(inhoud: dict[str, bytes], tabblad_naam: str) -> str:
+    """Zoekt het interne bestandspad (bijv. "xl/worksheets/sheet5.xml") bij
+    een tabbladnaam, via workbook.xml + workbook.xml.rels -- niet hardcoded
+    op "sheet5.xml"/"sheet4.xml" zoals de schrijfkant hierboven doet, want een
+    écht, jarenlang met de hand bijgehouden bestand kan een andere interne
+    volgorde hebben dan het sjabloon op dit moment, ook al heet het tabblad
+    zelf nog steeds "Calculatie"/"Quotation sheet" (de tabnaam is wat de
+    gebruiker in Excel ziet en dus stabiel blijft)."""
+    try:
+        wb = inhoud["xl/workbook.xml"].decode("utf-8")
+    except KeyError as fout:
+        raise CalculatiebladFout("dit is geen geldig Excel-bestand (geen workbook.xml)") from fout
+
+    rid = None
+    for sheet_tag in re.finditer(r"<sheet\b[^>]*/?>", wb):
+        tag = sheet_tag.group(0)
+        if re.search(r'\bname="' + re.escape(tabblad_naam) + r'"', tag):
+            m = re.search(r'\br:id="(rId\d+)"', tag)
+            if m:
+                rid = m.group(1)
+                break
+    if rid is None:
+        raise CalculatiebladFout(f"tabblad {tabblad_naam!r} niet gevonden in dit werkboek")
+
+    try:
+        rels = inhoud["xl/_rels/workbook.xml.rels"].decode("utf-8")
+    except KeyError as fout:
+        raise CalculatiebladFout("dit is geen geldig Excel-bestand (geen workbook.xml.rels)") from fout
+    m = re.search(r'<Relationship Id="' + re.escape(rid) + r'"[^>]*Target="([^"]+)"', rels)
+    if not m:
+        raise CalculatiebladFout(f"kan tabblad {tabblad_naam!r} niet terugvinden (ontbrekende relatie)")
+    doel = m.group(1).lstrip("/")
+    return doel if doel.startswith("xl/") else f"xl/{doel}"
+
+
+class SheetLezer:
+    """Leest cel-waarden uit de ruwe XML van één werkblad -- het omgekeerde
+    van SheetSchrijver hierboven. `waarde()` geeft een float, een str, of
+    None (lege/ontbrekende cel) terug, ongeacht of de cel plat is of een
+    formule heeft (dan de laatst gecachte `<v>`, zie de moduledocstring
+    hierboven voor waarom dat hier precies goed is)."""
+
+    def __init__(self, xml: str, shared_strings: list[str]):
+        self.xml = xml
+        self._shared = shared_strings
+
+    def _cel_match(self, ref: str) -> re.Match[str] | None:
+        patroon = re.compile(r'<c r="' + re.escape(ref) + r'"([^>]*?)(?:/>|>(.*?)</c>)', re.DOTALL)
+        return patroon.search(self.xml)
+
+    def waarde(self, ref: str) -> float | str | None:
+        m = self._cel_match(ref)
+        if not m or m.group(2) is None:
+            return None
+        attrs, binnen = m.group(1), m.group(2)
+        type_m = re.search(r'\bt="([a-zA-Z]+)"', attrs)
+        t = type_m.group(1) if type_m else None
+
+        if t == "inlineStr":
+            return _tekst_unescape("".join(_T_PATROON.findall(binnen)))
+        v_m = re.search(r"<v>(.*?)</v>", binnen, re.DOTALL)
+        if t == "s":
+            if not v_m:
+                return None
+            idx = int(v_m.group(1))
+            return self._shared[idx] if 0 <= idx < len(self._shared) else None
+        if t == "str":
+            return _tekst_unescape(v_m.group(1)) if v_m else None
+        if t in ("b", "e"):
+            return None  # boolean/formulefout (#VALUE! e.d.) -- geen bruikbare invoer
+        if not v_m or v_m.group(1) == "":
+            return None
+        try:
+            return float(v_m.group(1))
+        except ValueError:
+            return None
+
+    def tekst(self, ref: str) -> str:
+        w = self.waarde(ref)
+        return "" if w is None else str(w).strip()
+
+    def getal(self, ref: str, default: float = 0.0) -> float:
+        w = self.waarde(ref)
+        return float(w) if isinstance(w, (int, float)) else default
+
+
+def _prijs_uit(waarde: float | str | None) -> float | None:
+    """"op aanvraag" (of iets anders niet-numeriek) wordt net als bij een
+    leeg veld None -- nooit een verzonnen prijs."""
+    return waarde if isinstance(waarde, (int, float)) else None
+
+
+def _lees_kop(l: SheetLezer, staat: dict[str, Any]) -> None:
+    meta = staat["meta"]
+    meta["qnummer"] = l.tekst("B1")
+    meta["projectnaam"] = l.tekst("B2")
+    meta["klantnaam"] = l.tekst("B3")
+    meta["klantnummer"] = l.tekst("B4")
+    meta["uitgangspunten"] = l.tekst("D1")
+    # Geen cel in het sjabloon bewaart de offertedatum (zie _vul_kop
+    # hierboven, die 'm ook nergens schrijft) -- vandaag is hetzelfde, enige
+    # zinnige startpunt als een gloednieuw project (nieuwe_staat() aan de
+    # scherm/calculatie.js-kant doet dat ook al zo).
+    meta["datum"] = datetime.date.today().isoformat()
+
+
+def _lees_instellingen(
+    l: SheetLezer, staat: dict[str, Any], gegevens: dict[str, Any], waarschuwingen: list[str]
+) -> None:
+    instellingen = staat["instellingen"]
+
+    moeilijkheid = l.tekst("B7")
+    if moeilijkheid in rk.MOEILIJKHEID_FACTOR:
+        instellingen["moeilijkheid"] = moeilijkheid
+    elif moeilijkheid:
+        waarschuwingen.append(
+            f"onbekende moeilijkheidsgraad {moeilijkheid!r} in het bestand -- teruggevallen op 'Standaard'")
+
+    instellingen["reistijd"] = l.getal("B8", 1)
+
+    provincies = {p["provincie"] for p in gegevens["parkeertarieven"]}
+    provincie = l.tekst("D433")
+    if provincie in provincies:
+        instellingen["provincie"] = provincie
+    elif provincie:
+        waarschuwingen.append(
+            f"onbekende provincie {provincie!r} in het bestand -- teruggevallen op 'Geen parkeerkosten'")
+
+    bonusklanten = {b["klant"] for b in gegevens["omzetbonus_provisie"]["omzetbonus"]}
+    bonusklant = l.tekst("D440")
+    if bonusklant in bonusklanten:
+        instellingen["bonusklant"] = bonusklant
+    elif bonusklant:
+        waarschuwingen.append(
+            f"onbekende bonusklant {bonusklant!r} in het bestand -- teruggevallen op 'Geen bonusdragende klant'")
+
+    provisieklanten = {p["klant"] for p in gegevens["omzetbonus_provisie"]["provisie"]}
+    provisieklant = l.tekst("D443")
+    if provisieklant in provisieklanten:
+        instellingen["provisieklant"] = provisieklant
+    elif provisieklant:
+        waarschuwingen.append(
+            f"onbekende provisieklant {provisieklant!r} in het bestand -- teruggevallen op 'Geen provisie'")
+
+
+# (systeemsoort, cel aantal buitendelen, cel aantal binnendelen) -- zie
+# _vul_installaties hierboven, en de moduledocstring voor de beperking dat
+# hier alleen het TOTAAL per systeemsoort uit valt te lezen, nooit losse
+# installatieregels.
+_INSTALLATIE_CELLEN: list[tuple[str, str, str]] = [
+    ("VRF", "B12", "B13"),
+    ("RAC", "B16", "B17"),
+    ("PAC", "B20", "B21"),
+    ("Overig", "B24", "B25"),
+]
+
+
+def _lees_installaties(l: SheetLezer, staat: dict[str, Any]) -> None:
+    for systeemsoort, buiten_ref, binnen_ref in _INSTALLATIE_CELLEN:
+        buiten = l.getal(buiten_ref)
+        binnen = l.getal(binnen_ref)
+        if not buiten and not binnen:
+            continue
+        staat["installaties"].append({
+            "id": rk._nieuw_id(), "systeemsoort": systeemsoort,
+            "merk": "", "montagewijze": "", "typeBinnendeel": "", "materiaalId": None,
+            "aantalBuitendelen": buiten, "aantalBinnendelen": binnen,
+        })
+
+
+def _lees_materiaal(l: SheetLezer, staat: dict[str, Any], gegevens: dict[str, Any]) -> None:
+    yimm = gegevens["yimm"]
+    for cat_entry in gegevens["materiaal_catalogus"]:
+        row = cat_entry.get("row")
+        if row is None:
+            continue
+        aantal = l.getal(f"A{row}")
+        if not aantal:
+            continue
+        # De structurele velden (sectie/bron/artikelcode/leiding_categorie/...)
+        # zijn intrinsieke eigenschappen van déze catalogusrij en komen dus uit
+        # de (huidige) catalogus; omschrijving/eenheid/prijs zijn wat ooit in
+        # déze offerte werd getoond en komen daarom uit het Excel-bestand zelf
+        # -- een prijs kan intussen gewijzigd zijn, en dit moet de historische
+        # offerte reproduceren, niet een nieuwe met de prijzen van vandaag.
+        regel = rk.materiaal_regel_uit_catalogus(cat_entry, yimm)
+        regel["aantal"] = aantal
+        omschrijving = l.tekst(f"D{row}")
+        if omschrijving:
+            regel["omschrijving"] = omschrijving
+        eenheid = l.tekst(f"E{row}")
+        if eenheid:
+            regel["eenheid"] = eenheid
+        regel["prijs"] = _prijs_uit(l.waarde(f"F{row}"))
+        staat["materiaal"].append(regel)
+
+
+def _lees_overig(l: SheetLezer, staat: dict[str, Any]) -> None:
+    staat["overig"]["nachten"] = l.getal("A434", 0)
+    staat["overig"]["nachtprijs"] = l.getal("F434", 150)
+
+
+def _lees_marge_van_quotation(lq: SheetLezer, staat: dict[str, Any]) -> None:
+    staat["marge"]["contingencyReserves"] = lq.getal("E54", 0)
+    staat["marge"]["contingencyOnderhandeling"] = lq.getal("E55", 0)
+    # R71 staat in een kersvers/nooit ingevuld sjabloon al op een kale 0 (zie
+    # de moduledocstring) -- dat is niet te onderscheiden van een bewust
+    # ingevulde verkoopprijs van nul euro, die in de praktijk nooit voorkomt.
+    # Een gelezen 0 wordt daarom net als leeg behandeld: None, net als een
+    # project waarvoor nog geen prijs is bepaald.
+    prijs = lq.getal("R71")
+    staat["marge"]["projectPrice"] = prijs if prijs else None
+
+
+def _lees_kosten_lijst(
+    l: SheetLezer, rijen: dict[str, int], lege_rijen: list[int], defaults: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Uitbesteding/equipment: de standaardregels staan altijd op hun vaste
+    rij (zie rijen), eigen toegevoegde regels ("eigen regel") in de vrije
+    rijen aan het eind -- het omgekeerde van _vul_kosten_lijst hierboven."""
+    uit: list[dict[str, Any]] = []
+    for default in defaults:
+        naam = default["omschrijving"]
+        row = rijen[naam]
+        uit.append({
+            "id": rk._nieuw_id(), "omschrijving": naam, "eenheid": default["eenheid"],
+            "prijs": _prijs_uit(l.waarde(f"F{row}")), "aantal": l.getal(f"A{row}", 0),
+            "favoriet": default["favoriet"],
+        })
+    for row in lege_rijen:
+        omschrijving = l.tekst(f"B{row}")
+        if not omschrijving:
+            continue
+        uit.append({
+            "id": rk._nieuw_id(), "omschrijving": omschrijving, "eenheid": l.tekst(f"E{row}"),
+            "prijs": _prijs_uit(l.waarde(f"F{row}")), "aantal": l.getal(f"A{row}", 0),
+            "favoriet": True,
+        })
+    return uit
+
+
+def _lees_uitbesteding_equipment(l: SheetLezer, staat: dict[str, Any]) -> None:
+    staat["uitbesteding"] = _lees_kosten_lijst(l, UITBESTEDING_RIJEN, UITBESTEDING_LEGE_RIJEN, rk.UITBESTEDING_DEFAULTS)
+    staat["equipment"] = _lees_kosten_lijst(l, EQUIPMENT_RIJEN, EQUIPMENT_LEGE_RIJEN, rk.EQUIPMENT_DEFAULTS)
+
+
+_OVEREENKOMST_MARGE = 0.01  # afrondingsmarge bij het vergelijken van "definitief" met het herberekende voorstel
+
+
+def _lees_uren(l: SheetLezer, lq: SheetLezer, staat: dict[str, Any]) -> None:
+    """Vereist dat instellingen/installaties/materiaal/overig al in `staat`
+    staan (zie de aanroep in lees_calculatieblad) -- de override-detectie
+    hieronder herberekent het automatische voorstel met rekenkern zelf, en
+    dat voorstel hangt van al die velden af."""
+    uren = staat["uren"]
+
+    def eenvoudige_rol(rol: str, werk_rij: int, reis_rij: int, f_rij: int) -> None:
+        uren[rol]["werk"] = l.getal(f"B{werk_rij}", 0)
+        uren[rol]["reis"] = l.getal(f"B{reis_rij}", 0)
+        uren[rol]["tarief"] = l.getal(f"F{f_rij}", rk.DEFAULT_TARIEVEN[rol])
+
+    eenvoudige_rol("projectmanager", 331, 332, 330)
+    eenvoudige_rol("projectleider", 334, 335, 333)
+    eenvoudige_rol("werkvoorbereider", 337, 338, 336)
+    eenvoudige_rol("engineering", 340, 341, 339)
+
+    uren["servicemonteur"]["overig"] = l.getal("B347", 0)
+    uren["servicemonteur"]["tarief"] = l.getal("F343", rk.DEFAULT_TARIEVEN["servicemonteur"])
+    uren["hoofdmonteur"]["tarief"] = l.getal("F356", rk.DEFAULT_TARIEVEN["hoofdmonteur"])
+    uren["hulpmonteur"]["tarief"] = l.getal("F377", rk.DEFAULT_TARIEVEN["hulpmonteur"])
+
+    # Verkoper staat alleen op Quotation sheet (geen eigen rij op Calculatie),
+    # zie _vul_quotation hierboven.
+    uren["verkoper"]["uren"] = lq.getal("L24", 0)
+    uren["verkoper"]["tarief"] = lq.getal("M24", rk.DEFAULT_TARIEVEN["verkoper"])
+
+    # A343/A356/A377 zijn in het sjabloon zelf formules die het voorstel
+    # uitrekenen (ROUNDUP(...), identiek aan rk.servicemonteur_voorstel()/
+    # monteur_voorstel()) -- maar met de hand te overschrijven, vandaar de
+    # override-velden in rk.nieuwe_staat(). Een vergelijking met wat dat
+    # voorstel NU (met de net geïmporteerde installaties/materiaal/overig)
+    # zou zijn, onderscheidt "nooit aangeraakt" van "bewust overschreven":
+    # wijken ze meer dan een kleine afrondingsmarge af, dan was het een
+    # override, en komt die met de geïmporteerde, echte waarde mee.
+    sm_voorstel = rk.servicemonteur_voorstel(staat)["totaal"]
+    sm_definitief = l.getal("A343")
+    if abs(sm_definitief - sm_voorstel) > _OVEREENKOMST_MARGE:
+        uren["servicemonteur"]["override"] = sm_definitief
+
+    mv_voorstel = rk.monteur_voorstel(staat)
+    for rol, ref in (("hoofdmonteur", "A356"), ("hulpmonteur", "A377")):
+        definitief = l.getal(ref)
+        if abs(definitief - mv_voorstel) > _OVEREENKOMST_MARGE:
+            uren[rol]["override"] = definitief
+
+
+def lees_calculatieblad(
+    inhoud_bytes: bytes, gegevens: dict[str, Any] | None = None
+) -> tuple[dict[str, Any], list[str]]:
+    """Leest een ingevuld Excel-calculatieblad (dit sjabloon, met de hand
+    ingevuld in de oorspronkelijke, losstaande Excel-tool, of hier zelf eerder
+    mee geëxporteerd) terug in een calculatie-staat die rekenkern.bereken()
+    kan doorrekenen -- zie de uitleg bovenaan deze sectie voor de precieze
+    omgekeerde celtabel en waarom losse installatieregels hier niet uit te
+    herleiden zijn.
+
+    Geeft (staat, waarschuwingen) terug: `staat` heeft exact de vorm van
+    rekenkern.nieuwe_staat(), `waarschuwingen` is een lijst leesbare zinnen
+    over wat niet herkend kon worden (en dus op een standaardwaarde is
+    teruggevallen) of wat de gebruiker na het inladen zelf moet controleren --
+    nooit een stille gok, net als overdracht.py."""
+    gegevens = gegevens or rk.laad_gegevens()
+
+    try:
+        with zipfile.ZipFile(io.BytesIO(inhoud_bytes)) as zin:
+            inhoud = {naam: zin.read(naam) for naam in zin.namelist()}
+    except zipfile.BadZipFile as fout:
+        raise CalculatiebladFout("dit is geen geldig Excel-bestand (.xlsx)") from fout
+
+    shared_strings = _laad_shared_strings(inhoud)
+    calc_pad = _sheet_pad(inhoud, "Calculatie")
+    quot_pad = _sheet_pad(inhoud, "Quotation sheet")
+    try:
+        l = SheetLezer(inhoud[calc_pad].decode("utf-8"), shared_strings)
+        lq = SheetLezer(inhoud[quot_pad].decode("utf-8"), shared_strings)
+    except KeyError as fout:
+        raise CalculatiebladFout(f"tabblad-bestand {fout} ontbreekt in dit .xlsx-bestand") from fout
+
+    staat = rk.nieuwe_staat()
+    waarschuwingen: list[str] = []
+
+    _lees_kop(l, staat)
+    _lees_instellingen(l, staat, gegevens, waarschuwingen)
+    _lees_installaties(l, staat)
+    _lees_materiaal(l, staat, gegevens)
+    _lees_overig(l, staat)
+    _lees_marge_van_quotation(lq, staat)
+    _lees_uitbesteding_equipment(l, staat)
+    _lees_uren(l, lq, staat)  # na instellingen/installaties/materiaal/overig, zie daar
+
+    if staat["installaties"]:
+        waarschuwingen.append(
+            "De installaties zijn overgenomen als totalen per systeemsoort (zo legt het "
+            "Excel-blad dit vast), niet als losse installatieregels -- controleer en vul "
+            "zelf merk, montagewijze en model aan bij elke installatiekaart."
+        )
+
+    return staat, waarschuwingen

@@ -1009,6 +1009,47 @@ function calculatiebladBestandsnaam() {
   const naam = opties.length > 1 ? `${basis}-${CB.veiligeBestandsnaamdeel(opties[actieveOptieIndex].naam)}` : basis;
   return naam + '.xlsx';
 }
+/* Op verzoek van Lars (2 oktober 2026): alle bestaande calculaties staan al
+   in dit Excel-sjabloon (zoals vóór deze tool met de hand werd bijgehouden),
+   dus moet zo'n al ingevuld bestand ook weer INGELADEN kunnen worden -- niet
+   alleen het eigen .json-projectbestand. Het bestand gaat, net als bij
+   brief.html se datablad-upload, base64-gecodeerd naar de server
+   (POST /calculatieblad/importeer); calculatie/calculatieblad.py se
+   lees_calculatieblad() doet het eigenlijke werk en levert een staat +
+   waarschuwingen terug (bijv. "installaties zijn alleen als totaal per
+   systeemsoort te herleiden") die hier ongewijzigd aan de gebruiker worden
+   getoond -- zie CLAUDE.md voor de volledige uitleg van wat wel en niet uit
+   zo'n bestand is te herleiden. */
+function bindCalculatiebladImporterenKnop() {
+  const knop = document.getElementById('btnCalculatiebladImporteren');
+  const input = document.getElementById('calculatiebladInput');
+  knop.addEventListener('click', () => {
+    if (CB.heeftInhoud() && !confirm('Er staat al iets ingevuld. Dit overschrijven met het geïmporteerde calculatieblad?')) return;
+    input.value = '';
+    input.click();
+  });
+  input.addEventListener('change', async () => {
+    const bestand = input.files[0];
+    if (!bestand) return;
+    const oud = knop.textContent;
+    knop.disabled = true; knop.textContent = 'Bezig…';
+    try {
+      const bytes = new Uint8Array(await bestand.arrayBuffer());
+      let binair = ''; for (const b of bytes) binair += String.fromCharCode(b);
+      const resultaat = await CB.postJSON('/calculatieblad/importeer', { inhoud: btoa(binair) });
+      if (resultaat.fout) { CB.toast('Kon het calculatieblad niet importeren: ' + resultaat.fout); return; }
+      CB.calc.vulOpties([{ naam: 'Optie A', staat: resultaat.staat }], 0);
+      CB.toast(resultaat.waarschuwingen && resultaat.waarschuwingen.length
+        ? 'Calculatieblad geïmporteerd — ' + resultaat.waarschuwingen.join(' ')
+        : 'Calculatieblad geïmporteerd.');
+    } catch (fout) {
+      CB.toast('Kon het calculatieblad niet importeren: ' + fout.message);
+    } finally {
+      knop.disabled = false; knop.textContent = oud;
+    }
+  });
+}
+
 function bindCalculatiebladKnop() {
   const knop = document.getElementById('btnCalculatieblad');
   knop.addEventListener('click', async () => {
@@ -1075,6 +1116,7 @@ async function initCalculatie() {
   bindMeta(); bindInstallaties(); bindMateriaal(); bindUren();
   bindLijst('uitbestedingBody', 'uitbesteding'); bindLijst('equipmentBody', 'equipment');
   bindToevoegKnoppen(); bindBestellijst(); bindCollapsibles(); bindOpties(); bindCalculatiebladKnop();
+  bindCalculatiebladImporterenKnop();
   renderOptieBalk();
   CB.laadscherm.zetStatus('Rekenkern voorbereiden…');
   await herbereken();

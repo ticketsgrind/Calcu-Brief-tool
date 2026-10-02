@@ -110,6 +110,15 @@ Zonder dubbelklik-opstarter kan het ook rechtstreeks:
   op (zoals vóór deze tool met de hand werd bijgehouden) voor de calculatie
   die op dat moment open staat — bij meerdere opties dus per optie een eigen
   bestand, net zoals dat vroeger ook altijd losse Excel-bestanden waren.
+- **Calculatieblad importeren**: de knop "Calculatieblad importeren…" naast
+  "Calculatie openen…" leest zo'n Excel-bestand ook weer in — zowel een hier
+  eerder gedownload exemplaar als een bestaande, met de hand in het
+  oorspronkelijke Excel-sjabloon ingevulde calculatie van vóór deze tool. De
+  installaties komen terug als één totaal per systeemsoort (VRF/RAC/PAC/
+  Overig), niet als de oorspronkelijke losse installatieregels — dat legt het
+  Excel-blad zelf ook niet vast — dus vul na het importeren zelf nog even
+  merk/montagewijze/model aan bij elke installatiekaart; de tool meldt dit
+  er zelf bij na het inladen.
 
 ## Project opslaan/openen
 
@@ -134,7 +143,8 @@ iets staat dat niet is opgeslagen, dan vraagt de browser dat eerst na.
     start.command / .bat  dezelfde opstart, wél met zichtbare terminal/console (handig bij problemen)
     calculatie/
       rekenkern.py        de rekenkern (marge, uren, afgeleide materiaalregels)
-      calculatieblad.py    vult het Excel-bedrijfssjabloon met de uitkomst van rekenkern
+      calculatieblad.py    vult het Excel-bedrijfssjabloon met de uitkomst van rekenkern,
+                           en leest een al ingevuld exemplaar ook weer terug
     overdracht.py         zet een calculatie om in een aanvulling op het briefconcept
     brieventool/          tekstblokken kiezen, invullen, Word-bestand schrijven
     analyse/teksten.yaml  de brieftekst zelf (152 blokken) — geen codewijziging nodig
@@ -149,7 +159,7 @@ iets staat dat niet is opgeslagen, dan vraagt de browser dat eerst na.
                          van de losstaande brieventool (zie "Herkomst")
     tools/ververs_brief_scherm.py   werkt scherm/brief.html bij na een wijziging
                          in analyse/teksten.yaml of sjablonen/brief.docx
-    tests/                261 tests (rekenkern, overdracht, calculatieblad, brieventool)
+    tests/                291 tests (rekenkern, overdracht, calculatieblad, brieventool)
     voorbeelden/          ingevulde offertes om mee te proberen (los van de calculatie)
 
 ## Tests
