@@ -54,6 +54,31 @@ const FAVORIETEN_ROWS = {
 const { eur, pct } = CB;
 let uid = 1;
 const newId = () => 'calcid' + (uid++);
+// Voorkomt dat newId() na het laden van een bewaard project (autosave of een
+// geopend bestand) weer bij 1 begint terwijl de geladen rijen al ids als
+// "calcid7" dragen -- zonder deze stap zou de eerstvolgende nieuw toegevoegde
+// rij zo'n bestaand id hergebruiken (newId() geeft dan weer "calcid1"), met
+// als gevolg dat twee rijen in verschillende lijsten (bijv. een
+// uitbestedingsregel en een materiaalregel) hetzelfde data-id dragen.
+// restoreFocus() matcht na elke toets alleen op data-id+data-field en pakt
+// dan de EERSTE regel met dat id in DOM-volgorde -- dat gaf het "typen in
+// Uitbesteding springt naar het aantal-veld bij APPARATUUR"-effect, want
+// Materiaal rendert vóór Uitbesteding in renderAll(). uid is een module-brede
+// teller (niet per optie), dus dit kijkt over alle opties heen.
+function hersynchroniseerIdTeller(nieuweOpties) {
+  let hoogste = 0;
+  for (const optie of nieuweOpties) {
+    const s = optie.staat;
+    if (!s) continue;
+    for (const lijst of [s.installaties, s.materiaal, s.uitbesteding, s.equipment]) {
+      for (const regel of lijst || []) {
+        const match = /^calcid(\d+)$/.exec(regel.id || '');
+        if (match) hoogste = Math.max(hoogste, Number(match[1]));
+      }
+    }
+  }
+  if (hoogste >= uid) uid = hoogste + 1;
+}
 
 let DATA = null;      // catalogi, geladen bij init() uit /data/*.json
 let state = null;     // de calculatie-invoer van de ACTIEVE optie
@@ -199,6 +224,18 @@ function nonNegatief(waarde) {
   if (waarde === '' || waarde === null || waarde === undefined) return waarde;
   const n = Number(waarde);
   return (!isNaN(n) && n < 0) ? 0 : waarde;
+}
+
+// Voor het TONEN van een aantal-veld: een leeggemaakt veld (nonNegatief()
+// hierboven bewaart dat bewust als '', niet als 0) moet ook leeg BLIJVEN
+// staan tot de gebruiker zelf een cijfer intikt. "x || 0" -- wat hier eerder
+// stond -- zet zo'n geleegd veld bij de eerstvolgende render (die na ELKE
+// toetsaanslag gebeurt, zie renderAll()) alweer op "0", vóórdat er ooit een
+// nieuw cijfer in getypt kon worden: de 0 "bleef staan" zodra je 'm probeerde
+// weg te halen. Alleen een nog nooit ingevulde waarde (null/undefined, bijv.
+// een net aangemaakte regel) krijgt hier alsnog een 0 als startpunt.
+function weergaveAantal(x) {
+  return x === '' ? '' : (x ?? 0);
 }
 
 /* ---------------------------- lege berekening (voor het eerste scherm, nog voor /bereken is teruggekomen) --- */
@@ -444,8 +481,8 @@ function renderInstallaties() {
             ${materiaalOptiesVoorInstallatie(inst.materiaalId)}
           </select>
         </div>
-        <div class="field"><label>Aantal buitendelen</label><input type="number" min="0" step="1" class="num-input" data-id="${inst.id}" data-field="aantalBuitendelen" value="${inst.aantalBuitendelen||0}"></div>
-        <div class="field"><label>Aantal binnendelen</label><input type="number" min="0" step="1" class="num-input" data-id="${inst.id}" data-field="aantalBinnendelen" value="${inst.aantalBinnendelen||0}"></div>
+        <div class="field"><label>Aantal buitendelen</label><input type="text" inputmode="numeric" class="num-input" data-id="${inst.id}" data-field="aantalBuitendelen" value="${weergaveAantal(inst.aantalBuitendelen)}"></div>
+        <div class="field"><label>Aantal binnendelen</label><input type="text" inputmode="numeric" class="num-input" data-id="${inst.id}" data-field="aantalBinnendelen" value="${weergaveAantal(inst.aantalBinnendelen)}"></div>
       </div>`;
     wrap.appendChild(div);
   });
@@ -534,7 +571,7 @@ function renderMateriaal() {
       tr.className = 'material-row' + (onvolledig ? ' onbekend' : '');
       const aantalCel = r.afgeleid
         ? `${r.aantal || 0} <div class="afgeleid-hint">automatisch</div>`
-        : `<input type="number" min="0" step="1" class="num-input" data-id="${r.id}" data-field="aantal" value="${r.aantal||0}">`;
+        : `<input type="text" inputmode="numeric" class="num-input" data-id="${r.id}" data-field="aantal" value="${weergaveAantal(r.aantal)}">`;
       // Bron "projectbestelling" (o.a. alle APPARATUUR-regels: verdeelboxen,
       // headers, T-stukken, ...) heeft nooit een cataloguswaarde -- de prijs
       // is hier altijd iets dat de invuller er zelf bij moet zetten.
@@ -607,7 +644,7 @@ function renderLijst(lijst, tbodyId, totaalId, toonAlleKey) {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td><input data-id="${r.id}" data-field="omschrijving" value="${r.omschrijving || ''}"></td>
-      <td class="right"><input type="number" min="0" step="1" class="num-input" data-id="${r.id}" data-field="aantal" value="${r.aantal||0}"></td>
+      <td class="right"><input type="text" inputmode="numeric" class="num-input" data-id="${r.id}" data-field="aantal" value="${weergaveAantal(r.aantal)}"></td>
       <td><input data-id="${r.id}" data-field="eenheid" value="${r.eenheid||''}" style="max-width:70px;"></td>
       <td class="right"><input type="number" min="0" step="0.01" class="price-input" data-id="${r.id}" data-field="prijs" placeholder="onbekend" value="${r.prijs===null?'':r.prijs}"></td>
       <td class="right">${onvolledig ? '<span class="badge onbekend">onbekend</span>' : eur(totaal || 0)}</td>
@@ -706,6 +743,15 @@ function restoreFocus(f) {
   else if (f.elementId) el = document.getElementById(f.elementId);
   if (!el) return;
   el.focus();
+  // input type="number" ondersteunt setSelectionRange() niet (de catch
+  // hieronder) -- de cursor valt dan terug op het begin van het veld in
+  // plaats van waar 'm stond, dus elke toetsaanslag (renderAll() rendert bij
+  // elke wijziging deze hele rij opnieuw, zie hierboven) zet het volgende
+  // cijfer vóór het vorige in plaats van erachter: "123" typen werd zo "321".
+  // De "aantal"-velden (installaties/materiaal/uitbesteding/equipment)
+  // gebruiken daarom bewust type="text" inputmode="numeric" i.p.v.
+  // type="number" -- daar werkt setSelectionRange wél, dus landt de cursor na
+  // elke render weer op de juiste plek.
   if (f.selStart !== null && el.setSelectionRange) {
     try { el.setSelectionRange(f.selStart, f.selEnd); } catch (e) { /* input type ondersteunt het niet (bijv. number) */ }
   }
@@ -874,7 +920,13 @@ function bindLijst(tbodyId, stateKey) {
     if (!id || !field) return;
     const regel = state[stateKey].find(r => r.id === id);
     if (regel) {
-      regel[field] = (field === 'aantal' || field === 'prijs') ? (e.target.value === '' ? (field === 'prijs' ? null : 0) : nonNegatief(e.target.value)) : e.target.value;
+      // "aantal" leeg laten bij het legen van het veld (net als bij materiaal/
+      // installaties hieronder) -- hier stond eerder expliciet 0, waardoor het
+      // veld bij de eerstvolgende render alweer "0" toonde vóór er een nieuw
+      // cijfer in getypt kon worden.
+      regel[field] = field === 'aantal' ? nonNegatief(e.target.value)
+        : field === 'prijs' ? (e.target.value === '' ? null : nonNegatief(e.target.value))
+        : e.target.value;
       renderAll();
     }
   });
@@ -1014,6 +1066,7 @@ async function initCalculatie() {
   if (bewaard) {
     opties = bewaard.opties.map(o => ({ naam: o.naam, staat: o.staat }));
     actieveOptieIndex = Math.min(Math.max(bewaard.actieveOptie || 0, 0), opties.length - 1);
+    hersynchroniseerIdTeller(opties);
   } else {
     opties = [{ naam: 'Optie A', staat: nieuweStaat() }];
     actieveOptieIndex = 0;
@@ -1037,6 +1090,7 @@ CB.calc = {
   vulOpties(nieuweOpties, actieveIndex) {
     opties = nieuweOpties.map(o => ({ naam: o.naam || 'Optie', staat: o.staat }));
     actieveOptieIndex = Math.min(Math.max(actieveIndex || 0, 0), opties.length - 1);
+    hersynchroniseerIdTeller(opties);
     state = opties[actieveOptieIndex].staat;
     berekening = null; laatstVerzonden = null;
     renderOptieBalk();

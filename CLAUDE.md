@@ -905,6 +905,76 @@ hetzelfde gesimuleerde event bevestigt dat er dán juist géén waarschuwing
 komt. Volledige Python-testsuite (265 tests) ongewijzigd en nog steeds groen
 -- deze wijziging raakt alleen `scherm/*.js`/`scherm/*.html`.
 
+## Drie samenhangende bugs in de "aantal"-velden (2 oktober 2026)
+
+Op verzoek van Lars: het standaardgetal "0" in een aantal-veld (installaties,
+materiaal, uitbesteding, equipment) kon niet worden weggehaald om een eigen
+getal te typen, een meercijferig getal typen gaf de cijfers in de verkeerde
+volgorde terug, en typen in een Uitbesteding-regel liet de focus naar een
+aantal-veld bij APPARATUUR springen. Alle drie bleken gevolgen van hoe
+`renderAll()` (`scherm/calculatie.js`) werkt: dat rendert bij ELKE
+toetsaanslag de hele sectie opnieuw (nodig omdat de rest van het scherm --
+totalen, afgeleide regels -- moet meebewegen), met `captureFocus()`/
+`restoreFocus()` als vangnet om de cursor na die herbouw weer op de juiste
+plek te krijgen.
+
+1. **"0" liet zich niet weghalen.** De render-sjablonen voor deze velden
+   toonden `value="${r.aantal||0}"`: zodra het veld leeg werd gemaakt
+   (`r.aantal` dan `''`, een falsy waarde), zette `||0` de weergave bij de
+   eerstvolgende render -- die na élke toetsaanslag gebeurt -- alweer op "0",
+   vóórdat er ooit een nieuw cijfer in getypt kon worden. Nieuwe helper
+   `weergaveAantal()` maakt onderscheid tussen "leeggemaakt" (`''`, blijft
+   leeg) en "nog nooit gezet" (`null`/`undefined`, wordt 0 als startpunt voor
+   een net aangemaakte regel) -- gebruikt op alle vier plekken die dit
+   patroon hadden. Bijkomende, aparte bug in `bindLijst()` (de gedeelde
+   handler achter Uitbesteding/Equipment): die zette bij een leeggemaakt
+   "aantal"-veld expliciet `0` in de state zelf (niet pas in de weergave),
+   dus zelfs met `weergaveAantal()` zou dat veld alsnog meteen "0" tonen.
+   Rechtgetrokken naar hetzelfde patroon als materiaal/installaties
+   (`nonNegatief(e.target.value)`, dat een lege string al langer ongemoeid
+   liet).
+2. **Cijfers kwamen in de verkeerde volgorde terug** ("123" typen gaf "321").
+   `restoreFocus()` bewaart en herstelt de cursorpositie via
+   `setSelectionRange()` -- maar die methode bestaat niet voor
+   `input type="number"` (de bestaande `catch`-regel wist dit al, zonder dat
+   er ooit iets mee werd gedaan). Zonder herstelde cursorpositie valt de
+   cursor na elke her-render terug op het begin van het veld, dus kwam elk
+   volgend cijfer vóór het vorige te staan in plaats van erachter. Fix: de
+   vier "aantal"-velden gebruiken nu `type="text" inputmode="numeric"` in
+   plaats van `type="number"` -- `setSelectionRange()` werkt daar wél, dus
+   landt de cursor na elke render weer op de juiste plek. (Bewust alleen deze
+   vier velden: prijs/tarief/uren-velden delen dezelfde onderliggende
+   kwetsbaarheid maar zijn niet gemeld als stuk; zelfde fix toepassen zodra
+   dat wél gebeurt.) De numerieke validatie die `type="number"` bood komt
+   hiermee te vervallen, maar niets rekent ooit met een ongeldige tekststring
+   zonder terugval: `Number(x)||0` aan de clientkant en `_num()`
+   (`calculatie/rekenkern.py`) aan de serverkant behandelen een leeg of
+   onverwerkbaar "aantal" allebei al stilzwijgend als 0.
+3. **Typen in Uitbesteding sprong naar een veld bij APPARATUUR.** `newId()`
+   (`let uid=1; () => 'calcid'+(uid++)`) is een simpele, gedeelde teller --
+   maar die teller is alleen een in-memory JS-variabele en begint dus bij
+   élke pagina-herlaad weer bij 1, terwijl een herladen project (autosave of
+   een geopend bestand) rijen met al bestaande ids als "calcid7" meebrengt.
+   Werd er ná zo'n herlaad een nieuwe rij toegevoegd (bijv. een
+   materiaalartikel via de zoekbalk), dan gaf `newId()` een id terug dat al
+   in gebruik was door een rij uit een ANDERE lijst -- twee rijen met
+   hetzelfde `data-id`. `restoreFocus()` matcht enkel op
+   `data-id`+`data-field` en pakt de EERSTE match in DOM-volgorde; omdat
+   Materiaal vóór Uitbesteding rendert in `renderAll()`, won het
+   APPARATUUR-veld dat toevallig hetzelfde id had. Nieuwe
+   `hersynchroniseerIdTeller()` zet `uid` na het laden van een project
+   (zowel bij opstarten als bij "Openen") op één hoger dan het hoogste
+   gevonden `calcidN` over alle opties en lijsten heen, zodat een
+   nieuw-toegevoegde rij nooit meer een bestaand id kan hergebruiken.
+
+**Getest met Playwright:** een installatieveld leegmaken en een nieuw getal
+typen (blijft leeg tot er getypt wordt, geen "0" die terugkomt); "1", "2", "3"
+na elkaar typen in een leeg aantal-veld geeft "123", niet "321"; een pagina-
+herlaad gevolgd door een nieuw toegevoegd materiaalartikel geeft nog steeds
+allemaal unieke ids; typen in een Uitbesteding-aantal-veld laat de focus op
+diezelfde regel staan. Volledige Python-testsuite (265 tests) ongewijzigd en
+nog steeds groen -- ook deze wijziging raakt alleen `scherm/calculatie.js`.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in
