@@ -819,6 +819,92 @@ installaties (Casetteunit/Wandunit) via de calculatie, overdracht naar de
 brief, en de briefvoorvertoning bevat zowel de cassette- als de
 wand-omschrijving (voorheen zou er maar één zijn getoond).
 
+## Autosave is per sessie (tabblad), niet meer een archief over het sluiten heen (2 oktober 2026)
+
+Op verzoek van Lars: bij het openen van de tool stond er nog informatie uit
+een eerdere calculatie/brief in. Dat was geen bug maar het directe gevolg van
+de autosave-naar-`localStorage` hierboven beschreven ("De autosave moet
+gelezen worden vóór de eerste `renderAll()`"): `localStorage` overleeft het
+sluiten van het tabblad, dus elke nieuwe werksessie begon met de laatste
+stand van de vórige. Gewenst gedrag is nu: binnen één sessie niets verliezen
+(stap naar de brief en terug, een F5), maar bij het sluiten van het
+tabblad/de app eerst vragen of er nog iets niet is opgeslagen, en bij een
+nieuw geopende sessie een lege tool.
+
+**`localStorage` → `sessionStorage`, verder ongewijzigd.** `AUTOSAVE_SLEUTEL`
+(`scherm/gedeeld.js`, `CB.autosave()`/`CB.leesAutosaveOpties()`) en de twee
+sleutels in `scherm/brief.html` die dezelfde soort autosave doen
+(`CONCEPT`/`bewaarConcept()`/`haalConceptOp()` voor de brief zelf,
+`CALCULATIE_CONCEPT_SLEUTEL`/`calculatieOptiesOphalen()` die de calculatiekant
+leest voor de overdracht) gebruiken nu alledrie `sessionStorage` in plaats van
+`localStorage`. De reden dat dit precies het gevraagde gedrag geeft: een
+browsertabblad heeft een eigen, geïsoleerde `sessionStorage` die normale
+navigatie en een herlaad (F5) **wel** overleeft (dus de bestaande "nooit een
+leeg calculatieblad bij terugkeer"-fix hierboven blijft onaangetast werken),
+maar leeg begint zodra er een nieuw tabblad wordt geopend -- en dat is precies
+wat er gebeurt bij elke nieuwe start van de app (`webbrowser.open()` in
+`server.py` opent een nieuw tabblad, nooit hetzelfde oude). Geen enkele andere
+code hoefde te weten van dit onderscheid: alle bestaande `probeer/catch`-
+foutafhandeling, het "vóór de eerste `renderAll()`"-leesmoment, en de
+terugval-op-ouder-formaat-logica (`CB.optiesUitProject()`) werken identiek,
+alleen de opslagplek is anders.
+
+**De beforeunload-waarschuwing is de andere helft.** Wat `localStorage`
+eerder wél deed -- een vangnet tegen per ongeluk een tabblad dichtklikken --
+moest met `sessionStorage` ergens anders vandaan komen. `scherm/index.html`
+en `scherm/brief.html` luisteren daarom allebei naar `window.beforeunload` en
+roepen `e.preventDefault()`/zetten `e.returnValue` als er iets staat dat nog
+niet is opgeslagen. **Een pagina kan de tekst van dit venster niet zelf
+bepalen** -- elke browser toont hier al jaren alleen zijn eigen, generieke
+"Wijzigingen die u hebt aangebracht, worden mogelijk niet opgeslagen"-melding
+met Annuleren/Verlaten, als beveiliging tegen misbruik van een zelfverzonnen
+tekst (bijv. om een gebruiker te misleiden een tabblad toch niet te sluiten).
+Dat is dus geen keuze die deze tool kan maken; wél bepaalt de tool **wanneer**
+dat venster verschijnt:
+- **Calculatiestap** (`scherm/index.html`): `CB.heeftInhoud()`, dezelfde toets
+  die de "Nieuw"-knop al gebruikte. Bij het uitschrijven hiervan bleek
+  `staatHeeftInhoud()` (`scherm/calculatie.js`) een bestaande makke te hebben:
+  `meta.datum` staat in een kersverse `nieuweStaat()` altijd al op vandaag, dus
+  telde als "ingevuld" ook al was er he-le-maal niets aangeraakt -- elke net
+  geopende, nog maagdelijke sessie zou dan alsnog een "weet u het zeker?"
+  geven bij het sluiten (en liet "Nieuw" vlak na het openen van de tool ook al
+  onnodig waarschuwen, een kleinere versie van hetzelfde euvel die er
+  blijkbaar al die tijd al was). Fix: `datum` telt niet meer mee in die toets.
+- **Briefstap** (`scherm/brief.html`): hier kan "staat er iets in" niet
+  gebruikt worden zoals bij de calculatie -- `A` begint altijd gevuld, met een
+  compleet uitgewerkt voorbeeld (`BEGINSTAND`), geen lege staat. In plaats
+  daarvan een momentopname (`laatsteBewaarSnapshot`/`zetBewaarSnapshot()`):
+  ververst bij elk "schoon"-moment (geladen bij opstarten, na Opslaan, na
+  Openen, na Nieuw) en vergeleken met de huidige `A` in
+  `heeftNietOpgeslagenWijzigingen()`. Een automatische overdracht vanuit de
+  calculatie (bij binnenkomst, of via "↺ Vanuit calculatie") telt bewust wél
+  als wijziging -- dat is nieuwe data die nog niet is opgeslagen, ook al heeft
+  de gebruiker zelf niets getypt.
+- **Nooit bij de normale stap-navigatie binnen de tool.** `beforeunload` kan
+  niet onderscheiden "tabblad dicht" van "naar een andere pagina op dezelfde
+  site" -- allebei vuren hetzelfde event. Zonder verder onderscheid zou dus
+  ook een doodgewone klik op "Calculatie klaar → verder naar de brief" of
+  "← Calculatie" de native waarschuwing laten verschijnen, bij elke stap --
+  onbruikbaar, want dat is helemaal geen dataverlies (de sessionStorage-
+  autosave gaat gewoon mee). Een simpele, in-memory vlag
+  (`interneNavigatieOnderweg`, gezet vlak vóór `location.href=...` in de
+  klikhandler van "Brief →" resp. "← Calculatie") die de beforeunload-
+  functie eerst checkt, lost dit op -- de vlag hoeft niet over de
+  paginagrens heen te overleven, want hij wordt gelezen op dezelfde pagina
+  die 'm zet, vlak voordat die pagina al navigerend verdwijnt.
+
+**Getest met Playwright** (twee tabbladen in dezelfde browsercontext, om een
+echte nieuwe-sessie-situatie na te bootsen): calculatie invullen → naar de
+brief (gegevens komen over, `sessionStorage` gevuld, `localStorage`
+ongebruikt) → terug naar calculatie via de link (geen beforeunload-blokkade,
+gegevens nog aanwezig) → een gesimuleerd `beforeunload`-event bevestigt dat de
+browser zou waarschuwen zolang er inhoud/wijzigingen staan. Een tweede,
+volledig nieuw tabblad in dezelfde context laat vervolgens zowel de
+calculatie als de brief leeg zien (`CB.heeftInhoud()` nu terecht `false`), en
+hetzelfde gesimuleerde event bevestigt dat er dán juist géén waarschuwing
+komt. Volledige Python-testsuite (265 tests) ongewijzigd en nog steeds groen
+-- deze wijziging raakt alleen `scherm/*.js`/`scherm/*.html`.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

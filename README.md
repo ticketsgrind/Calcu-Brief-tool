@@ -119,9 +119,12 @@ allebei hun eigen bestand — dat is hoe de losstaande brieventool dat al deed
 en is met de overname van die stap zo gebleven. Wat ze wel delen: dezelfde
 klantnaam/projectnaam in de standaard bestandsnaam
 (`Calculatie-klant-project.json` / `Brief-klant-project.docx`), en de
-browser onthoudt de laatste stand van allebei apart in `localStorage` als
-vangnet tegen een dichtgeklapt tabblad — dat is geen archief, alleen die ene
-computer heeft het.
+browser onthoudt de laatste stand van allebei apart zolang het tabblad
+openstaat — zo kost een stap tussen de twee stappen of een gewone F5 geen
+werk. Dat is bewust geen archief dat het sluiten van het tabblad overleeft:
+bij het openen van de tool staat er daarom altijd een lege calculatie/brief
+klaar, nooit die van een vorig project. Sluit je het tabblad terwijl er nog
+iets staat dat niet is opgeslagen, dan vraagt de browser dat eerst na.
 
 ## Indeling
 

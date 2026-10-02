@@ -175,8 +175,16 @@ function bindOpties() {
 }
 
 function staatHeeftInhoud(s) {
+  // meta.datum staat in nieuweStaat() altijd al op vandaag (zie daar) -- dat
+  // is een handig vooraf ingevulde waarde, geen teken dat er iets is
+  // ingevuld. Zonder deze uitzondering was ELKE kersverse, nooit aangeraakte
+  // staat al "heeft inhoud", wat zowel "Nieuw"/"Openen" hun waarschuwing
+  // onnodig liet geven vlak na het openen van de tool, als (sinds de
+  // beforeunload-waarschuwing bij het sluiten van het tabblad) een nooit
+  // gebruikte calculatie bij het dichtklikken alsnog zou laten vragen of je
+  // wel hebt opgeslagen.
   return s.installaties.length > 0 || s.materiaal.length > 0
-    || Object.values(s.meta).some(Boolean)
+    || Object.entries(s.meta).some(([sleutel, waarde]) => sleutel !== 'datum' && Boolean(waarde))
     || s.marge.projectPrice !== null;
 }
 // Kijkt over alle opties heen, niet alleen de actieve -- anders zou "Nieuw"/

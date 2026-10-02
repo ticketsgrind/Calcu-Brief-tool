@@ -298,13 +298,32 @@
     // vlag zetten waarmee brief.html bij het laden zelf de overdracht toepast
     // -- zo blijft "één klik doet alles" behouden zonder dat deze pagina iets
     // hoeft te weten van hoe de brief dat doet.
+    let interneNavigatieOnderweg = false;
     const gaNaarBrief = () => {
       CB.autosave();
       try { sessionStorage.setItem('calcubrief.naarBrief', '1'); } catch (e) { /* dan gewoon geen auto-overdracht */ }
+      interneNavigatieOnderweg = true;
       location.href = 'brief.html';
     };
     document.getElementById('btnNaarBrief').addEventListener('click', gaNaarBrief);
     document.getElementById('btnStapBrief').addEventListener('click', gaNaarBrief);
+
+    // Op verzoek van Lars (2 oktober 2026): bij het sluiten van het tabblad/de
+    // app eerst vragen of er nog niet-opgeslagen werk is, nu de autosave zelf
+    // (hierboven, scherm/gedeeld.js) bewust niet meer over een afgesloten
+    // tabblad heen bewaart. Een pagina kan de tekst van dit venster niet zelf
+    // bepalen -- browsers staan dat om veiligheidsredenen niet toe en tonen
+    // altijd hun eigen (generieke) "weet u het zeker?"-melding; wél bepalen we
+    // zelf WANNEER hij verschijnt: nooit bij de gewone stap naar de brief
+    // (dat is geen dataverlies, de autosave gaat gewoon mee) en alleen als er
+    // ook echt iets is ingevuld (CB.heeftInhoud(), dezelfde toets als bij de
+    // "Nieuw"-knop hierboven).
+    window.addEventListener('beforeunload', (e) => {
+      if (interneNavigatieOnderweg) return;
+      if (!CB.heeftInhoud()) return;
+      e.preventDefault();
+      e.returnValue = '';
+    });
 
     CB.calc.klaar.then(() => {
       CB.laadscherm.verberg();

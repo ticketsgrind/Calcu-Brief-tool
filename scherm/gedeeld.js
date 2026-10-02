@@ -236,16 +236,26 @@ CB.bindOpslaanOpenen = () => {
   });
 };
 
-/* Vangnet, geen archief: de browser onthoudt de laatste stand zodat een
-   dichtgeklapt tabblad geen werk kost. Net als bij de losse brieventool.
-   Dezelfde sleutel wordt ook door scherm/brief.html gelezen (nooit
-   weggeschreven) om de calculatiegegevens over te nemen -- zie
-   CALCULATIE_CONCEPT_SLEUTEL daar. */
+/* Vangnet binnen deze ene sessie (tabblad), geen archief: een stap naar de
+   brief en terug (of een F5) verliest niets, maar het sluiten van het
+   tabblad/de app wist deze stand bewust -- op verzoek van Lars (2 oktober
+   2026): de tool liet bij een nieuwe calculatie nog de vorige klant zien,
+   omdat localStorage (vóór deze wijziging) over een afgesloten en opnieuw
+   geopend tabblad heen bleef bestaan. sessionStorage deelt die eigenschap
+   niet: die overleeft navigatie/herladen binnen hetzelfde tabblad prima
+   (precies wat deze autosave moet doen), maar is leeg zodra de app een
+   nieuw tabblad opent (een nieuwe werksessie) -- zie ook de
+   beforeunload-waarschuwing in index.html, de andere helft van deze
+   wijziging: die vangt nu op wat sessionStorage niet meer doet (per ongeluk
+   sluiten met niet-opgeslagen werk). Dezelfde sleutel wordt ook door
+   scherm/brief.html gelezen (nooit weggeschreven) om de calculatiegegevens
+   over te nemen -- zie CALCULATIE_CONCEPT_SLEUTEL daar, ook omgezet naar
+   sessionStorage. */
 const AUTOSAVE_SLEUTEL = 'calcubrief.concept';
 
 CB.autosave = () => {
-  try { localStorage.setItem(AUTOSAVE_SLEUTEL, JSON.stringify(CB.huidigProject())); }
-  catch (e) { /* localStorage kan vol/uitgeschakeld zijn; geen ramp */ }
+  try { sessionStorage.setItem(AUTOSAVE_SLEUTEL, JSON.stringify(CB.huidigProject())); }
+  catch (e) { /* sessionStorage kan vol/uitgeschakeld zijn; geen ramp */ }
 };
 
 // Puur lezen, geen side-effect op CB.calc -- gebruikt door initCalculatie()
@@ -257,12 +267,12 @@ CB.autosave = () => {
 // index.html's CB.calc.klaar.then()), dan was de bewaarde autosave dus al
 // overschreven met lege staat vóórdat hij ooit gelezen werd. Dat gaf een
 // leeg calculatieblad bij elke terugkeer naar deze pagina (ook een gewone
-// F5), ook al stond de data nog prima in localStorage op het moment van
+// F5), ook al stond de data nog prima in de autosave op het moment van
 // wegnavigeren. Geeft { opties, actieveOptie } terug (via CB.optiesUitProject,
 // dus ook met terugval op het oudere formaat vóór meerdere opties), of null.
 CB.leesAutosaveOpties = () => {
   let bewaard;
-  try { bewaard = localStorage.getItem(AUTOSAVE_SLEUTEL); } catch (e) { return null; }
+  try { bewaard = sessionStorage.getItem(AUTOSAVE_SLEUTEL); } catch (e) { return null; }
   if (!bewaard) return null;
   try {
     const project = JSON.parse(bewaard);

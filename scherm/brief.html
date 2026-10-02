@@ -292,7 +292,7 @@ body:not(.waarom) .tip{display:none}
     <span class="kenmerk">Ref. <b id="k-ref">—</b></span>
   </div>
   <div class="kop-acties">
-    <a class="knop" href="index.html">&larr; Calculatie</a>
+    <a class="knop" href="index.html" id="knop-calculatie">&larr; Calculatie</a>
     <button class="knop" id="knop-vanuit-calculatie" type="button">&#8635; Vanuit calculatie</button>
     <button class="knop" id="knop-waarom" aria-pressed="false">
       <span class="stip"></span>Toon waarom</button>
@@ -1947,24 +1947,44 @@ function vulAntwoorden(nieuw){
   Object.assign(A,JSON.parse(JSON.stringify(nieuw)));
 }
 
-/* De browser onthoudt waar je gebleven was. Alleen op deze computer en in deze
-   browser: het is een vangnet tegen een dichtgeklapt tabblad, geen archief. */
+/* De browser onthoudt waar je gebleven was, zolang dit tabblad openstaat: een
+   stap naar de calculatie en terug of een F5 verliest niets. Bewust GEEN
+   archief meer over een afgesloten tabblad heen (tot 2 oktober 2026 was dit
+   localStorage, dat dat wél deed -- op verzoek van Lars teruggedraaid, want
+   dat liet bij een nieuwe brief nog de vorige klant zien). sessionStorage
+   geeft precies "binnen deze sessie wel, na sluiten niet"; de
+   beforeunload-waarschuwing hieronder vangt op wat dat niet meer doet (per
+   ongeluk sluiten met niet-opgeslagen werk). */
 let bewaarWacht=null;
 function bewaarConcept(){
   clearTimeout(bewaarWacht);
   bewaarWacht=setTimeout(()=>{
-    try{ localStorage.setItem(CONCEPT,JSON.stringify(A)) }
+    try{ sessionStorage.setItem(CONCEPT,JSON.stringify(A)) }
     catch(_){ /* privévenster of vol geheugen; dan gewoon niet */ }
   },400);
 }
 function haalConceptOp(){
   try{
-    const bewaard=localStorage.getItem(CONCEPT);
+    const bewaard=sessionStorage.getItem(CONCEPT);
     return bewaard?JSON.parse(bewaard):null;
   }catch(_){ return null }
 }
 function vergeetConcept(){
-  try{ localStorage.removeItem(CONCEPT) }catch(_){}
+  try{ sessionStorage.removeItem(CONCEPT) }catch(_){}
+}
+
+/* Niet-opgeslagen-wijzigingen-toets voor de beforeunload-waarschuwing
+   hieronder. A begint altijd gevuld (BEGINSTAND is een uitgewerkt
+   voorbeeld, geen lege staat zoals calculatie se nieuweStaat()) -- "staat er
+   iets in" is hier dus geen bruikbare toets, in tegenstelling tot
+   CB.heeftInhoud() aan de calculatiekant. In plaats daarvan: vergelijk met
+   een momentopname die wordt ververst bij elk natuurlijk "schoon"-moment
+   (geladen, opgeslagen, geopend, nieuw) -- wijkt de huidige A daarvan af, dan
+   is er sinds dat moment iets veranderd dat nog niet is opgeslagen. */
+let laatsteBewaarSnapshot=null;
+function zetBewaarSnapshot(){ laatsteBewaarSnapshot=JSON.stringify(A) }
+function heeftNietOpgeslagenWijzigingen(){
+  return laatsteBewaarSnapshot!==null && JSON.stringify(A)!==laatsteBewaarSnapshot;
 }
 
 /* Opslaan als bestand: dat kun je bewaren, mailen of later weer openen. */
@@ -1975,6 +1995,7 @@ async function slaOfferteOp(){
   const naam=(A.bestandsnaam||kaleNaam(bestandsnaam()))+".json";
   try{
     toonMelding(await bewaarBestand(naam,new TextEncoder().encode(inhoud)));
+    zetBewaarSnapshot();
   }catch(fout){ toonFout("Opslaan lukte niet: "+fout.message) }
 }
 
@@ -1986,6 +2007,7 @@ async function openOfferte(bestand){
       throw new Error("dit is geen opgeslagen offerte van de brieventool");
     vulAntwoorden(antwoorden);
     ververs();
+    zetBewaarSnapshot();
     toonFout(null);
     toonMelding("De offerte uit "+bestand.name+" staat klaar.");
   }catch(fout){
@@ -1997,6 +2019,7 @@ function nieuweBrief(){
   vulAntwoorden(BEGINSTAND);
   vergeetConcept();
   ververs();
+  zetBewaarSnapshot();
   toonFout(null);
   toonMelding("Een nieuwe brief; de vorige is niet bewaard.");
 }
@@ -2049,7 +2072,7 @@ const NAVIGATIE_VLAG="calcubrief.naarBrief";
 // is), of null als er geen calculatieproject bekend is.
 function calculatieOptiesOphalen(){
   try{
-    const bewaard=localStorage.getItem(CALCULATIE_CONCEPT_SLEUTEL);
+    const bewaard=sessionStorage.getItem(CALCULATIE_CONCEPT_SLEUTEL);
     if(!bewaard)return null;
     const project=JSON.parse(bewaard);
     if(project&&Array.isArray(project.opties)&&project.opties.length)
@@ -2149,6 +2172,23 @@ function verwerkNavigatieVlag(){
   if(gezet)vulVanuitCalculatie();
 }
 
+// Op verzoek van Lars (2 oktober 2026): bij het sluiten van het tabblad/de
+// app eerst vragen of er nog niet-opgeslagen werk is -- dezelfde reden als de
+// beforeunload-waarschuwing in scherm/index.html (zie de uitleg daar: de
+// tekst van dit venster is browser-bepaald, niet door deze pagina). De
+// normale stap "← Calculatie" is geen dataverlies (de concept-autosave
+// hierboven gaat gewoon mee) en mag dus geen waarschuwing geven.
+let interneNavigatieOnderweg=false;
+document.getElementById("knop-calculatie").addEventListener("click",()=>{
+  interneNavigatieOnderweg=true;
+});
+window.addEventListener("beforeunload",(e)=>{
+  if(interneNavigatieOnderweg)return;
+  if(!heeftNietOpgeslagenWijzigingen())return;
+  e.preventDefault();
+  e.returnValue="";
+});
+
 (async () => {
   VIA_APP = await isErEenMotor();
   BRIEFPAPIER = await haalBriefpapier();
@@ -2157,6 +2197,7 @@ function verwerkNavigatieVlag(){
   const concept=haalConceptOp();
   if(concept)vulAntwoorden(concept);
   ververs();
+  zetBewaarSnapshot();
   if(concept)toonMelding("De brief waar je mee bezig was staat weer klaar. "+
     "Met Nieuw begin je opnieuw.");
   verwerkNavigatieVlag();
