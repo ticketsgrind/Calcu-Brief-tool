@@ -483,6 +483,19 @@ class TestInlezenRondje(unittest.TestCase):
         geimporteerd, _, _, _ = _rondje(staat)
         self.assertEqual(geimporteerd["materiaal"], [])
 
+    def test_kaal_getal_in_een_tekstkolom_geeft_geen_punt_nul(self):
+        """Aangetroffen in een écht ingevuld bestand van Lars (2 oktober
+        2026): iemand typte "1" (geen tekst) in de TYPE-kolom (D) van een
+        eigen APPARATUUR-regel. tekst() moet dat als "1" teruggeven, niet als
+        "1.0" (wat str(1.0) zonder deze opmaak zou doen)."""
+        staat = rk.nieuwe_staat()
+        data = cb.schrijf_calculatieblad(staat, GEGEVENS)
+        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "A37", 1)
+        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D37", 1)
+        geimporteerd, _ = cb.lees_calculatieblad(data, GEGEVENS)
+        regel = next(m for m in geimporteerd["materiaal"] if m["row"] == 37)
+        self.assertEqual(regel["omschrijving"], "1")
+
     def test_eigen_uitbestedingsregel_komt_terug(self):
         staat = _voorbeeldstaat()  # heeft al "Eigen extra werk" op een lege rij
         geimporteerd, _, _, _ = _rondje(staat)

@@ -743,7 +743,17 @@ class SheetLezer:
 
     def tekst(self, ref: str) -> str:
         w = self.waarde(ref)
-        return "" if w is None else str(w).strip()
+        if w is None:
+            return ""
+        # Een "tekst"-kolom kan best een kaal getal bevatten -- aangetroffen
+        # in een écht ingevuld bestand (Lars, 2 oktober 2026): iemand typte
+        # "1" in de TYPE-kolom van een eigen APPARATUUR-regel. str(1.0) geeft
+        # dan "1.0" -- dezelfde opmaak als _getal_tekst() hierboven (de
+        # schrijfkant) voorkomt dat exact zo'n lelijke ".0" hier weer naar
+        # buiten lekt.
+        if isinstance(w, (int, float)):
+            return _getal_tekst(w)
+        return str(w).strip()
 
     def getal(self, ref: str, default: float = 0.0) -> float:
         w = self.waarde(ref)

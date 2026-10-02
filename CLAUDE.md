@@ -1095,6 +1095,24 @@ hier je eerste paar echt ingevulde calculatiebladen doorheen voordat je
 hierop vertrouwt voor belangrijk werk** -- precies dezelfde voorzichtigheid
 die bij de downloadkant hierboven ook al gold, nu voor de andere richting.
 
+**Inmiddels getoetst tegen een écht door Lars ingevuld bestand (2 oktober
+2026).** Las zonder crash in, en alle instellingen/installaties/materiaal/
+uitbesteding/equipment/uren kwamen er correct uit -- geverifieerd cel voor
+cel door het bestand zelf uit te pakken en met de uitkomst te vergelijken
+(bijv. `B334`=2 → `uren.projectleider.werk`, `D433`="Geen parkeerkosten" →
+`instellingen.provincie`, `A356`/`A377` allebei 11 → geen override, want
+hoofd- en hulpmonteur komen in dit bestand toevallig op hetzelfde automatische
+voorstel uit). **Eén echte bug eruit gehaald:** iemand had in dit bestand een
+kaal getal (`1`, geen tekst) getypt in de TYPE-kolom van een eigen
+APPARATUUR-regel (rij 37) -- `SheetLezer.tekst()` deed daar `str(1.0)` mee,
+wat `"1.0"` opleverde in plaats van het nette `"1"` dat iemand in Excel ziet.
+Fix: `tekst()` hergebruikt nu dezelfde opmaakregel als `_getal_tekst()` (de
+schrijfkant hierboven) voor een cel die toevallig numeriek blijkt te zijn,
+óók als het om een "tekst"-kolom gaat. Vastgelegd als regressietest
+(`test_kaal_getal_in_een_tekstkolom_geeft_geen_punt_nul`). Live door het
+scherm heen getest (Playwright): importeren, renderen van de installatiekaart,
+en doorrekenen via `/bereken` gaven alle drie geen fouten.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in
