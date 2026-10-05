@@ -1,6 +1,6 @@
 {
  "meta": {
-  "bron": "Panasonic RAC prijscatalogus 2026|2027 (aircologic)",
+  "bron": "Panasonic RAC prijscatalogus 2026|2027, geldig vanaf 1 oktober 2026 (aircologic)",
   "korting_pct": 0.43,
   "prijzen_zijn": "exclusief btw"
  },
@@ -15,14 +15,14 @@
    "buitenunit_code": "CU-BZ25CKE",
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.15,
-   "bruto_prijs": 795,
+   "bruto_prijs": 804,
    "pagina": 4,
    "zoekcodes": [
     "KIT-BZ25-CKE",
     "CS-BZ25CKE",
     "CU-BZ25CKE"
    ],
-   "netto_prijs": 453.15
+   "netto_prijs": 458.28
   },
   {
    "rol": "systeem_set",
@@ -34,14 +34,14 @@
    "buitenunit_code": "CU-BZ35CKE",
    "koelen_kw": 3.3,
    "verwarmen_kw": 3.7,
-   "bruto_prijs": 889,
+   "bruto_prijs": 899,
    "pagina": 4,
    "zoekcodes": [
     "KIT-BZ35-CKE",
     "CS-BZ35CKE",
     "CU-BZ35CKE"
    ],
-   "netto_prijs": 506.73
+   "netto_prijs": 512.43
   },
   {
    "rol": "systeem_set",
@@ -53,14 +53,14 @@
    "buitenunit_code": "CU-BZ50CKE",
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.4,
-   "bruto_prijs": 1434,
+   "bruto_prijs": 1450,
    "pagina": 4,
    "zoekcodes": [
     "KIT-BZ50-CKE",
     "CS-BZ50CKE",
     "CU-BZ50CKE"
    ],
-   "netto_prijs": 817.38
+   "netto_prijs": 826.5
   },
   {
    "rol": "systeem_set",
@@ -72,14 +72,14 @@
    "buitenunit_code": "CU-BZ60CKE",
    "koelen_kw": 6.0,
    "verwarmen_kw": 6.8,
-   "bruto_prijs": 1829,
+   "bruto_prijs": 1848,
    "pagina": 4,
    "zoekcodes": [
     "KIT-BZ60-CKE",
     "CS-BZ60CKE",
     "CU-BZ60CKE"
    ],
-   "netto_prijs": 1042.53
+   "netto_prijs": 1053.36
   },
   {
    "rol": "systeem_set",
@@ -91,14 +91,14 @@
    "buitenunit_code": "CU-TZ20CKE",
    "koelen_kw": 2.0,
    "verwarmen_kw": 2.7,
-   "bruto_prijs": 870,
+   "bruto_prijs": 880,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ20-CKE",
     "CS-TZ20CKEW",
     "CU-TZ20CKE"
    ],
-   "netto_prijs": 495.9
+   "netto_prijs": 501.6
   },
   {
    "rol": "systeem_set",
@@ -110,14 +110,14 @@
    "buitenunit_code": "CU-TZ25CKE",
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.3,
-   "bruto_prijs": 956,
+   "bruto_prijs": 966,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ25-CKE",
     "CS-TZ25CKEW",
     "CU-TZ25CKE"
    ],
-   "netto_prijs": 544.92
+   "netto_prijs": 550.62
   },
   {
    "rol": "systeem_set",
@@ -129,14 +129,14 @@
    "buitenunit_code": "CU-TZ35CKE",
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.0,
-   "bruto_prijs": 1143,
+   "bruto_prijs": 1155,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ35-CKE",
     "CS-TZ35CKEW",
     "CU-TZ35CKE"
    ],
-   "netto_prijs": 651.51
+   "netto_prijs": 658.35
   },
   {
    "rol": "systeem_set",
@@ -148,14 +148,14 @@
    "buitenunit_code": "CU-TZ42CKE",
    "koelen_kw": 4.2,
    "verwarmen_kw": 5.0,
-   "bruto_prijs": 1497,
+   "bruto_prijs": 1513,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ42-CKE",
     "CS-TZ42CKEW",
     "CU-TZ42CKE"
    ],
-   "netto_prijs": 853.29
+   "netto_prijs": 862.41
   },
   {
    "rol": "systeem_set",
@@ -167,14 +167,14 @@
    "buitenunit_code": "CU-TZ50CKE",
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.8,
-   "bruto_prijs": 1690,
+   "bruto_prijs": 1708,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ50-CKE",
     "CS-TZ50CKEW",
     "CU-TZ50CKE"
    ],
-   "netto_prijs": 963.3
+   "netto_prijs": 973.56
   },
   {
    "rol": "systeem_set",
@@ -186,14 +186,14 @@
    "buitenunit_code": "CU-TZ60CKE",
    "koelen_kw": 6.0,
    "verwarmen_kw": 7.0,
-   "bruto_prijs": 2077,
+   "bruto_prijs": 2098,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ60-CKE",
     "CS-TZ60CKEW",
     "CU-TZ60CKE"
    ],
-   "netto_prijs": 1183.89
+   "netto_prijs": 1195.86
   },
   {
    "rol": "systeem_set",
@@ -205,14 +205,14 @@
    "buitenunit_code": "CU-TZ71CKE",
    "koelen_kw": 7.1,
    "verwarmen_kw": 8.2,
-   "bruto_prijs": 2458,
+   "bruto_prijs": 2483,
    "pagina": 4,
    "zoekcodes": [
     "KIT-TZ71-CKE",
     "CS-TZ71CKEW",
     "CU-TZ71CKE"
    ],
-   "netto_prijs": 1401.06
+   "netto_prijs": 1415.31
   },
   {
    "rol": "systeem_set",
@@ -224,14 +224,14 @@
    "buitenunit_code": "CU-Z25CBEA",
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.4,
-   "bruto_prijs": 1614,
+   "bruto_prijs": 1631,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z25-CFE",
     "CS-Z25CFEAW",
     "CU-Z25CBEA"
    ],
-   "netto_prijs": 919.98
+   "netto_prijs": 929.67
   },
   {
    "rol": "systeem_set",
@@ -243,14 +243,14 @@
    "buitenunit_code": "CU-Z35CBEA",
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.3,
-   "bruto_prijs": 1912,
+   "bruto_prijs": 1932,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z35-CFE",
     "CS-Z35CFEAW",
     "CU-Z35CBEA"
    ],
-   "netto_prijs": 1089.84
+   "netto_prijs": 1101.24
   },
   {
    "rol": "systeem_set",
@@ -262,14 +262,14 @@
    "buitenunit_code": "CU-Z50CBEA",
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.8,
-   "bruto_prijs": 2358,
+   "bruto_prijs": 2382,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z50-CFE",
     "CS-Z50CFEAW",
     "CU-Z50CBEA"
    ],
-   "netto_prijs": 1344.06
+   "netto_prijs": 1357.74
   },
   {
    "rol": "systeem_set",
@@ -281,14 +281,14 @@
    "buitenunit_code": "CU-Z25CBEA",
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.2,
-   "bruto_prijs": 1797,
+   "bruto_prijs": 1816,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z25-CD3",
     "CS-Z25CD3EAW",
     "CU-Z25CBEA"
    ],
-   "netto_prijs": 1024.29
+   "netto_prijs": 1035.12
   },
   {
    "rol": "systeem_set",
@@ -300,14 +300,14 @@
    "buitenunit_code": "CU-Z35CBEA",
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.2,
-   "bruto_prijs": 2057,
+   "bruto_prijs": 2078,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z35-CD3",
     "CS-Z35CD3EAW",
     "CU-Z35CBEA"
    ],
-   "netto_prijs": 1172.49
+   "netto_prijs": 1184.46
   },
   {
    "rol": "systeem_set",
@@ -319,14 +319,14 @@
    "buitenunit_code": "CU-Z50CBEA",
    "koelen_kw": 5.1,
    "verwarmen_kw": 6.1,
-   "bruto_prijs": 2309,
+   "bruto_prijs": 2333,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z50-CD3",
     "CS-Z50CD3EAW",
     "CU-Z50CBEA"
    ],
-   "netto_prijs": 1316.13
+   "netto_prijs": 1329.81
   },
   {
    "rol": "systeem_set",
@@ -338,14 +338,14 @@
    "buitenunit_code": "CU-Z60CBEA",
    "koelen_kw": 6.0,
    "verwarmen_kw": 7.0,
-   "bruto_prijs": 2513,
+   "bruto_prijs": 2539,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z60-CD3",
     "CS-Z60CD3EAW",
     "CU-Z60CBEA"
    ],
-   "netto_prijs": 1432.41
+   "netto_prijs": 1447.23
   },
   {
    "rol": "systeem_set",
@@ -357,14 +357,14 @@
    "buitenunit_code": "CU-Z20CKE",
    "koelen_kw": 2.0,
    "verwarmen_kw": null,
-   "bruto_prijs": 1256,
+   "bruto_prijs": 1296,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z20-CKE",
     "CS-Z20CKEW",
     "CU-Z20CKE"
    ],
-   "netto_prijs": 715.92
+   "netto_prijs": 738.72
   },
   {
    "rol": "systeem_set",
@@ -376,14 +376,14 @@
    "buitenunit_code": "CU-Z20CKE",
    "koelen_kw": 2.0,
    "verwarmen_kw": null,
-   "bruto_prijs": 1309,
+   "bruto_prijs": 1323,
    "pagina": 4,
    "zoekcodes": [
     "KIT-XZ20-CKE-H",
     "CS-XZ20CKEW-H",
     "CU-Z20CKE"
    ],
-   "netto_prijs": 746.13
+   "netto_prijs": 754.11
   },
   {
    "rol": "systeem_set",
@@ -395,14 +395,14 @@
    "buitenunit_code": "CU-Z25CKE",
    "koelen_kw": 2.5,
    "verwarmen_kw": null,
-   "bruto_prijs": 1383,
+   "bruto_prijs": 1398,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z25-CKE",
     "CS-Z25CKEW",
     "CU-Z25CKE"
    ],
-   "netto_prijs": 788.31
+   "netto_prijs": 796.86
   },
   {
    "rol": "systeem_set",
@@ -414,14 +414,14 @@
    "buitenunit_code": "CU-Z25CKE",
    "koelen_kw": 2.5,
    "verwarmen_kw": null,
-   "bruto_prijs": 1442,
+   "bruto_prijs": 1457,
    "pagina": 4,
    "zoekcodes": [
     "KIT-XZ25-CKE-H",
     "CS-XZ25CKEW-H",
     "CU-Z25CKE"
    ],
-   "netto_prijs": 821.94
+   "netto_prijs": 830.49
   },
   {
    "rol": "systeem_set",
@@ -433,14 +433,14 @@
    "buitenunit_code": "CU-Z35CKE",
    "koelen_kw": 3.5,
    "verwarmen_kw": null,
-   "bruto_prijs": 1638,
+   "bruto_prijs": 1656,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z35-CKE",
     "CS-Z35CKEW",
     "CU-Z35CKE"
    ],
-   "netto_prijs": 933.66
+   "netto_prijs": 943.92
   },
   {
    "rol": "systeem_set",
@@ -452,14 +452,14 @@
    "buitenunit_code": "CU-Z35CKE",
    "koelen_kw": 3.5,
    "verwarmen_kw": null,
-   "bruto_prijs": 1732,
+   "bruto_prijs": 1751,
    "pagina": 4,
    "zoekcodes": [
     "KIT-XZ35-CKE-H",
     "CS-XZ35CKEW-H",
     "CU-Z35CKE"
    ],
-   "netto_prijs": 987.24
+   "netto_prijs": 998.07
   },
   {
    "rol": "systeem_set",
@@ -471,14 +471,14 @@
    "buitenunit_code": "CU-Z42CKE",
    "koelen_kw": 4.2,
    "verwarmen_kw": null,
-   "bruto_prijs": 1984,
+   "bruto_prijs": 2005,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z42-CKE",
     "CS-Z42CKEW",
     "CU-Z42CKE"
    ],
-   "netto_prijs": 1130.88
+   "netto_prijs": 1142.85
   },
   {
    "rol": "systeem_set",
@@ -490,14 +490,14 @@
    "buitenunit_code": "CU-Z42CKE",
    "koelen_kw": 4.2,
    "verwarmen_kw": null,
-   "bruto_prijs": 2070,
+   "bruto_prijs": 2092,
    "pagina": 4,
    "zoekcodes": [
     "KIT-XZ42-CKE-H",
     "CS-XZ42CKEW-H",
     "CU-Z42CKE"
    ],
-   "netto_prijs": 1179.9
+   "netto_prijs": 1192.44
   },
   {
    "rol": "systeem_set",
@@ -509,14 +509,14 @@
    "buitenunit_code": "CU-Z50CKE",
    "koelen_kw": 5.0,
    "verwarmen_kw": null,
-   "bruto_prijs": 2106,
+   "bruto_prijs": 2129,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z50-CKE",
     "CS-Z50CKEW",
     "CU-Z50CKE"
    ],
-   "netto_prijs": 1200.42
+   "netto_prijs": 1213.53
   },
   {
    "rol": "systeem_set",
@@ -528,14 +528,14 @@
    "buitenunit_code": "CU-Z71CKE",
    "koelen_kw": 7.1,
    "verwarmen_kw": null,
-   "bruto_prijs": 2856,
+   "bruto_prijs": 2885,
    "pagina": 4,
    "zoekcodes": [
     "KIT-Z71-CKE",
     "CS-Z71CKEW",
     "CU-Z71CKE"
    ],
-   "netto_prijs": 1627.92
+   "netto_prijs": 1644.45
   },
   {
    "rol": "systeem_compleet",
@@ -543,14 +543,15 @@
    "lijn": "RAC Solo",
    "kleur": null,
    "set_code": null,
-   "binnenunit_code": "P-M0G16IC5-E",
-   "buitenunit_code": "P-M0G16IC5-E",
+   "binnenunit_code": "P-MOG16IC5-E",
+   "buitenunit_code": "P-MOG16IC5-E",
    "koelen_kw": 1.7,
    "verwarmen_kw": 1.71,
    "bruto_prijs": 2029,
    "pagina": 4,
    "zoekcodes": [
-    "P-M0G16IC5-E"
+    "P-MOG16IC5-E",
+    "P-MOG16IC5-E"
    ],
    "koudemiddel": "R290",
    "netto_prijs": 1156.53
@@ -561,14 +562,15 @@
    "lijn": "RAC Solo",
    "kleur": null,
    "set_code": null,
-   "binnenunit_code": "P-M0Z20IC5-E",
-   "buitenunit_code": "P-M0Z20IC5-E",
+   "binnenunit_code": "P-MOZ20IC5-E",
+   "buitenunit_code": "P-MOZ20IC5-E",
    "koelen_kw": 2.0,
    "verwarmen_kw": 2.08,
    "bruto_prijs": 2029,
    "pagina": 4,
    "zoekcodes": [
-    "P-M0Z20IC5-E"
+    "P-MOZ20IC5-E",
+    "P-MOZ20IC5-E"
    ],
    "koudemiddel": "R32",
    "netto_prijs": 1156.53
@@ -586,6 +588,7 @@
    "bruto_prijs": 2183,
    "pagina": 4,
    "zoekcodes": [
+    "P-M0Z25IC5-E",
     "P-M0Z25IC5-E"
    ],
    "koudemiddel": "R32",
@@ -604,6 +607,7 @@
    "bruto_prijs": 2284,
    "pagina": 4,
    "zoekcodes": [
+    "P-M0Z30IC5-E",
     "P-M0Z30IC5-E"
    ],
    "koudemiddel": "R32",
@@ -620,12 +624,12 @@
    "aansluiten_binnencapaciteit": "3,2 - 6,0 kW",
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.2,
-   "bruto_prijs": 1223,
+   "bruto_prijs": 1236,
    "pagina": 5,
    "zoekcodes": [
     "CU-2Z35CBE"
    ],
-   "netto_prijs": 697.11
+   "netto_prijs": 704.52
   },
   {
    "rol": "buitenunit",
@@ -638,12 +642,12 @@
    "aansluiten_binnencapaciteit": "3,2 - 6,0 kW",
    "koelen_kw": 4.1,
    "verwarmen_kw": 4.6,
-   "bruto_prijs": 1292,
+   "bruto_prijs": 1305,
    "pagina": 5,
    "zoekcodes": [
     "CU-2Z41CBE"
    ],
-   "netto_prijs": 736.44
+   "netto_prijs": 743.85
   },
   {
    "rol": "buitenunit",
@@ -656,12 +660,12 @@
    "aansluiten_binnencapaciteit": "3,2 - 7,7 kW",
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.6,
-   "bruto_prijs": 1527,
+   "bruto_prijs": 1543,
    "pagina": 5,
    "zoekcodes": [
     "CU-2Z50CBE"
    ],
-   "netto_prijs": 870.39
+   "netto_prijs": 879.51
   },
   {
    "rol": "buitenunit",
@@ -674,12 +678,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 9,5 kW",
    "koelen_kw": 5.2,
    "verwarmen_kw": 6.8,
-   "bruto_prijs": 1857,
+   "bruto_prijs": 1876,
    "pagina": 5,
    "zoekcodes": [
     "CU-3Z52CBE"
    ],
-   "netto_prijs": 1058.49
+   "netto_prijs": 1069.32
   },
   {
    "rol": "buitenunit",
@@ -692,12 +696,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 11,2 kW",
    "koelen_kw": 6.8,
    "verwarmen_kw": 8.5,
-   "bruto_prijs": 2080,
+   "bruto_prijs": 2101,
    "pagina": 5,
    "zoekcodes": [
     "CU-3Z68CBE"
    ],
-   "netto_prijs": 1185.6
+   "netto_prijs": 1197.57
   },
   {
    "rol": "buitenunit",
@@ -710,12 +714,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 11,5 kW",
    "koelen_kw": 6.8,
    "verwarmen_kw": 8.5,
-   "bruto_prijs": 2402,
+   "bruto_prijs": 2427,
    "pagina": 5,
    "zoekcodes": [
     "CU-4Z68CBE"
    ],
-   "netto_prijs": 1369.14
+   "netto_prijs": 1383.39
   },
   {
    "rol": "buitenunit",
@@ -728,12 +732,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 14,7 kW",
    "koelen_kw": 8.0,
    "verwarmen_kw": 9.6,
-   "bruto_prijs": 2790,
+   "bruto_prijs": 2818,
    "pagina": 5,
    "zoekcodes": [
     "CU-4Z80CBE"
    ],
-   "netto_prijs": 1590.3
+   "netto_prijs": 1606.26
   },
   {
    "rol": "buitenunit",
@@ -746,12 +750,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 18,3 kW",
    "koelen_kw": 9.0,
    "verwarmen_kw": 10.4,
-   "bruto_prijs": 3373,
+   "bruto_prijs": 3407,
    "pagina": 5,
    "zoekcodes": [
     "CU-5Z90CBE"
    ],
-   "netto_prijs": 1922.61
+   "netto_prijs": 1941.99
   },
   {
    "rol": "binnenunit",
@@ -763,12 +767,12 @@
    "buitenunit_code": null,
    "koelen_kw": 1.6,
    "verwarmen_kw": 2.6,
-   "bruto_prijs": 292,
+   "bruto_prijs": 295,
    "pagina": 5,
    "zoekcodes": [
     "CS-MTZ16CKE"
    ],
-   "netto_prijs": 166.44
+   "netto_prijs": 168.15
   },
   {
    "rol": "binnenunit",
@@ -780,12 +784,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.0,
    "verwarmen_kw": 2.7,
-   "bruto_prijs": 319,
+   "bruto_prijs": 323,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ20CKEW"
    ],
-   "netto_prijs": 181.83
+   "netto_prijs": 184.11
   },
   {
    "rol": "binnenunit",
@@ -797,12 +801,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.3,
-   "bruto_prijs": 396,
+   "bruto_prijs": 400,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ25CKEW"
    ],
-   "netto_prijs": 225.72
+   "netto_prijs": 228.0
   },
   {
    "rol": "binnenunit",
@@ -814,12 +818,12 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.0,
-   "bruto_prijs": 489,
+   "bruto_prijs": 494,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ35CKEW"
    ],
-   "netto_prijs": 278.73
+   "netto_prijs": 281.58
   },
   {
    "rol": "binnenunit",
@@ -831,12 +835,12 @@
    "buitenunit_code": null,
    "koelen_kw": 4.2,
    "verwarmen_kw": 5.0,
-   "bruto_prijs": 537,
+   "bruto_prijs": 543,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ42CKEW"
    ],
-   "netto_prijs": 306.09
+   "netto_prijs": 309.51
   },
   {
    "rol": "binnenunit",
@@ -848,12 +852,12 @@
    "buitenunit_code": null,
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.8,
-   "bruto_prijs": 583,
+   "bruto_prijs": 589,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ50CKEW"
    ],
-   "netto_prijs": 332.31
+   "netto_prijs": 335.73
   },
   {
    "rol": "binnenunit",
@@ -865,12 +869,12 @@
    "buitenunit_code": null,
    "koelen_kw": 6.0,
    "verwarmen_kw": 7.0,
-   "bruto_prijs": 788,
+   "bruto_prijs": 796,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ60CKEW"
    ],
-   "netto_prijs": 449.16
+   "netto_prijs": 453.72
   },
   {
    "rol": "binnenunit",
@@ -882,12 +886,12 @@
    "buitenunit_code": null,
    "koelen_kw": 7.1,
    "verwarmen_kw": 8.6,
-   "bruto_prijs": 872,
+   "bruto_prijs": 881,
    "pagina": 5,
    "zoekcodes": [
     "CS-TZ71CKEW"
    ],
-   "netto_prijs": 497.04
+   "netto_prijs": 502.17
   },
   {
    "rol": "binnenunit",
@@ -899,12 +903,12 @@
    "buitenunit_code": null,
    "koelen_kw": 1.6,
    "verwarmen_kw": 2.6,
-   "bruto_prijs": 457,
+   "bruto_prijs": 462,
    "pagina": 5,
    "zoekcodes": [
     "CS-MZ16CKE"
    ],
-   "netto_prijs": 260.49
+   "netto_prijs": 263.34
   },
   {
    "rol": "binnenunit",
@@ -916,12 +920,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.05,
    "verwarmen_kw": 2.8,
-   "bruto_prijs": 473,
+   "bruto_prijs": 478,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z20CKEW"
    ],
-   "netto_prijs": 269.61
+   "netto_prijs": 272.46
   },
   {
    "rol": "binnenunit",
@@ -933,12 +937,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.05,
    "verwarmen_kw": 2.8,
-   "bruto_prijs": 526,
+   "bruto_prijs": 532,
    "pagina": 5,
    "zoekcodes": [
     "CS-XZ20CKEW-H"
    ],
-   "netto_prijs": 299.82
+   "netto_prijs": 303.24
   },
   {
    "rol": "binnenunit",
@@ -950,12 +954,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.4,
-   "bruto_prijs": 533,
+   "bruto_prijs": 539,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z25CKEW"
    ],
-   "netto_prijs": 303.81
+   "netto_prijs": 307.23
   },
   {
    "rol": "binnenunit",
@@ -967,12 +971,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.4,
-   "bruto_prijs": 592,
+   "bruto_prijs": 598,
    "pagina": 5,
    "zoekcodes": [
     "CS-XZ25CKEW-H"
    ],
-   "netto_prijs": 337.44
+   "netto_prijs": 340.86
   },
   {
    "rol": "binnenunit",
@@ -984,12 +988,12 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.0,
-   "bruto_prijs": 630,
+   "bruto_prijs": 637,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z35CKEW"
    ],
-   "netto_prijs": 359.1
+   "netto_prijs": 363.09
   },
   {
    "rol": "binnenunit",
@@ -1001,12 +1005,12 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.0,
-   "bruto_prijs": 724,
+   "bruto_prijs": 732,
    "pagina": 5,
    "zoekcodes": [
     "CS-XZ35CKEW-H"
    ],
-   "netto_prijs": 412.68
+   "netto_prijs": 417.24
   },
   {
    "rol": "binnenunit",
@@ -1018,12 +1022,12 @@
    "buitenunit_code": null,
    "koelen_kw": 4.2,
    "verwarmen_kw": 5.3,
-   "bruto_prijs": 726,
+   "bruto_prijs": 734,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z42CKEW"
    ],
-   "netto_prijs": 413.82
+   "netto_prijs": 418.38
   },
   {
    "rol": "binnenunit",
@@ -1035,12 +1039,12 @@
    "buitenunit_code": null,
    "koelen_kw": 4.2,
    "verwarmen_kw": 5.3,
-   "bruto_prijs": 812,
+   "bruto_prijs": 821,
    "pagina": 5,
    "zoekcodes": [
     "CS-XZ42CKEW-H"
    ],
-   "netto_prijs": 462.84
+   "netto_prijs": 467.97
   },
   {
    "rol": "binnenunit",
@@ -1052,12 +1056,12 @@
    "buitenunit_code": null,
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.8,
-   "bruto_prijs": 804,
+   "bruto_prijs": 813,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z50CKEW"
    ],
-   "netto_prijs": 458.28
+   "netto_prijs": 463.41
   },
   {
    "rol": "binnenunit",
@@ -1069,12 +1073,12 @@
    "buitenunit_code": null,
    "koelen_kw": 7.1,
    "verwarmen_kw": 8.2,
-   "bruto_prijs": 1175,
+   "bruto_prijs": 1187,
    "pagina": 5,
    "zoekcodes": [
     "CS-Z71CKEW"
    ],
-   "netto_prijs": 669.75
+   "netto_prijs": 676.59
   },
   {
    "rol": "binnenunit",
@@ -1086,12 +1090,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.0,
    "verwarmen_kw": 3.2,
-   "bruto_prijs": 774,
+   "bruto_prijs": 782,
    "pagina": 6,
    "zoekcodes": [
     "CS-MZ20CFEA"
    ],
-   "netto_prijs": 441.18
+   "netto_prijs": 445.74
   },
   {
    "rol": "binnenunit",
@@ -1103,12 +1107,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.6,
-   "bruto_prijs": 856,
+   "bruto_prijs": 865,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z25CFEAW"
    ],
-   "netto_prijs": 487.92
+   "netto_prijs": 493.05
   },
   {
    "rol": "binnenunit",
@@ -1120,12 +1124,12 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.5,
-   "bruto_prijs": 1014,
+   "bruto_prijs": 1025,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z35CFEAW"
    ],
-   "netto_prijs": 577.98
+   "netto_prijs": 584.25
   },
   {
    "rol": "binnenunit",
@@ -1137,12 +1141,12 @@
    "buitenunit_code": null,
    "koelen_kw": 5.0,
    "verwarmen_kw": 5.3,
-   "bruto_prijs": 1242,
+   "bruto_prijs": 1255,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z50CFEAW"
    ],
-   "netto_prijs": 707.94
+   "netto_prijs": 715.35
   },
   {
    "rol": "binnenunit",
@@ -1154,13 +1158,13 @@
    "buitenunit_code": null,
    "koelen_kw": 2.0,
    "verwarmen_kw": 3.2,
-   "bruto_prijs": 997,
+   "bruto_prijs": 1004,
    "pagina": 6,
    "zoekcodes": [
     "S-M20PY3E"
    ],
    "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
-   "netto_prijs": 568.29
+   "netto_prijs": 572.28
   },
   {
    "rol": "binnenunit",
@@ -1172,13 +1176,13 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.6,
-   "bruto_prijs": 1012,
+   "bruto_prijs": 1019,
    "pagina": 6,
    "zoekcodes": [
     "S-25PY3E"
    ],
    "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
-   "netto_prijs": 576.84
+   "netto_prijs": 580.83
   },
   {
    "rol": "binnenunit",
@@ -1190,13 +1194,13 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 3.6,
-   "bruto_prijs": 1222,
+   "bruto_prijs": 1231,
    "pagina": 6,
    "zoekcodes": [
     "S-36PY3E"
    ],
    "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
-   "netto_prijs": 696.54
+   "netto_prijs": 701.67
   },
   {
    "rol": "binnenunit",
@@ -1208,13 +1212,13 @@
    "buitenunit_code": null,
    "koelen_kw": 5.0,
    "verwarmen_kw": 6.8,
-   "bruto_prijs": 1374,
+   "bruto_prijs": 1385,
    "pagina": 6,
    "zoekcodes": [
     "S-50PY3E"
    ],
    "opmerking": "Exclusief paneel CZ-KPY4(B) à €217,- bruto en bedrade bediening CZ-RTC6(W) à €144,- bruto (los te bestellen).",
-   "netto_prijs": 783.18
+   "netto_prijs": 789.45
   },
   {
    "rol": "binnenunit",
@@ -1244,12 +1248,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.0,
    "verwarmen_kw": 3.2,
-   "bruto_prijs": 936,
+   "bruto_prijs": 946,
    "pagina": 6,
    "zoekcodes": [
     "CS-MZ20CD3EA"
    ],
-   "netto_prijs": 533.52
+   "netto_prijs": 539.22
   },
   {
    "rol": "binnenunit",
@@ -1261,12 +1265,12 @@
    "buitenunit_code": null,
    "koelen_kw": 2.5,
    "verwarmen_kw": 3.6,
-   "bruto_prijs": 1039,
+   "bruto_prijs": 1050,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z25CD3EAW"
    ],
-   "netto_prijs": 592.23
+   "netto_prijs": 598.5
   },
   {
    "rol": "binnenunit",
@@ -1278,12 +1282,12 @@
    "buitenunit_code": null,
    "koelen_kw": 3.5,
    "verwarmen_kw": 4.5,
-   "bruto_prijs": 1159,
+   "bruto_prijs": 1171,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z35CD3EAW"
    ],
-   "netto_prijs": 660.63
+   "netto_prijs": 667.47
   },
   {
    "rol": "binnenunit",
@@ -1295,12 +1299,12 @@
    "buitenunit_code": null,
    "koelen_kw": 5.0,
    "verwarmen_kw": 6.8,
-   "bruto_prijs": 1193,
+   "bruto_prijs": 1205,
    "pagina": 6,
    "zoekcodes": [
     "CS-Z50CD3EAW"
    ],
-   "netto_prijs": 680.01
+   "netto_prijs": 686.85
   },
   {
    "rol": "binnenunit",
@@ -1330,12 +1334,12 @@
    "aansluiten_binnencapaciteit": "4,0 - 8,5 kW",
    "koelen_kw": 5.3,
    "verwarmen_kw": 6.4,
-   "bruto_prijs": 1900,
+   "bruto_prijs": 1919,
    "pagina": 6,
    "zoekcodes": [
     "CU-2Z50ABEC"
    ],
-   "netto_prijs": 1083.0
+   "netto_prijs": 1093.83
   },
   {
    "rol": "buitenunit",
@@ -1348,12 +1352,12 @@
    "aansluiten_binnencapaciteit": "4,5 - 11,0 kW",
    "koelen_kw": 7.5,
    "verwarmen_kw": 8.6,
-   "bruto_prijs": 2570,
+   "bruto_prijs": 2596,
    "pagina": 6,
    "zoekcodes": [
     "CU-3Z75ABEC"
    ],
-   "netto_prijs": 1464.9
+   "netto_prijs": 1479.72
   }
  ]
 }

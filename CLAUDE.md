@@ -1265,6 +1265,99 @@ Q-kosten- en achternaam-tests erbij). Deze drie wijzigingen raken
 `scherm/gedeeld.js` — niet `brieventool/samenstellen.py` of
 `analyse/teksten.yaml` (dus geen `tools/ververs_brief_scherm.py` nodig).
 
+## Panasonic RAC/PAC-prijscatalogus bijgewerkt naar oktober 2026 (5 oktober 2026)
+
+Lars leverde twee nieuwe prijslijst-PDF's aan (`prijscatalogus-rac_102026` en
+`-paci_102026`, "geldig vanaf 1 oktober 2026") met de uitdrukkelijke
+instructie: dit zijn BRUTO prijzen, en de tool moet NETTO rekenen (bruto −
+43% korting). Dat is precies wat `data/panasonic/rac.json`/`pac.json` al
+deden (`meta.korting_pct: 0.43`, `netto_prijs = round(bruto_prijs * 0.57, 2)`,
+zie `scherm/calculatie.js` se `materiaalRegelUitPanasonic()`/
+`voegPanasonicToe()`) — dit was dus een kwestie van de 189 `bruto_prijs`-
+waarden in die twee bestanden bijwerken en `netto_prijs` opnieuw laten
+uitrekenen, niet een nieuwe functie bouwen.
+
+**Waar prijsdata hoort.** Lars vroeg expliciet of nieuwe prijslijsten in déze
+chat/repo thuishoren of in de losstaande `Calculatie-tool-Schilt`-repo
+(waarnaar elders in dit bestand wordt verwezen voor UI-synchronisatie). Het
+antwoord: hier, in `data/panasonic/` — dat is waar deze tool, de app die Lars
+dagelijks gebruikt, zijn prijzen vandaan haalt. De losstaande
+`calculatie-tool-schilt`-repo is alleen een referentie voor UI-verbeteringen,
+geen bron van actuele prijsdata voor déze app.
+
+**Geen PDF-bibliotheek beschikbaar, dus `tools/extract_pdf.py` hergebruikt.**
+Dezelfde kale, stdlib-only tekst-extractor die al voor brieven bestond (zie
+de moduledocstring daar: Flate-decompressie + regex over de PDF-tekst-
+operatoren, géén volwaardige PDF-parser) bleek ook deze twee prijscatalogus-
+PDF's (9,5-9,6MB, tekst-laag, geen scans) uitstekend leesbaar te maken — een
+schone, regelmatige tekstdump per productrij (code/kW/SEER/SCOP/prijs, elk op
+een eigen regel). `pdftoppm`/`pdftotext` (poppler) en elke Python PDF-
+bibliotheek (pypdf, PyMuPDF, pdfplumber) zijn hier niet beschikbaar en niet
+te installeren (apt/pip allebei door het sandbox-netwerkbeleid geblokkeerd,
+zelfde beperking als bij `calculatieblad.py` hierboven) — dit was dus de
+enige begaanbare weg, geen bewuste keuze tussen alternatieven.
+
+**Elke rij handmatig tegen de bestaande JSON-structuur gelegd, niet
+automatisch geparsed.** Met 75 (RAC) + 114 (PAC) bestaande artikelen, elk met
+een eigen `rol`/`systeemtype`/`lijn`-indeling die niet uit de tekst zelf is
+af te leiden (die indeling komt uit de visuele pagina-indeling van het
+origineel, niet uit de kale tekststroom), was een generieke regel-parser een
+groter risico dan baat: de bestaande volgorde en indeling van beide bestanden
+is regel-voor-regel nagelopen tegen de nieuwe catalogustekst (zelfde
+productcode, zelfde positie in de lijst), en alleen `bruto_prijs` (plus een
+klein aantal hieronder genoemde correcties) is aangepast. Dat garandeert dat
+geen enkel bestaand artikel per ongeluk van categorie wisselt of een verkeerd
+label krijgt.
+
+**Vier dingen die verder zijn gevonden, niet alleen prijzen:**
+- **Twee bestaande typefouten gecorrigeerd.** RAC Solo's binnenunit-/
+  buitenunitcode stond als `P-M0G16IC5-E`/`P-M0Z20IC5-E` (cijfer "0") in
+  plaats van het echte `P-MOG16IC5-E`/`P-MOZ20IC5-E` (letter "O") — de nieuwe
+  catalogustekst laat dit ondubbelzinnig zien, dus rechtgezet.
+- **Twee PACi-productcodes zijn door Panasonic zelf hernoemd** in deze
+  editie: "Jet Air Stream Standard" se binnenunit werd
+  `P-VTVF140/250NC5A-PE` (was `P-VTVF140/250MC5-PE`, een N- in plaats van een
+  M-serie), en "Jet Air Stream Ducted" se set-code kreeg een extra "A"
+  (`KIT-140/250PC5AZH8`, was `KIT-140/250PC5ZH8`). Beide alleen zo
+  overnemen (niet de oude code laten staan) omdat zoeken op de oude code na
+  deze catalogus-editie toch niets meer zou opleveren.
+- **Eén ontbrekende regel toegevoegd:** `LBK-aansluitkit Elite` had in het
+  bestaande bestand geen aparte prijs voor `U-71PZH4E8` (alleen voor
+  `U-71PZH4E5`) — de nieuwe catalogus laat beide zien. Toegevoegd vlak na de
+  E5-regel (met dezelfde `lijn`/`systeemtype`), dus `pac.json` heeft nu 115
+  in plaats van 114 artikelen.
+- **Eén categorie kon NIET worden bijgewerkt: losse "Utiliteit twin/triple/
+  double-twin"-buitenunits** (PACi NX Standard/Elite, de oude artikelen
+  82-92). Deze catalogus-editie bevat voor deze buitenunits alleen nog een
+  combinatiematrix (welke binnenunits met welke buitenunit, zónder prijs) --
+  geen eigen prijsregel meer zoals eerder. De oude bruto-prijzen zijn daarom
+  bewust ONGEWIJZIGD gelaten in plaats van te gokken of ze nog kloppen, met
+  een `meta.niet_bijgewerkt`-vermelding in `pac.json` zelf als geheugensteun.
+  **Navraag bij Lars nodig:** worden deze nog los verkocht, en zo ja tegen
+  welke prijs?
+
+**`panasonic_id` (client-side, `scherm/calculatie.js`) is een array-index,
+geen stabiele sleutel** (`'RAC-' + i`/`'PAC-' + i`, toegekend bij het laden
+van de JSON) — gebruikt alleen om bij het TOEVOEGEN via de zoekbalk te
+herkennen "dit artikel staat al in de materiaallijst, aantal ophogen in
+plaats van dupliceren". Een eerder opgeslagen project bewaart de waarde van
+een materiaalregel (`prijs`/`omschrijving`/...) altijd al als momentopname,
+nooit een live verwijzing naar de catalogus -- dus het invoegen van de
+nieuwe LBK-regel (met een verschuiving van alle latere PAC-indices) kan geen
+bestaand opgeslagen project corrumperen; in het ongunstigste geval herkent
+een hernieuwde toevoeging van exact hetzelfde artikel via de zoekbalk het
+niet meer als "al toegevoegd" en komt het er een keer dubbel bij in plaats
+van het aantal op te hogen -- een onschuldig randgeval, geen dataverlies.
+
+**Getest:** alle 298 Python-tests ongewijzigd en groen (de Python-kant van
+deze tool leest `data/panasonic/*.json` nooit -- dat is pure
+scherm/calculatie.js-opzoeklogica, zie de architectuurregel bovenaan dit
+bestand). Live met Playwright: totaal aantal artikelen (75 RAC + 115 PAC)
+geklopt, een paar steekproeven (KIT-TZ20-CKE, de hernoemde Ducted-code, de
+nieuwe LBK-regel, de gecorrigeerde RAC Solo-code) gaven stuk voor stuk de
+juiste bruto/netto-prijs terug, en de echte zoekbalk in het scherm (typen
+"TZ20") toonde de bijgewerkte prijs (€ 501,60) in de resultatenlijst.
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in
