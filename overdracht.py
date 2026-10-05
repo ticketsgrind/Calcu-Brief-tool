@@ -20,6 +20,25 @@ regels hierover:
   altijd hetzelfde bedrag als in stap 1 te zien was) -- er wordt in de
   brieventool-kant niets herberekend.
 
+Klantnaam (5 oktober 2026, gevonden door 'm echt te draaien): de calculatie
+heeft precies één vrij tekstveld voor de klantnaam, de brief onderscheidt een
+organisatie (zakelijke klant) van een persoon (aanspreekvorm/voorletters/
+achternaam, ook als contactpersoon bij een zakelijke klant) -- en `klanttype`
+bestaat uitsluitend in de brief (zie de btw-uitleg hierboven), dus bij de
+EERSTE overdracht staat het nog op zijn standaardwaarde "particulier". Zonder
+verdere actie bleef `achternaam` dan op het voorbeeld uit BEGINSTAND staan
+("ten Broek") terwijl de echte klantnaam alleen in `organisatie` kwam -- een
+veld dat bij klanttype "particulier" nergens in de brief wordt getoond. Live
+getest: een calculatie voor "Jansen Vastgoed BV" leverde een brief op die
+"De heer K. ten Broek" aanschreef, zonder enige waarschuwing (`achternaam`
+was voor `controle.ontbrekende_gegevens()` immers al "gevuld"). Omdat hier
+niet te gokken valt of de klant een bedrijf of een privépersoon is, wordt
+`achternaam` nu bewust LEEGGEMAAKT zodra er een klantnaam is (status
+"keuze_nodig") -- dat maakt dit gat zichtbaar via diezelfde bestaande
+ontbrekende-gegevens-controle (achternaam staat al in
+`controle.VASTE_VELDEN`) in plaats van een plausibele maar verzonnen naam
+onopgemerkt te laten staan.
+
 Systeemsoort-vertaling (afgesproken met Schilt): de calculatietool kent maar
 vier grove categorieën (VRF/RAC/PAC/Overig, gebruikt voor de urenformules),
 de brief onderscheidt fijner (splitsystem/multi-splitsystem/vrf/warmtepomp/
@@ -155,6 +174,31 @@ def zet_meerdere_over(
                 "overgenomen uit de klantnaam van de calculatie -- controleer of dit de "
                 "bedrijfsnaam is (bij een particuliere klant hoort deze juist leeg te blijven "
                 "en de naam bij achternaam/aanspreekvorm)."
+            ))
+            # A.klanttype staat bij de eerste overdracht nog op zijn standaard
+            # "particulier" (de calculatie kent geen klanttype-begrip, zie de
+            # btw-uitleg in de moduledocstring) -- zonder onderstaande regel
+            # bleef "achternaam" dan gewoon op het voorbeeld uit BEGINSTAND
+            # staan ("ten Broek"), want dat veld is al "gevuld" en
+            # controle.ontbrekende_gegevens() ziet dus niets mis. Een live
+            # test (5 oktober 2026) liet de brief daardoor voor een echte
+            # klant "Jansen Vastgoed BV" gewoon "De heer K. ten Broek"
+            # aanschrijven -- de echte naam stond wel in organisatie, maar dat
+            # blok rendert alleen bij klanttype=='zakelijk'. We kunnen hier
+            # niet gokken of dit een bedrijf of een privépersoon is (dat
+            # onderscheid bestaat alleen in de brief, niet in de calculatie),
+            # dus leeghalen in plaats van zelf raden in welk veld de naam
+            # hoort: dat maakt het gat zichtbaar via de bestaande "nog
+            # ontbrekende gegevens"-controle (achternaam staat al in
+            # controle.VASTE_VELDEN) in plaats van een foute naam onopgemerkt
+            # te laten staan.
+            offerte["achternaam"] = ""
+            overdracht.append(VeldOverdracht(
+                "achternaam", "keuze_nodig",
+                "de calculatie kent geen onderscheid tussen een zakelijke en een particuliere "
+                "klant -- de klantnaam is daarom (nog even) alleen bij 'Organisatie' gezet. Is dit "
+                "een particuliere klant: vul hier zelf de achternaam in (en aanspreekvorm/"
+                "voorletters). Is het een bedrijf: laat dit leeg of vul de contactpersoon in."
             ))
 
     offerte_installaties: list[dict[str, Any]] = []

@@ -114,6 +114,10 @@ def _voorbeeldstaat() -> dict:
         {"id": "x1", "omschrijving": "Eigen extra werk", "eenheid": "POST", "prijs": 123, "aantal": 1, "favoriet": False}
     )
     staat["overig"]["nachten"] = 2
+    staat["overig"]["shortTripDagen"] = 2
+    staat["overig"]["shortTripTarief"] = 65
+    staat["overig"]["transferUren"] = 5
+    staat["overig"]["transferTarief"] = 158
     staat["marge"]["contingencyReserves"] = 100
     staat["marge"]["contingencyOnderhandeling"] = 50
     staat["marge"]["projectPrice"] = 15000
@@ -305,10 +309,29 @@ class TestQuotationSheet(unittest.TestCase):
         staat = _voorbeeldstaat()
         _, _, quot, berekening = _bouw(staat)
         marge = berekening["marge"]
-        for ref, veld in (("R42", "arbeid"), ("E41", "materiaal"), ("R61", "ic"), ("R67", "fullCost"),
+        # R42 ("S/TOTAL LABOUR COSTS") is in het sjabloon zelf SUM(R34:R40),
+        # dus arbeid + short trip allowance + transfer quotation full cost --
+        # geen los veld in `marge`, vandaar hier samengesteld i.p.v. in de
+        # for-loop hieronder.
+        self.assertAlmostEqual(
+            quot["R42"], marge["arbeid"] + marge["shortTripKosten"] + marge["transferKosten"], places=4)
+        for ref, veld in (("E41", "materiaal"), ("R61", "ic"), ("R67", "fullCost"),
                           ("R69", "resultaat"), ("R74", "garantie"), ("R76", "verkoopprijs")):
             verwacht = marge[veld]["totaal"] if isinstance(marge[veld], dict) else marge[veld]
             self.assertAlmostEqual(quot[ref], verwacht, places=4, msg=ref)
+
+    def test_short_trip_en_transfer_cellen(self):
+        staat = _voorbeeldstaat()
+        _, _, quot, berekening = _bouw(staat)
+        marge = berekening["marge"]
+        self.assertAlmostEqual(quot["M38"], staat["overig"]["shortTripDagen"])
+        self.assertAlmostEqual(quot["P38"], staat["overig"]["shortTripTarief"])
+        self.assertAlmostEqual(quot["R38"], marge["shortTripKosten"])
+        self.assertAlmostEqual(quot["M39"], staat["overig"]["transferUren"])
+        self.assertAlmostEqual(quot["P39"], staat["overig"]["transferTarief"])
+        self.assertAlmostEqual(quot["R39"], marge["transferKosten"])
+        self.assertAlmostEqual(marge["shortTripKosten"], 2 * 65)
+        self.assertAlmostEqual(marge["transferKosten"], 5 * 158)
         self.assertAlmostEqual(quot["R71"], marge["projectPrice"], places=4)
 
     def test_geen_projectprice_laat_marge_velden_leeg(self):
@@ -524,9 +547,25 @@ class TestInlezenRondje(unittest.TestCase):
         staat = _voorbeeldstaat()
         geimporteerd, _, _, _ = _rondje(staat)
         self.assertEqual(geimporteerd["overig"]["nachten"], 2)
+        self.assertEqual(geimporteerd["overig"]["shortTripDagen"], 2)
+        self.assertEqual(geimporteerd["overig"]["shortTripTarief"], 65)
+        self.assertEqual(geimporteerd["overig"]["transferUren"], 5)
+        self.assertEqual(geimporteerd["overig"]["transferTarief"], 158)
         self.assertEqual(geimporteerd["marge"]["contingencyReserves"], 100)
         self.assertEqual(geimporteerd["marge"]["contingencyOnderhandeling"], 50)
         self.assertEqual(geimporteerd["marge"]["projectPrice"], 15000)
+
+    def test_short_trip_nul_blijft_nul_na_rondje(self):
+        """Een kersverse staat (short trip/transfer nog op hun standaardwaarde,
+        zie rk.nieuwe_staat()) mag na een exportrondje niet opeens een gokwaarde
+        krijgen -- alleen transferTarief heeft een niet-nul standaard (158,
+        hetzelfde tarief als projectmanager), de rest blijft 0."""
+        staat = rk.nieuwe_staat()
+        geimporteerd, _, _, _ = _rondje(staat)
+        self.assertEqual(geimporteerd["overig"]["shortTripDagen"], 0)
+        self.assertEqual(geimporteerd["overig"]["shortTripTarief"], 0)
+        self.assertEqual(geimporteerd["overig"]["transferUren"], 0)
+        self.assertEqual(geimporteerd["overig"]["transferTarief"], 158)
 
     def test_geen_projectprice_blijft_none_niet_nul(self):
         staat = rk.nieuwe_staat()

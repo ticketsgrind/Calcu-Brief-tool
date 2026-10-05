@@ -1113,6 +1113,158 @@ schrijfkant hierboven) voor een cel die toevallig numeriek blijkt te zijn,
 scherm heen getest (Playwright): importeren, renderen van de installatiekaart,
 en doorrekenen via `/bereken` gaven alle drie geen fouten.
 
+## Drie meldingen van Lars, live uitgezocht (5 oktober 2026)
+
+Lars vroeg de laatste commit van `Calculatie-tool-Schilt` (de losstaande
+calculatietool, niet de brieventool — zie git-historie voor hoe dat
+misverstand is uitgezocht: die bleek al volledig verwerkt) te bekijken, en gaf
+daarbij meteen drie losse meldingen door. Alle drie zijn uitgezocht door het
+écht te draaien (Playwright), niet alleen door de code te lezen — precies de
+werkwijze die bij de "Vier gaten in de overdracht"-sectie hierboven ook al
+twee keer een stil gat vond dat bij statisch lezen onzichtbaar bleef.
+
+### 1. Twee ontbrekende Q-kosten-regels in het calculatieblad
+
+Het Excel-sjabloon (Quotation sheet!I38/I39) kent twee vaste kostenregels,
+"SHORT TRIP ALLOWANCE" (dagen × tarief) en "TRANSFER QUOTATION FULL COST"
+(uren × tarief) — Lars: "Dit zijn de Qkosten die bij elke calculatie moet
+worden toegevoegd." Geen van beide had een tegenhanger in deze tool: niet als
+invoerveld in het scherm, niet in `rekenkern.bereken()`, en dus ook niet in
+het geëxporteerde of geïmporteerde calculatieblad (`calculatieblad.py`) —
+elke calculatie in deze tool miste dit bedrag domweg.
+
+**Nieuwe velden `overig.shortTripDagen`/`shortTripTarief`/`transferUren`/
+`transferTarief`** (`calculatie/rekenkern.py`, `scherm/calculatie.js`), twee
+nieuwe regels in de "Overig"-kaart (`scherm/index.html`) en twee nieuwe
+regels in de margetabel (`mg_shorttrip`/`mg_transfer`, direct na "Arbeid").
+In het Excel-sjabloon zelf staan deze twee regels bij de arbeidskosten
+(`R42` = `SUM(R34:R40)`, dus arbeid + deze twee regels samen, vóór de
+materiaal/uitbesteding-kant) — `marge_berekening()` telt
+`shortTripKosten`/`transferKosten` daarom ook rechtstreeks bij `ic` op, niet
+bij `overigeKosten` (dat is bewust de materiaal/uitbesteding-stroom).
+
+**Standaardwaarden volgen hetzelfde patroon als `nachten`/`nachtprijs`**: het
+AANTAL (dagen/uren) begint op 0 — dat is per calculatie verschillend en nooit
+een gok — maar `transferTarief` krijgt wel een zinnige standaardwaarde
+(`DEFAULT_TARIEVEN["projectmanager"]` = 158, hetzelfde tarief: deze kosten
+zijn immers diens tijd om de offerte over te dragen). Belangrijk hierbij:
+0 uren/dagen × een tarief blijft altijd 0 euro, dus deze toevoeging verandert
+niets aan een calculatie die het veld niet gebruikt — geen van de 292
+bestaande tests hoefde aangepast te worden op dit punt. `shortTripTarief`
+heeft geen vergelijkbaar vast tarief (staat ook leeg in het kale
+Excel-sjabloon) en begint dus op 0.
+
+**`calculatie/calculatieblad.py`**: `_vul_quotation()` schrijft `M38`/`P38`/
+`R38` en `M39`/`P39`/`R39` nu als kant-en-klare waarden (formule verwijderd,
+dezelfde regel als de rest van deze module), en `R42` is nu
+`arbeid + shortTripKosten + transferKosten` in plaats van alleen `arbeid`.
+Nieuwe leesfunctie `_lees_quotation_overig()` (naast de bestaande
+`_lees_overig()`, die op het blad "Calculatie" leest — deze twee regels staan
+op "Quotation sheet") maakt dit ook bij het importeren rond: een bestaand,
+extern ingevuld calculatieblad dat deze twee regels al had ingevuld, komt nu
+ook echt met die bedragen mee in plaats van ze stilzwijgend te laten vallen.
+
+**Getest:** nieuwe rekenkern-tests (`test_short_trip_en_transfer_tellen_mee_in_ic`,
+`test_nieuwe_staat_heeft_geen_qkosten_zonder_aantal`), nieuwe
+calculatieblad-tests voor zowel export (`test_short_trip_en_transfer_cellen`)
+als het exportrondje (`test_overig_en_marge_komen_over` uitgebreid,
+`test_short_trip_nul_blijft_nul_na_rondje` nieuw). Live getest met Playwright:
+2 dagen × €65 + 5 uur × €158 ingevuld, marge-tabel en `/bereken` toonden
+beide correct €130 + €790 = €920 extra in de intermediary cost, en het
+gedownloade calculatieblad bevatte de juiste, formuleloze cellen (met de hand
+nagelezen in de ruwe XML) — een rondje export→import gaf dezelfde waarden
+terug.
+
+### 2. De klantnaam kwam niet zichtbaar over — een echt gat, geen misverstand
+
+Lars: "Hij neemt niet alles over vanuit de calculatie, Q nummer, klantnaam,
+welke installatie model." Het Q-nummer en de systeemsoort/model-per-installatie
+bleken bij live testen gewoon te werken (zie "Vier gaten"/"Synchronisatie"
+hierboven) — maar de klantnaam bleek een echt, nieuw gat.
+
+**De oorzaak.** De calculatie heeft precies één vrij tekstveld voor de
+klantnaam; de brief onderscheidt een organisatie (zakelijke klant) van een
+persoon (`aanspreekvorm`/`voorletters`/`achternaam`, ook als contactpersoon
+bíj een zakelijke klant) via `klanttype` — een begrip dat uitsluitend in de
+brief bestaat (zie de btw-uitleg hierboven). Bij de EERSTE overdracht staat
+`klanttype` dus nog op zijn standaardwaarde "particulier". `overdracht.py`
+zette de klantnaam al in `organisatie`, gemarkeerd als "afgeleid" — maar een
+`organisatie`-blok in de brief rendert alleen bij `klanttype == 'zakelijk'`.
+Bij "particulier" (de standaard) bleef `achternaam` daardoor gewoon op het
+voorbeeld uit `BEGINSTAND` staan ("ten Broek") — en omdat dat veld dus al
+"gevuld" is, zag `controle.ontbrekende_gegevens()` niets mis.
+
+**Live aangetoond:** een calculatie voor klant "Jansen Vastgoed BV" leverde
+een briefvoorvertoning op die echt "De heer K. ten Broek" aanschreef, zonder
+enige waarschuwing — de werkelijke naam stond wel (gemarkeerd) in
+`organisatie`, maar was in de praktijk onzichtbaar. Dit is precies zo'n gat
+als de vier eerdere (zie hierboven): bij statisch lezen van `overdracht.py`
+leek dit in orde ("afgeleid" + een eigen waarschuwingstekst die zelfs met
+zoveel woorden zegt "bij een particuliere klant hoort deze juist leeg te
+blijven"), maar niemand trok daar de consequentie uit totdat de brief er
+echt bij stond.
+
+**De fix.** Hier valt niet te gokken of de klant een bedrijf of een
+privépersoon is — dat onderscheid bestaat alleen in de brief. In plaats van
+zelf te raden in welk veld de naam hoort, maakt `overdracht.py` `achternaam`
+nu bewust LEEG zodra er een klantnaam is (status "keuze_nodig", niet
+"afgeleid" — er wordt immers geen waarde gegeven). Dat maakt het gat
+zichtbaar via de al bestaande `controle.ontbrekende_gegevens()`-controle
+(`achternaam` staat al in `controle.VASTE_VELDEN`, zie de commentaar
+daarboven) in plaats van een plausibele maar verzonnen naam onopgemerkt te
+laten staan. `OVERDRACHT_VELDLABELS` (`scherm/brief.html`) kreeg er een label
+voor, zodat de controleerbalk "Achternaam (contactpersoon/particuliere
+klant)" noemt in plaats van het rauwe veldpad.
+
+**Dit overschrijft een eventueel al met de hand ingevulde achternaam bij een
+volgende klik op "↺ Vanuit calculatie"** — maar dat gold al voor
+`organisatie`/`projectnummer`/`briefdatum` (plain `A[sleutel]=waarde` voor
+elke sleutel die `overdracht.py` teruggeeft, zie "De briefstap is 1-op-1
+overgenomen" hierboven): die knop is bedoeld als "opnieuw synchroniseren
+vanuit de calculatie", dus dit is bestaand, verwacht gedrag, geen nieuw
+risico.
+
+**Getest:** nieuwe tests in `tests/test_overdracht.py`
+(`test_klantnaam_maakt_achternaam_bewust_leeg`,
+`test_geen_klantnaam_laat_achternaam_ongemoeid`). Live met Playwright herhaald
+na de fix: dezelfde calculatie geeft nu een brief met een lege
+aanhef/adresregel voor de achternaam (zichtbaar `ten Broek`-vrij) én
+`controle.ontbrekende_gegevens()` noemt "de achternaam" nu terecht als
+ontbrekend.
+
+### 3. Het laadscherm-filmpje speelde opnieuw af bij elke terugkeer naar de calculatie
+
+Lars: "Ook wanneer ik vanuit de brief terug ga naar de calculatie speelt het
+laadscherm/filmpje weer af. Dit filmpje moet enkel afspelen wanneer de tool
+de eerste keer wordt opgestart." `CB.laadscherm` (`scherm/gedeeld.js`) had
+geen geheugen van "is dit al vertoond in deze sessie" — elke keer dat
+`index.html` opnieuw laadt (de "← Calculatie"-link in `scherm/brief.html`,
+maar ook een gewone F5) begon de hele overlay, inclusief de opzettelijk lange
+`MINIMALE_DUUR_MS` (~10,3s, zie de laadscherm-sectie hierboven), gewoon
+opnieuw.
+
+**Fix:** een nieuwe `sessionStorage`-sleutel (`calcubrief.laadschermGetoond`,
+zelfde opslagplek/reden als `AUTOSAVE_SLEUTEL`: per tabblad, overleeft
+navigatie/F5, begint leeg bij een nieuw tabblad — exact het gewenste "éénmaal
+per sessie"-gedrag). `init()` slaat de video nu over en valt direct terug op
+de bestaande `_toonSpinnerTerugval()`-route (dezelfde korte, 300ms-wachttijd
+als wanneer het filmpje niet kan worden afgespeeld) zodra deze sleutel al
+gezet is — geen nieuwe code-paden, alleen een eerder bestaand terugvalpad
+hergebruikt.
+
+**Getest met Playwright:** een eerste `index.html`-load in een nieuwe tab zet
+de sessionStorage-sleutel en toont het filmpje; een navigatie naar
+`brief.html` en terug (`page.goBack()`) laat het laadscherm-element nog heel
+even verschijnen maar zonder de video (overgeslagen) en verdwijnt binnen
+~350ms in plaats van de volle ~10 seconden.
+
+**Volledige Python-testsuite: 298 tests, groen** (was 292 — de nieuwe
+Q-kosten- en achternaam-tests erbij). Deze drie wijzigingen raken
+`calculatie/rekenkern.py`, `calculatie/calculatieblad.py`, `overdracht.py`,
+`scherm/calculatie.js`, `scherm/index.html`, `scherm/brief.html` en
+`scherm/gedeeld.js` — niet `brieventool/samenstellen.py` of
+`analyse/teksten.yaml` (dus geen `tools/ververs_brief_scherm.py` nodig).
+
 ## Git
 
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in

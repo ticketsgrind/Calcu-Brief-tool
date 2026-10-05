@@ -116,6 +116,33 @@ class TestMargeBerekening(unittest.TestCase):
         m = rk.marge_berekening(staat, GEGEVENS)
         self.assertLess(m["resultaat"], 0)
 
+    def test_short_trip_en_transfer_tellen_mee_in_ic(self):
+        """SHORT TRIP ALLOWANCE / TRANSFER QUOTATION FULL COST (Quotation
+        sheet!I38/I39, zie calculatieblad.py) -- twee vaste Q-kosten-regels
+        die net als arbeid rechtstreeks in de intermediary cost (ic) horen,
+        niet bij overigeKosten (dat is de materiaal/uitbesteding-kant)."""
+        staat = rk.nieuwe_staat()
+        basis = rk.marge_berekening(staat, GEGEVENS)
+        staat["overig"]["shortTripDagen"] = 2
+        staat["overig"]["shortTripTarief"] = 65
+        staat["overig"]["transferUren"] = 5
+        staat["overig"]["transferTarief"] = 158
+        m = rk.marge_berekening(staat, GEGEVENS)
+        self.assertAlmostEqual(m["shortTripKosten"], 130, places=6)
+        self.assertAlmostEqual(m["transferKosten"], 790, places=6)
+        self.assertAlmostEqual(m["overigeKosten"], basis["overigeKosten"], places=6)
+        self.assertAlmostEqual(m["ic"], basis["ic"] + 130 + 790, places=6)
+
+    def test_nieuwe_staat_heeft_geen_qkosten_zonder_aantal(self):
+        """Het tarief van transfer quotation heeft wel een standaardwaarde
+        (zie nieuwe_staat()), maar zonder ingevuld aantal uren/dagen mag dat
+        nooit alsnog een kostenpost opleveren -- een kersverse calculatie mag
+        hier niets van merken."""
+        staat = rk.nieuwe_staat()
+        m = rk.marge_berekening(staat, GEGEVENS)
+        self.assertEqual(m["shortTripKosten"], 0)
+        self.assertEqual(m["transferKosten"], 0)
+
 
 class TestAfgeleideAantallen(unittest.TestCase):
     """Scenario 4 uit test_engine.js: automatisch gekoppelde materiaalregels

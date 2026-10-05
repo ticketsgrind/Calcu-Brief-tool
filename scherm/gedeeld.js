@@ -76,6 +76,17 @@ CB.debounce = (fn, ms) => {
 // metadata binnen is, en (in het onwaarschijnlijke geval dat die nooit
 // binnenkomt) voor de rest van die sessie -- 10240ms is de duur van het
 // filmpje op het moment van schrijven.
+//
+// LAADSCHERM_GETOOND_SLEUTEL onthoudt (in sessionStorage, dus per tabblad --
+// zelfde opslagplek en reden als AUTOSAVE_SLEUTEL hieronder) dat het filmpje
+// in déze sessie al is afgespeeld. Zonder dit speelde het filmpje, met zijn
+// opzettelijk lange MINIMALE_DUUR_MS, opnieuw af bij elke terugkeer naar
+// index.html binnen dezelfde tab -- bijv. de "← Calculatie"-link in
+// scherm/brief.html, of een gewone F5 -- terwijl het alleen bedoeld is om de
+// eerste, echte opstart van de tool te overbruggen. init() slaat de video dan
+// over en valt meteen terug op de korte spinner-wachttijd (_toonSpinnerTerugval),
+// dezelfde route als wanneer het filmpje niet kan worden afgespeeld.
+const LAADSCHERM_GETOOND_SLEUTEL = 'calcubrief.laadschermGetoond';
 CB.laadscherm = {
   _vanaf: Date.now(),
   MINIMALE_DUUR_MS: 10300,
@@ -85,6 +96,10 @@ CB.laadscherm = {
   init() {
     const video = document.getElementById('laadschermVideo');
     if (!video) return;
+    let algeToond = false;
+    try { algeToond = sessionStorage.getItem(LAADSCHERM_GETOOND_SLEUTEL) === '1'; } catch (e) {}
+    if (algeToond) { this._toonSpinnerTerugval(); return; }
+    try { sessionStorage.setItem(LAADSCHERM_GETOOND_SLEUTEL, '1'); } catch (e) {}
     video.addEventListener('error', () => this._toonSpinnerTerugval());
     video.addEventListener('loadedmetadata', () => {
       if (isFinite(video.duration) && video.duration > 0) {

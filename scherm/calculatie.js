@@ -112,7 +112,12 @@ function nieuweStaat() {
     },
     uitbesteding: UITBESTEDING_DEFAULTS.map(d => ({ id: newId(), aantal: 0, ...d })),
     equipment: EQUIPMENT_DEFAULTS.map(d => ({ id: newId(), aantal: 0, ...d })),
-    overig: { nachten: 0, nachtprijs: 150 },
+    // shortTrip*/transfer*: zie CLAUDE.md §Q-kosten -- het aantal (dagen/
+    // uren) start op 0 zoals nachten hierboven, het tarief krijgt wel een
+    // zinnige standaardwaarde (158 = hetzelfde tarief als projectmanager),
+    // zodat 0 × tarief nog altijd op 0 euro uitkomt.
+    overig: { nachten: 0, nachtprijs: 150, shortTripDagen: 0, shortTripTarief: 0,
+              transferUren: 0, transferTarief: DEFAULT_TARIEVEN.projectmanager },
     marge: { contingencyReserves: 0, contingencyOnderhandeling: 0, projectPrice: null },
   };
 }
@@ -437,6 +442,13 @@ function renderMeta() {
   document.getElementById('i_verdeelboxen_out').textContent = berekening.verdeelboxenAantal;
   document.getElementById('ov_nachten').value = state.overig.nachten;
   document.getElementById('ov_nachtprijs').value = state.overig.nachtprijs;
+  // ?? 0/158: een project opgeslagen vóór deze velden bestonden heeft ze niet
+  // in zijn overig-object staan -- zonder deze terugval zou het veld hier de
+  // letterlijke tekst "undefined" tonen in plaats van gewoon leeg/0.
+  document.getElementById('ov_shorttrip_dagen').value = state.overig.shortTripDagen ?? 0;
+  document.getElementById('ov_shorttrip_tarief').value = state.overig.shortTripTarief ?? 0;
+  document.getElementById('ov_transfer_uren').value = state.overig.transferUren ?? 0;
+  document.getElementById('ov_transfer_tarief').value = state.overig.transferTarief ?? DEFAULT_TARIEVEN.projectmanager;
   document.getElementById('mg_contingency_reserves').value = state.marge.contingencyReserves;
   document.getElementById('mg_contingency_onderhandeling').value = state.marge.contingencyOnderhandeling;
   document.getElementById('mg_projectprice').value = state.marge.projectPrice === null ? '' : state.marge.projectPrice;
@@ -666,6 +678,8 @@ function renderOverig(m) {
 function renderMarge(m) {
   document.getElementById('mg_materiaal').textContent = eur(m.materiaal.totaal) + (m.materiaal.onvolledig ? ` (+${m.materiaal.onvolledig} onbekend)` : '');
   document.getElementById('mg_arbeid').textContent = eur(m.arbeid);
+  document.getElementById('mg_shorttrip').textContent = eur(m.shortTripKosten);
+  document.getElementById('mg_transfer').textContent = eur(m.transferKosten);
   document.getElementById('mg_uitbesteding').textContent = eur(m.uitbesteding.totaal) + (m.uitbesteding.onvolledig ? ` (+${m.uitbesteding.onvolledig} onbekend)` : '');
   document.getElementById('mg_overhead').textContent = eur(m.overheadInkoop + m.overheadUitbesteding);
   document.getElementById('mg_equipment').textContent = eur(m.equipment.totaal) + (m.equipment.onvolledig ? ` (+${m.equipment.onvolledig} onbekend)` : '');
@@ -710,7 +724,7 @@ function renderSectieSamenvattingen(m) {
   set('sum_uren', `${document.getElementById('urenTotaalUren').textContent} u · ${document.getElementById('urenTotaalKosten').textContent}`);
   set('sum_uitbesteding', `${eur(m.uitbesteding.totaal)}${m.uitbesteding.onvolledig ? ` (+${m.uitbesteding.onvolledig} onbekend)` : ''}`);
   set('sum_equipment', `${eur(m.equipment.totaal)}${m.equipment.onvolledig ? ` (+${m.equipment.onvolledig} onbekend)` : ''}`);
-  set('sum_overig', eur(m.reiskosten));
+  set('sum_overig', eur(m.reiskosten + m.shortTripKosten + m.transferKosten));
   set('sum_marge', m.verkoopprijs === null
     ? 'nog geen project price ingevuld'
     : `verkoopprijs ${eur(m.verkoopprijs)} · resultaat ${pct(m.resultaatPct)}`);
@@ -795,6 +809,10 @@ function bindMeta() {
   document.getElementById('i_provisieklant').addEventListener('change', e => { state.instellingen.provisieklant = e.target.value; renderAll(); });
   document.getElementById('ov_nachten').addEventListener('input', e => { state.overig.nachten = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('ov_nachtprijs').addEventListener('input', e => { state.overig.nachtprijs = nonNegatief(e.target.value); renderAll(); });
+  document.getElementById('ov_shorttrip_dagen').addEventListener('input', e => { state.overig.shortTripDagen = nonNegatief(e.target.value); renderAll(); });
+  document.getElementById('ov_shorttrip_tarief').addEventListener('input', e => { state.overig.shortTripTarief = nonNegatief(e.target.value); renderAll(); });
+  document.getElementById('ov_transfer_uren').addEventListener('input', e => { state.overig.transferUren = nonNegatief(e.target.value); renderAll(); });
+  document.getElementById('ov_transfer_tarief').addEventListener('input', e => { state.overig.transferTarief = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('sm_overig').addEventListener('input', e => { state.uren.servicemonteur.overig = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('mg_contingency_reserves').addEventListener('input', e => { state.marge.contingencyReserves = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('mg_contingency_onderhandeling').addEventListener('input', e => { state.marge.contingencyOnderhandeling = nonNegatief(e.target.value); renderAll(); });

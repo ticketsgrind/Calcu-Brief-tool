@@ -160,7 +160,20 @@ def nieuwe_staat() -> dict[str, Any]:
         },
         "uitbesteding": [dict(d, id=_nieuw_id(), aantal=0) for d in UITBESTEDING_DEFAULTS],
         "equipment": [dict(d, id=_nieuw_id(), aantal=0) for d in EQUIPMENT_DEFAULTS],
-        "overig": {"nachten": 0, "nachtprijs": 150},
+        # shortTrip*/transfer*: zie marge_berekening() hieronder voor wat deze
+        # twee regels voorstellen (Quotation sheet!I38/I39). Net als
+        # nachten/nachtprijs hierboven: het AANTAL (dagen/uren) start op 0 --
+        # dat is per calculatie verschillend en nooit een gok -- maar het
+        # TARIEF krijgt wel een zinnige standaardwaarde, zodat 0 uren/dagen ×
+        # een standaardtarief nog altijd op 0 euro uitkomt (geen wijziging in
+        # een calculatie die dit veld niet gebruikt). 158 is hetzelfde
+        # standaardtarief als projectmanager/verkoper (DEFAULT_TARIEVEN) --
+        # deze transferkosten zijn immers hun tijd om de offerte over te
+        # dragen. Short trip allowance heeft geen vergelijkbaar vast tarief
+        # (staat ook leeg in het kale Excel-sjabloon), dus die begint op 0.
+        "overig": {"nachten": 0, "nachtprijs": 150,
+                   "shortTripDagen": 0, "shortTripTarief": 0,
+                   "transferUren": 0, "transferTarief": DEFAULT_TARIEVEN["projectmanager"]},
         "marge": {"contingencyReserves": 0, "contingencyOnderhandeling": 0, "projectPrice": None},
     }
 
@@ -401,6 +414,14 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
     overnachtingen = _num(staat["overig"].get("nachten")) * _num(staat["overig"].get("nachtprijs"))
     reiskosten = parkeerkosten + overnachtingen
 
+    # SHORT TRIP ALLOWANCE / TRANSFER QUOTATION FULL COST (Quotation sheet
+    # I38/I39): twee vaste "Q-kosten"-regels die in het Excel-sjabloon bij de
+    # arbeidskosten horen (R42 = SUM(R34:R40), dus vóór/naast de gewone
+    # rol-uren) -- geen reiskosten/materiaalopslag, dus bewust niet in
+    # overige_kosten hieronder, maar wel in ic net als arbeid zelf.
+    short_trip_kosten = _num(staat["overig"].get("shortTripDagen")) * _num(staat["overig"].get("shortTripTarief"))
+    transfer_kosten = _num(staat["overig"].get("transferUren")) * _num(staat["overig"].get("transferTarief"))
+
     overhead_inkoop = materiaal["totaal"] * 0.12
     overhead_uitbesteding = uitbesteding["totaal"] * 0.12
     contingency_reserves = _num(staat["marge"].get("contingencyReserves"))
@@ -409,7 +430,7 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
     overige_kosten = (materiaal["totaal"] + overhead_inkoop + uitbesteding["totaal"] + overhead_uitbesteding
                        + equipment["totaal"] + reiskosten + contingency_reserves + contingency_onderhandeling)
 
-    ic = arbeid + overige_kosten
+    ic = arbeid + short_trip_kosten + transfer_kosten + overige_kosten
     lost = ic * 0.04
     financial = ic * 0.007
     group_fees = ic * 0.04
@@ -432,6 +453,7 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
     return {
         "materiaal": materiaal, "uitbesteding": uitbesteding, "equipment": equipment, "arbeid": arbeid,
         "parkeeruren": parkeeruren, "parkeerkosten": parkeerkosten, "overnachtingen": overnachtingen,
+        "shortTripKosten": short_trip_kosten, "transferKosten": transfer_kosten,
         "reiskosten": reiskosten, "overheadInkoop": overhead_inkoop, "overheadUitbesteding": overhead_uitbesteding,
         "contingencyReserves": contingency_reserves, "contingencyOnderhandeling": contingency_onderhandeling,
         "overigeKosten": overige_kosten, "ic": ic, "lost": lost, "financial": financial, "groupFees": group_fees,

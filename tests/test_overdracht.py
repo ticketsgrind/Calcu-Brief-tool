@@ -54,6 +54,32 @@ class TestDirecteOvername(unittest.TestCase):
         item = status_van(overdracht, "organisatie")
         self.assertEqual(item.status, "afgeleid")
 
+    def test_klantnaam_maakt_achternaam_bewust_leeg(self):
+        """De calculatie kent geen klanttype-onderscheid (zakelijk/particulier,
+        zie de btw-uitleg in overdracht.py), dus klantnaam gaat alleen naar
+        'organisatie' -- maar bij klanttype 'particulier' (de standaard in een
+        kersvers briefconcept) wordt organisatie nergens getoond. Zonder deze
+        leegmaking bleef het BEGINSTAND-voorbeeld "ten Broek" onopgemerkt
+        staan (al "gevuld" voor controle.ontbrekende_gegevens()) -- gevonden
+        door de overdracht echt te draaien, 5 oktober 2026."""
+        staat = rk.nieuwe_staat()
+        staat["meta"]["klantnaam"] = "Jansen Vastgoed BV"
+        offerte, overdracht = zet_over(staat, rk.bereken(staat, GEGEVENS))
+
+        self.assertEqual(offerte["achternaam"], "")
+        item = status_van(overdracht, "achternaam")
+        self.assertEqual(item.status, "keuze_nodig")
+
+    def test_geen_klantnaam_laat_achternaam_ongemoeid(self):
+        """Zonder klantnaam in de calculatie is er ook geen reden om het
+        bestaande achternaam-veld in de brief aan te raken -- dit veld hoort
+        dan simpelweg niet in `offerte` te staan (zie ook
+        test_lege_meta_levert_geen_velden hierboven voor hetzelfde patroon bij
+        briefdatum/projectnummer)."""
+        staat = rk.nieuwe_staat()
+        offerte, _ = zet_over(staat, rk.bereken(staat, GEGEVENS))
+        self.assertNotIn("achternaam", offerte)
+
 
 class TestVerkoopprijs(unittest.TestCase):
     def test_prijsregel_komt_uit_de_berekening_zelf(self):

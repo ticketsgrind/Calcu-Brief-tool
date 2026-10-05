@@ -159,7 +159,7 @@ iets staat dat niet is opgeslagen, dan vraagt de browser dat eerst na.
                          van de losstaande brieventool (zie "Herkomst")
     tools/ververs_brief_scherm.py   werkt scherm/brief.html bij na een wijziging
                          in analyse/teksten.yaml of sjablonen/brief.docx
-    tests/                291 tests (rekenkern, overdracht, calculatieblad, brieventool)
+    tests/                298 tests (rekenkern, overdracht, calculatieblad, brieventool)
     voorbeelden/          ingevulde offertes om mee te proberen (los van de calculatie)
 
 ## Tests

@@ -477,7 +477,20 @@ def _vul_quotation(
     w.zet("R26", rolkosten("hoofdmonteur"))
     w.zet("M29", _num(uren_staat["hulpmonteur"].get("tarief")))
     w.zet("R29", rolkosten("hulpmonteur"))
-    w.zet("R42", marge["arbeid"])
+
+    # SHORT TRIP ALLOWANCE / TRANSFER QUOTATION FULL COST (I38/I39): twee
+    # vaste Q-kosten-regels die in het kale sjabloon zelf als R38=M38*P38 /
+    # R39=M39*P39-formules staan -- hier, net als de rest van dit blad, wordt
+    # de kant-en-klare rekenkern-waarde geschreven en de formule verwijderd
+    # (zie de moduledocstring). R42 ("S/TOTAL LABOUR COSTS") is in het
+    # sjabloon zelf SUM(R34:R40), dus arbeid + deze twee regels samen.
+    w.zet("M38", _num(staat["overig"].get("shortTripDagen")))
+    w.zet("P38", _num(staat["overig"].get("shortTripTarief")))
+    w.zet("R38", marge["shortTripKosten"])
+    w.zet("M39", _num(staat["overig"].get("transferUren")))
+    w.zet("P39", _num(staat["overig"].get("transferTarief")))
+    w.zet("R39", marge["transferKosten"])
+    w.zet("R42", marge["arbeid"] + marge["shortTripKosten"] + marge["transferKosten"])
 
     sectie_totalen = _sectie_totalen(berekening["materiaal"])
     for i, sectie in enumerate(SECTIE_VOLGORDE):
@@ -876,6 +889,18 @@ def _lees_overig(l: SheetLezer, staat: dict[str, Any]) -> None:
     staat["overig"]["nachtprijs"] = l.getal("F434", 150)
 
 
+def _lees_quotation_overig(lq: SheetLezer, staat: dict[str, Any]) -> None:
+    """SHORT TRIP ALLOWANCE / TRANSFER QUOTATION FULL COST (Quotation
+    sheet!M38/P38, M39/P39) -- zie _vul_quotation voor de schrijfkant. Staan
+    op Quotation sheet, niet Calculatie, dus een eigen functie met `lq` in
+    plaats van `_lees_overig` hierboven uit te breiden."""
+    overig = staat["overig"]
+    overig["shortTripDagen"] = lq.getal("M38", 0)
+    overig["shortTripTarief"] = lq.getal("P38", 0)
+    overig["transferUren"] = lq.getal("M39", 0)
+    overig["transferTarief"] = lq.getal("P39", rk.DEFAULT_TARIEVEN["projectmanager"])
+
+
 def _lees_marge_van_quotation(lq: SheetLezer, staat: dict[str, Any]) -> None:
     staat["marge"]["contingencyReserves"] = lq.getal("E54", 0)
     staat["marge"]["contingencyOnderhandeling"] = lq.getal("E55", 0)
@@ -1010,6 +1035,7 @@ def lees_calculatieblad(
     _lees_installaties(l, staat)
     _lees_materiaal(l, staat, gegevens)
     _lees_overig(l, staat)
+    _lees_quotation_overig(lq, staat)
     _lees_marge_van_quotation(lq, staat)
     _lees_uitbesteding_equipment(l, staat)
     _lees_uren(l, lq, staat)  # na instellingen/installaties/materiaal/overig, zie daar
