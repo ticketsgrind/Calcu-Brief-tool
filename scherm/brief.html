@@ -1470,9 +1470,9 @@ function bouwInstallaties(){
     vk.appendChild(ik); k.appendChild(vk);
     const r1=el("div","rij");
     r1.append(keuzeveld("systeemsoort","Systeem",
-      [["splitsystem","Split"],["multi-splitsystem","Multi-split"],["vrf","VRF"]],
+      [["","— nog niet bekend —"],["splitsystem","Split"],["multi-splitsystem","Multi-split"],["vrf","VRF"]],
       ()=>zetWerkzaamheden()));
-    r1.append(keuzeveld("merk","Merk",MERKEN.map(m=>[m,m])));
+    r1.append(keuzeveld("merk","Merk",[["","— nog niet bekend —"],...MERKEN.map(m=>[m,m])]));
     k.appendChild(r1);
     // Bepaalt welke systeemomschrijving deze regel krijgt ("De binnenunit is
     // ontworpen voor montage hoog aan de wand..." e.d.) -- per regel, want een
@@ -1481,11 +1481,11 @@ function bouwInstallaties(){
     // brief, waardoor de brief bij verschillende modellen er maar één
     // beschreef. Op verzoek van Lars.
     k.appendChild(keuzeveld("model_binnenunit","Model binnenunit",
-      [["wand","Wandmodel"],["cassette","Cassette"],["kanaal","Kanaal, boven het plafond"],
+      [["","— nog niet bekend —"],["wand","Wandmodel"],["cassette","Cassette"],["kanaal","Kanaal, boven het plafond"],
        ["vloer","Vloermodel / laag aan de muur"],["plafondonderbouw","Plafondonderbouw"],
        ["vrf","VRF"]]));
     k.appendChild(tekstveld("montagewijze","Montagewijze"));
-    k.appendChild(tekstveld("type_binnendeel","Type binnendeel","code"));
+    k.appendChild(tekstveld("type_binnendeel","Type installatie","code"));
     if(inst.systeemsoort==="splitsystem"){
       // Meerdere gelijke splitsystemen in één regel (bijvoorbeeld drie identieke
       // wandmodellen) -- zonder dit veld bleef aantal_systemen op de terugval
@@ -1768,7 +1768,7 @@ function toonControleer(tekst){
 
 const OVERDRACHT_VELDLABELS={organisatie:"Organisatie (bedrijfsnaam)",
   achternaam:"Achternaam (contactpersoon/particuliere klant)",
-  systeemsoort:"systeemsoort",type_binnendeel:"type binnendeel (model)",
+  systeemsoort:"systeemsoort",type_binnendeel:"type installatie (model)",
   merk:"merk",montagewijze:"montagewijze",model_binnenunit:"model binnenunit"};
 function overdrachtPadNaarLabel(pad){
   const m=pad.match(/^installaties\[(\d+)\]\.(.+)$/);

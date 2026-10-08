@@ -1363,3 +1363,76 @@ juiste bruto/netto-prijs terug, en de echte zoekbalk in het scherm (typen
 Ontwikkel op de branch `claude/magical-davinci-63dmec`. Commitberichten in
 het Nederlands, beschrijvend (niet gebiedende wijs, niet verleden tijd), met
 uitleg van het waarom bij niet voor de hand liggende keuzes.
+
+## Lege `<select>`-velden in de brief toonden stilzwijgend de verkeerde optie (8 oktober 2026)
+
+Lars, met een screenshot van een installatiekaart in `scherm/brief.html`:
+"ik wil dat er alleen dingen vooraf worden ingevuld vanuit de calculatie,
+alles wat je niet weet of niet kan overnemen gewoon leeg laten om verwarring
+te voorkomen [...] wat wel en niet juist is overgenomen." De screenshot toonde
+"Systeem: Split" en "Merk: Panasonic" bij een installatie die daar volgens
+hem niets van wist.
+
+**De data was al correct leeg -- het probleem zat puur in de weergave.** Live
+getest (Playwright, een "Overig"-installatie zonder merk): `A.installaties[0]`
+had `systeemsoort:""` en `merk:""`, precies zoals `overdracht.py` dat hoort
+te doen bij "keuze_nodig" (zie de moduledocstring daar). Maar de
+`keuzeveld()`-dropdowns voor `systeemsoort`/`merk`/`model_binnenunit` in
+`bouwInstallaties()` (`scherm/brief.html`) hadden geen `<option value="">` --
+en zonder een optie die matcht met een lege waarde selecteert de browser
+gewoon stilzwijgend de EERSTE optie in de lijst (`"splitsystem"`/`MERKEN[0]`
+= Panasonic). De onderliggende data bleef dus kloppen (een Word-bestand zou
+hier niet per ongeluk "Panasonic" in krijgen, en `controle.ontbrekende_gegevens()`
+zag dit gat ook niet, want die kijkt niet naar deze velden), maar het SCHERM
+loog: het zag eruit als een zelfverzonnen gok die nooit had mogen gebeuren.
+
+**Fix:** een `["", "— nog niet bekend —"]`-optie toegevoegd als eerste keuze
+in alle drie de dropdowns (`systeemsoort`, `merk`, `model_binnenunit`). Een
+installatie die met de hand in de brief wordt toegevoegd (`plus.onclick` in
+`bouwInstallaties()`) blijft wél met zinnige standaardwaarden beginnen
+(`splitsystem`/`MERKEN[0]`/`wand`) -- iemand gaat zo'n regel toch zelf
+invullen, dat is dus geen gok maar een handig startpunt, net als
+`nieuweInstallatie()` aan de calculatiekant. Alleen de koppeling tussen een
+ECHT lege waarde (uit de overdracht) en een misleidende weergave is
+rechtgezet.
+
+**"Type binnendeel" heette verwarrend.** Dat veld bevat sinds de Fase-5-fix
+(zie hierboven, "Vier gaten in de overdracht", punt 3) een productmodel
+(bijv. "KIT-TZ20-CKE"), geen montage-categorie -- de naam "Type binnendeel"
+paste daar al niet goed bij, en Lars vroeg expliciet om "Type installatie".
+Hernoemd in het formulier (`tekstveld("type_binnendeel", "Type installatie", ...)`)
+en in `OVERDRACHT_VELDLABELS` (de controleerbalk-tekst) -- de onderliggende
+sleutel `type_binnendeel` blijft ongewijzigd (die staat ook in
+`analyse/teksten.yaml`/het Word-sjabloon/`brieventool/controle.py`, een
+hernoeming daarvan is een heel andere, veel grotere wijziging die hier niet
+gevraagd is).
+
+**De materiaal-koppeling zelf werkt al correct -- bevestigd door 'm echt te
+draaien.** Lars vroeg zich af of het voor de tool "niet duidelijk is welke
+van de geselecteerde onderdelen in de calculatie het systeem is," en stelde
+voor een aparte selectie-optie te maken. Die bestaat al: `installatie.materiaalId`
++ de "Model (...)"-dropdown in de installatiekaart (`scherm/calculatie.js`,
+zie Fase 5 hierboven) -- live getest (Playwright): een Panasonic-systeem via
+de zoekbalk toegevoegd, gekoppeld aan een installatie, en `A.installaties[0]
+.type_binnendeel` kwam er na de overdracht correct als `"KIT-TZ20-CKE"` uit.
+Geen bug dus, maar waarschijnlijk een **ontdekkingsprobleem**: de
+installatiekaart heeft TWEE velden die allebei met "het systeem" te maken
+lijken te hebben -- "Type binnendeel" (een grove montage-categorie,
+Kanaalunit/Cassetteunit/..., puur voor de `model_binnenunit`-vertaling, telt
+niet mee in de urenberekening) vlak boven "Model (uit materiaallijst)" (de
+echte productkoppeling voor de brief) -- en het is aannemelijk dat niet
+duidelijk was dat specifiek de TWEEDE van die twee bepaalt wat er in de brief
+als modelnummer verschijnt. Het label is daarom hernoemd naar "Model
+(koppeling voor de brief)" met een (ⓘ)-tooltip die expliciet zegt wat het
+doet en wat er gebeurt zonder koppeling (hetzelfde `.info-icon`-patroon als
+elders in deze kaart, zie "Opmaak-opschoning" hierboven) -- geen nieuw
+mechanisme, wel een duidelijkere aanwijzing naar het bestaande.
+
+**Getest:** volledige Python-testsuite (298 tests) ongewijzigd en groen --
+deze wijziging raakt alleen `scherm/brief.html`/`scherm/calculatie.js`. Live
+met Playwright: de "Overig"-installatie toont nu "— nog niet bekend —" voor
+Systeem/Merk in plaats van Split/Panasonic; een installatie met een echte,
+afgeleide systeemsoort (RAC + 1 binnendeel → splitsystem) toont nog
+steeds gewoon de juiste waarde; de materiaal-koppeling geeft nog steeds het
+juiste modelnummer door; de controleerbalk noemt het veld nu "type
+installatie (model)".

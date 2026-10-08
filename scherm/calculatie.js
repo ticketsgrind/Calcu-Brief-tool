@@ -488,7 +488,7 @@ function renderInstallaties() {
             ${DATA.systemen.soort_binnendeel.map(s=>`<option ${s===inst.typeBinnendeel?'selected':''}>${s}</option>`).join('')}
           </select>
         </div>
-        <div class="field"><label>Model (uit materiaallijst)</label>
+        <div class="field"><label>Model (koppeling voor de brief) <span class="info-icon" title="Dit is het modelnummer dat in de offertebrief komt te staan (bijv. KIT-TZ20-CKE). Koppel hier het artikel uit Materiaal → Apparatuur dat bij deze installatie hoort — zonder koppeling blijft het modelnummer in de brief leeg in plaats van een gok.">ⓘ</span></label>
           <select data-id="${inst.id}" data-field="materiaalId">
             ${materiaalOptiesVoorInstallatie(inst.materiaalId)}
           </select>
