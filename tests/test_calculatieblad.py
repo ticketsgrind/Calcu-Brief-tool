@@ -616,14 +616,15 @@ class TestInlezenRondje(unittest.TestCase):
     def test_short_trip_nul_blijft_nul_na_rondje(self):
         """Een kersverse staat (short trip/transfer nog op hun standaardwaarde,
         zie rk.nieuwe_staat()) mag na een exportrondje niet opeens een gokwaarde
-        krijgen -- alleen transferTarief heeft een niet-nul standaard (158,
-        hetzelfde tarief als projectmanager), de rest blijft 0."""
+        krijgen -- alleen transferTarief heeft een niet-nul standaard
+        (DEFAULT_TARIEVEN["projectmanager"], hetzelfde tarief als
+        projectmanager), de rest blijft 0."""
         staat = rk.nieuwe_staat()
         geimporteerd, _, _, _ = _rondje(staat)
         self.assertEqual(geimporteerd["overig"]["shortTripDagen"], 0)
         self.assertEqual(geimporteerd["overig"]["shortTripTarief"], 0)
         self.assertEqual(geimporteerd["overig"]["transferUren"], 0)
-        self.assertEqual(geimporteerd["overig"]["transferTarief"], 158)
+        self.assertEqual(geimporteerd["overig"]["transferTarief"], rk.DEFAULT_TARIEVEN["projectmanager"])
 
     def test_geen_projectprice_blijft_none_niet_nul(self):
         staat = rk.nieuwe_staat()

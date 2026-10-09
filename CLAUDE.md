@@ -1540,19 +1540,105 @@ als bonusklant/provisieklant:
   een nieuwe margetabel-regel `mg_betalingskorting` tussen Omzetbonus en
   Garantie.
 
-## DGC-bonus 4% → 5%, en Lost/Financial costs 4%/0,7% → 5%/0,75%
+## Percentages/tarieven uit het nieuwe sjabloon -- en een gemiste eerste pas
 
-Het nieuwe sjabloon laat drie percentages anders zien dan voorheen:
-`Omzetbonus+Provisie`-blad B9 (DGC groep) 0.04 → 0.05
-(`data/omzetbonus_provisie.json` bijgewerkt), en `Quotation sheet!P63`
-(LOST QUOTATION COSTS) 0.04 → 0.05 resp. `P64` (FINANCIAL COSTS)
-0.007 → 0.0075. Die laatste twee staan niet in een databestand maar
-hardcoded in `rekenkern.marge_berekening()` (`lost = ic * 0.05`,
-`financial = ic * 0.0075`, was `0.04`/`0.007`) -- rechtgezet, met de
-bijbehorende labels in `scherm/index.html` ("Lost quotation costs (5%)",
-"Financial costs (0,75%)") en de verwachte waarde in
-`tests/test_rekenkern.py`'s scenario-3-test herrekend (`fullCost` 2697,934
-→ 2723,995, `resultaat` 302,066 → 276,005).
+Het nieuwe sjabloon laat een aantal percentages en standaardtarieven anders
+zien dan voorheen. **De eerste doorloop van deze sjabloonupdate (zie hierboven)
+vond er daar maar twee van** (DGC-bonus, Lost/Financial costs) -- Lars wees
+erna op: "de uren zijn namelijk ook omhoog gegaan. Projectmanager 168
+bijvoorbeeld nu, zorg dat je echt alles overneemt wat anders is." Terecht: de
+eerste diff-pas over "Quotation sheet" vergeleek alleen cellen met een
+TEKST-waarde (labels, formules) tussen oud en nieuw, niet elke cel met een
+GETAL-waarde -- een tariefcel als `M21` (gewoon een los getal, geen
+label/formule) viel daar dus letterlijk buiten. Een tweede, volledige diff
+(elke cel met een rij-mapping die rekening houdt met de Calculatie-sheet-
+verschuiving hierboven, numeriek EN tekstueel) vond zo alsnog 8 verdere
+wijzigingen:
+
+- **Alle zes standaardtarieven (`rekenkern.DEFAULT_TARIEVEN`), op engineering
+  na**: `Calculatie!F329/F332/F335/F342/F355/F376` (== `Quotation
+  sheet!M21/M22/M23/M25/M26/M29`): projectmanager 158→168, projectleider
+  112→123, werkvoorbereider 93→98, servicemonteur 81→85, hoofdmonteur 69→72,
+  hulpmonteur 56→59. Engineering (`F338`) bleef letterlijk 112 -- geen
+  wijziging, geen omissie.
+- **Opslag inkoop/uitbesteding (`Quotation sheet!P47`/`P49`) 0.12 → 0.13**,
+  hardcoded in `marge_berekening()` als `overhead_inkoop`/
+  `overhead_uitbesteding` (was `* 0.12` voor beide) -- label in
+  `scherm/index.html` ("Opslag inkoop (13%) + uitbesteding (13%)")
+  meeveranderd.
+
+**`verkoper` (`DEFAULT_TARIEVEN["verkoper"]`) is bewust NIET meeveranderd.**
+Anders dan de andere zes rollen heeft "Verkoper" geen eigen cel in het
+sjabloon zelf (`Quotation sheet!M24` staat zowel in de oude als de nieuwe
+editie leeg -- `calculatieblad.py` vult die hele rij zelf vanuit de staat, zie
+`_vul_quotation`). De bestaande standaardwaarde (158) is dus ooit met de hand
+gekozen, toevallig gelijk aan het OUDE projectmanager-tarief (en dezelfde
+158 wordt ook voor `transferTarief`'s standaardwaarde hergebruikt, zie de
+Q-kosten-sectie hierboven: "`DEFAULT_TARIEVEN["projectmanager"]`, hetzelfde
+tarief: deze kosten zijn immers diens tijd"). Nu projectmanager naar 168 is
+gegaan dus een echte keuze: hield 158 aan in plaats van zelf te raden of het
+mee moest naar 168 -- **vraag dit na bij Lars** als dit opvalt in een
+calculatieblad-export.
+
+`tests/test_rekenkern.py`'s scenario-3-test opnieuw herrekend met de
+uiteindelijke, volledige percentage-set (`fullCost` 2723,995 → 2736,0675,
+`resultaat` 276,005 → 263,9325, `resultaatPct` naar 0,0869) en een
+tariefdefault-test (`transferTarief` na een blanco rondje) losgekoppeld van
+het hardgecodeerde getal 158 naar `rk.DEFAULT_TARIEVEN["projectmanager"]`,
+zodat die niet nog een keer stilzwijgend fout gaat bij de volgende
+tariefwijziging. **Les voor een volgende sjabloonupdate: vergelijk altijd
+ELKE cel met een waarde (tekst én getal) tussen oud en nieuw, niet alleen de
+cellen die een label of formule bevatten** -- een kale tariefcel levert geen
+tekst- of formuleverschil op, alleen een getalverschil, en is dus onzichtbaar
+voor een diff die zich beperkt tot de eerste twee categorieën.
+
+**Een tweede, los gat: `scherm/calculatie.js` duplicere de standaardtarieven
+zélf, ongemoeid gelaten bij deze hele correctie totdat live testen het liet
+zien.** `calculatie/rekenkern.py`'s `DEFAULT_TARIEVEN` is niet de enige plek
+waar deze tarieven staan: `scherm/calculatie.js` heeft (noodgedwongen, het
+scherm kan geen Python importeren) een eigen, met de hand synchroon
+gehouden kopie van dezelfde constante, gebruikt voor `nieuweStaat()`'s
+client-side standaardwaarden. Die kopie bleef op de oude getallen staan --
+Playwright tegen de draaiende app liet dit zien (een nieuwe calculatie toonde
+nog gewoon 158 voor projectmanager, ondanks de Python-kant al op 168 stond).
+Rechtgezet, met een commentaarregel die uitdrukkelijk verwijst naar
+`rekenkern.py`'s versie zodat een volgende tariefwijziging niet opnieuw op
+één plek blijft hangen.
+
+**Een derde, subtieler gat: `FAVORIETEN_ROWS` in `scherm/calculatie.js`** --
+een met de hand samengestelde lijst rijnummers per materiaalsectie voor de
+"snelkeuze"-knoppen (chips) boven de materiaallijst, ONAFHANKELIJK van
+`data/materiaal_catalogus.json` zelf opgeslagen (dus niet automatisch
+meeverschoven toen dat bestand werd bijgewerkt). Dit is dezelfde categorie
+fout als de `afgeleid_van`-verwijzingen hierboven -- een hardcoded rijnummer
+dat niet is herkend als "verwijst naar een catalogusrij" bij de eerste
+migratiepas. Twee aparte problemen hierin:
+- Rij 117 stond in de `LEIDINGEN/KABELS/SIFON`-lijst (de verwijderde
+  Stuurstroomkabel) -- na de rij-verschuiving wijst "117" niet naar niets,
+  maar naar een ANDER, toevallig bestaand artikel op die rij ("Stuurstroomkabel
+  YSLY-JZ 5x1,5", een ander kabeltype) -- een stille relabeling, geen crash
+  en dus onzichtbaar zonder het scherm echt te bekijken. Rij 117 is uit deze
+  lijst gehaald.
+- Alle overige rijen in `POMPEN`/`INOAC`/`LEIDINGEN/KABELS/SIFON` die boven
+  117 liggen, zijn met -1 verschoven, net als de rest van de catalogus.
+
+**Les, nu dubbel onderstreept:** een rij-gebaseerde migratie moet ELKE plek
+raken die een rijnummer vasthoudt, niet alleen de voor de hand liggende
+databestanden (`data/materiaal_catalogus.json`) en de Python-module die ze
+leest/schrijft (`calculatieblad.py`) -- ook een met de hand onderhouden
+duplicaat-constante aan de clientkant (tarieven) en een losse,
+UI-specifieke rijverwijzingenlijst (snelkeuze-chips) moeten worden
+meegenomen. Beide waren hier pas zichtbaar door de app ÉCHT te openen en te
+bekijken, niet door alleen de Python-tests te laten slagen -- die testen
+`scherm/*.js` namelijk helemaal niet.
+
+**Volledige Python-testsuite: 303 tests, nog steeds groen** na deze correctie.
+Live opnieuw getest met Playwright tegen de draaiende server (met het
+vervangen sjabloon): alle acht rol-tarieven in een kersverse calculatie
+tonen nu de bijgewerkte waarden (168/123/98/112/85/72/59/158), en de
+snelkeuze-chips voor BALKEN/VOETEN/MUURSTEUN, LEIDINGEN/KABELS/SIFON, POMPEN
+en INOAC tonen stuk voor stuk weer de juiste, bedoelde artikelen (geen
+rij-117-relabeling meer).
 
 ## YIMM- en materiaalcatalogus-data bijgewerkt
 

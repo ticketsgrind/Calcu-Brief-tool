@@ -17,8 +17,11 @@ const ROL_LABELS = {
   hulpmonteur: 'Hulpmonteur', verkoper: 'Verkoper',
 };
 const DEFAULT_TARIEVEN = {
-  projectmanager: 158, projectleider: 112, werkvoorbereider: 93, engineering: 112,
-  servicemonteur: 81, hoofdmonteur: 69, hulpmonteur: 56, verkoper: 158,
+  // Zelfde waarden als calculatie/rekenkern.py se DEFAULT_TARIEVEN -- zie
+  // daar (en CLAUDE.md) voor waar deze vandaan komen en waarom "verkoper"
+  // zijn oude waarde (158) behield.
+  projectmanager: 168, projectleider: 123, werkvoorbereider: 98, engineering: 112,
+  servicemonteur: 85, hoofdmonteur: 72, hulpmonteur: 59, verkoper: 158,
 };
 const UITBESTEDING_DEFAULTS = [
   { omschrijving: 'Kleine kraan', eenheid: 'ST', prijs: 500, favoriet: true },
@@ -44,11 +47,18 @@ const EQUIPMENT_DEFAULTS = [
 const MATERIAAL_SECTIES = ['APPARATUUR','BALKEN/VOETEN/MUURSTEUN','LEIDINGEN/KABELS/SIFON','POMPEN','INOAC','SOLDEER','WERKSCHAKELAAR','KOUDE MIDDEL','DAKDOORVOERING','TOEBEHOREN LUCHTVERDELING'];
 const MERK_OPTIES = ['Panasonic', 'Mitsubishi Electric', 'Toshiba', 'Daikin', 'LG'];
 const MONTAGEWIJZE_OPTIES = ['Wandmontage', 'Plafondinbouwmontage', 'Vloermontage'];
+// Rijnummers volgen data/materiaal_catalogus.json's row-veld -- zie
+// CLAUDE.md (sjabloonupdate oktober 2026) voor de -1-verschuiving t.o.v.
+// het vorige sjabloon. Rij 117 (Stuurstroomkabel LSOH) is daarbij uit de
+// LEIDINGEN/KABELS/SIFON-lijst gehaald: dat artikel bestaat niet meer in de
+// catalogus, en de rij waar "117" nu wél naar wijst is een ander,
+// ongerelateerd artikel -- een geschoven rijnummer zonder meer zou hier dus
+// stilzwijgend het verkeerde chip-label zijn gaan tonen.
 const FAVORIETEN_ROWS = {
   'BALKEN/VOETEN/MUURSTEUN': [84, 82],
-  'LEIDINGEN/KABELS/SIFON': [102, 103, 104, 105, 108, 117, 111, 110, 124],
-  'POMPEN': [140, 141, 143],
-  'INOAC': [156, 157, 158, 161, 162, 164, 165, 187],
+  'LEIDINGEN/KABELS/SIFON': [102, 103, 104, 105, 108, 111, 110, 123],
+  'POMPEN': [139, 140, 142],
+  'INOAC': [155, 156, 157, 160, 161, 163, 164, 186],
 };
 
 const { eur, pct } = CB;

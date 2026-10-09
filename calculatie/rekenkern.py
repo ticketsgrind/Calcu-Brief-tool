@@ -38,8 +38,16 @@ ROL_LABELS: dict[str, str] = {
 }
 
 DEFAULT_TARIEVEN: dict[str, float] = {
-    "projectmanager": 158, "projectleider": 112, "werkvoorbereider": 93, "engineering": 112,
-    "servicemonteur": 81, "hoofdmonteur": 69, "hulpmonteur": 56, "verkoper": 158,
+    # Komen rechtstreeks uit het Excel-sjabloon (Calculatie!F329/F332/F335/
+    # F342/F355/F376, == Quotation sheet!M21/M22/M23/M25/M26/M29) -- bijgewerkt
+    # naar de sjabloonversie van oktober 2026 (was 158/112/93/112/81/69/56).
+    # "verkoper" heeft geen eigen sjabloon-cel (Quotation sheet!M24 staat
+    # zowel in de oude als de nieuwe editie leeg; calculatieblad.py vult die
+    # rij zelf) -- hield daarom bewust zijn oude waarde (158, toevallig gelijk
+    # aan het OUDE projectmanager-tarief); of dit ook naar 168 moet, is aan
+    # Lars, zie CLAUDE.md.
+    "projectmanager": 168, "projectleider": 123, "werkvoorbereider": 98, "engineering": 112,
+    "servicemonteur": 85, "hoofdmonteur": 72, "hulpmonteur": 59, "verkoper": 158,
 }
 
 UITBESTEDING_DEFAULTS: list[dict[str, Any]] = [
@@ -423,8 +431,11 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
     short_trip_kosten = _num(staat["overig"].get("shortTripDagen")) * _num(staat["overig"].get("shortTripTarief"))
     transfer_kosten = _num(staat["overig"].get("transferUren")) * _num(staat["overig"].get("transferTarief"))
 
-    overhead_inkoop = materiaal["totaal"] * 0.12
-    overhead_uitbesteding = uitbesteding["totaal"] * 0.12
+    # Quotation sheet!P47/P49 ("Overheads on purchases"/"...on external
+    # subcontracting") -- ook verhoogd in de sjabloonupdate van oktober 2026
+    # (was 0.12/0.12 voor beide).
+    overhead_inkoop = materiaal["totaal"] * 0.13
+    overhead_uitbesteding = uitbesteding["totaal"] * 0.13
     contingency_reserves = _num(staat["marge"].get("contingencyReserves"))
     contingency_onderhandeling = _num(staat["marge"].get("contingencyOnderhandeling"))
 

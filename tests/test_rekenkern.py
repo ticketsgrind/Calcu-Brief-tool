@@ -101,16 +101,18 @@ class TestMargeBerekening(unittest.TestCase):
         m = rk.marge_berekening(staat, GEGEVENS)
         self.assertAlmostEqual(m["materiaal"]["totaal"], 1000, places=6)
         self.assertAlmostEqual(m["arbeid"], 1000, places=6)
-        self.assertAlmostEqual(m["overigeKosten"], 1482, places=6)
-        self.assertAlmostEqual(m["ic"], 2482, places=6)
-        # Lost quotation costs (5%) en financial costs (0,75%) -- verhoogd
-        # t.o.v. de vorige sjabloonversie (was 4%/0,7%), zie CLAUDE.md.
-        self.assertAlmostEqual(m["fullCost"], 2723.995, places=3)
-        self.assertAlmostEqual(m["resultaat"], 276.005, places=3)
+        # Overheads on purchases/external subcontracting (13%, was 12%) --
+        # verhoogd t.o.v. de vorige sjabloonversie, zie CLAUDE.md.
+        self.assertAlmostEqual(m["overigeKosten"], 1493, places=6)
+        self.assertAlmostEqual(m["ic"], 2493, places=6)
+        # Lost quotation costs (5%) en financial costs (0,75%) -- eveneens
+        # verhoogd t.o.v. de vorige sjabloonversie (was 4%/0,7%).
+        self.assertAlmostEqual(m["fullCost"], 2736.0675, places=3)
+        self.assertAlmostEqual(m["resultaat"], 263.9325, places=3)
         self.assertAlmostEqual(m["garantie"], 37.5, places=6)
         self.assertAlmostEqual(m["betalingskorting"], 0, places=6)
         self.assertAlmostEqual(m["verkoopprijs"], 3037.5, places=6)
-        self.assertAlmostEqual(m["resultaatPct"], 0.09086584, delta=0.0001)
+        self.assertAlmostEqual(m["resultaatPct"], 0.08689136, delta=0.0001)
 
     def test_verlies_geeft_negatief_resultaat(self):
         staat = rk.nieuwe_staat()
