@@ -293,11 +293,21 @@ def _vul_installaties(w: SheetSchrijver, staat: dict[str, Any]) -> None:
     w.zet("B25", overig["binnen"])
 
 
-def _vul_materiaal(w: SheetSchrijver, berekening: dict[str, Any]) -> None:
-    for item in berekening["materiaal"]:
-        row = item.get("row")
-        if row is None:
-            continue
+def _vrije_apparatuur_rijen(gegevens: dict[str, Any]) -> list[int]:
+    """De 'naamloze' APPARATUUR-rijen (rij 37-51/57-71, omschrijving=None)
+    die het sjabloon al had voor een met de hand ingetypt model+prijs --
+    hergebruikt hieronder voor een materiaalregel die zelf geen rij heeft
+    (zie _vul_materiaal), op volgorde van rijnummer."""
+    return sorted(
+        e["row"] for e in gegevens["materiaal_catalogus"]
+        if e.get("sectie") == "APPARATUUR" and e.get("omschrijving") is None and e.get("row") is not None
+    )
+
+
+def _vul_materiaal(w: SheetSchrijver, berekening: dict[str, Any], gegevens: dict[str, Any]) -> None:
+    materiaal = berekening["materiaal"]
+
+    def schrijf_regel(row: int, item: dict[str, Any]) -> None:
         aantal = _num(item.get("aantal"))
         prijs = item.get("prijs")
         w.zet(f"A{row}", aantal)
@@ -310,7 +320,33 @@ def _vul_materiaal(w: SheetSchrijver, berekening: dict[str, Any]) -> None:
             w.zet(f"F{row}", float(prijs))
             w.zet(f"H{row}", aantal * float(prijs))
 
-    for sectie, totaal in _sectie_totalen(berekening["materiaal"]).items():
+    bezette_rijen = {item["row"] for item in materiaal if item.get("row") is not None}
+    vrije_rijen = [r for r in _vrije_apparatuur_rijen(gegevens) if r not in bezette_rijen]
+
+    for item in materiaal:
+        row = item.get("row")
+        if row is not None:
+            schrijf_regel(row, item)
+            continue
+        # Geen eigen rij in de catalogus -- dit raakt specifiek een via de
+        # Panasonic/Daikin-zoekbalk toegevoegd apparatuur-systeem (bron:
+        # "panasonic"/"daikin", zie scherm/calculatie.js se
+        # materiaalRegelUitPanasonic/-Daikin). Zonder rij kwam zo'n systeem
+        # tot nu toe HELEMAAL niet in het blad terecht -- het totaalbedrag
+        # klopte (zie _sectie_totalen hieronder, die werkt op sectie, niet op
+        # rij), maar welk model en hoeveel was in het geëxporteerde blad
+        # nergens meer te zien, precies wat een werkvoorbereider nodig heeft
+        # om te bestellen. Leent daarom een van de vrije, naamloze
+        # APPARATUUR-rijen die het sjabloon al voor exact dit doel had.
+        # Alleen sectie APPARATUUR: dat is de enige sectie waar een
+        # rijloze regel vandaan komt (een losse "PROJECTBESTELLING"-regel
+        # heeft een eigen, niet-APPARATUUR sectie en blijft hier bewust
+        # buiten beschouwing, zie CLAUDE.md).
+        if item.get("sectie") != "APPARATUUR" or not vrije_rijen:
+            continue
+        schrijf_regel(vrije_rijen.pop(0), item)
+
+    for sectie, totaal in _sectie_totalen(materiaal).items():
         w.zet(f"H{SECTIE_SUBTOTAAL_RIJ[sectie]}", totaal)
 
 
@@ -601,7 +637,7 @@ def schrijf_calculatieblad(
     w_calc = SheetSchrijver(calc_xml)
     _vul_kop(w_calc, staat, berekening)
     _vul_installaties(w_calc, staat)
-    _vul_materiaal(w_calc, berekening)
+    _vul_materiaal(w_calc, berekening, gegevens)
     _vul_uren(w_calc, staat, berekening)
     _vul_uitbesteding_equipment_overig(w_calc, staat, berekening, gegevens)
     inhoud[SHEET_CALCULATIE] = w_calc.xml.encode("utf-8")

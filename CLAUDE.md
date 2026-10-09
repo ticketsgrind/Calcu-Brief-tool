@@ -1686,3 +1686,71 @@ sjabloonwijzigingen: laat het eerste nieuwe calculatieblad dat met dit
 sjabloon wordt gedownload door Lars (die wél Excel heeft) controleren
 voordat er op wordt vertrouwd voor belangrijk werk** -- met name omdat de
 rij-verschuiving dit keer het hele blad raakt, niet alleen nieuwe cellen.
+
+## Panasonic/Daikin-units ontbraken (per regel) in het gedownloade calculatieblad (9 oktober 2026)
+
+Lars: "Het bedrag van de unit/s staat er wel, maar welke units zijn
+geselecteerd en hoeveel staat er niet bij. Dit is wel belangrijk, voor als de
+werkvoorbereiders de calculatie bekijken." Dit was geen nieuwe regressie maar
+een al bestaande, in CLAUDE.md zelf al benoemde beperking ("Niet herleidbaar
+(bewust, al sinds de exportkant): materiaal zonder `row`", hierboven in de
+sectie over `lees_calculatieblad()`) -- die bleek in de praktijk belangrijker
+dan destijds ingeschat.
+
+**De oorzaak.** Een via de Panasonic/Daikin-zoekbalk toegevoegd systeem
+(`materiaalRegelUitPanasonic()`/`-Daikin()` in `scherm/calculatie.js`, bron
+`"panasonic"`/`"daikin"`) is GEEN regel uit `data/materiaal_catalogus.json`
+en heeft dus geen `row`-veld om naar te schrijven. `_vul_materiaal()`
+(`calculatieblad.py`) sloeg zo'n regel bij het **EXPORTEREN** daarom
+volledig over -- geen rij, geen omschrijving, geen aantal, helemaal niets
+zichtbaars. Het totaalbedrag klopte desondanks wél: `_sectie_totalen()`
+somt op basis van `item["sectie"]` (== `"APPARATUUR"`, sectie-breed), niet op
+basis van of er een rij voor is, dus de APPARATUUR-subtotaalcel (`H30`) en
+daarmee de hele marge-opbouw erna waren altijd al correct. Precies dat
+onderscheid -- bedrag klopt, regel is onzichtbaar -- is wat Lars meldde.
+
+**De fix: dezelfde "vrije rijen"-truc als Uitbesteding/Equipment, maar voor
+APPARATUUR.** Het sjabloon heeft zelf al 30 "naamloze" APPARATUUR-rijen
+(37-51/57-71, `omschrijving: null` in de catalogus) voor exact dit doel: in
+de oorspronkelijke, losstaande Excel-tool typte iemand daar met de hand een
+model+prijs in. Nieuwe functie `_vrije_apparatuur_rijen(gegevens)` vindt deze
+rijen; `_vul_materiaal()` schrijft een rijloze regel nu naar de eerste nog
+onbezette rij uit die lijst (onbezet = niet al gebruikt door een gewone,
+wél-met-`row`-catalogusregel) -- dezelfde aantal/omschrijving/eenheid/prijs/
+bedrag-kolommen als een normale regel. Meer rijloze regels dan vrije rijen:
+dezelfde graceful degradation als UITBESTEDING_LEGE_RIJEN/EQUIPMENT_LEGE_RIJEN
+hierboven -- de extra regels krijgen geen zichtbare rij, maar het totaal
+(sectie-gebaseerd, niet rij-gebaseerd) blijft kloppen.
+
+**Bewust NIET gedaan: hetzelfde voor een losse "PROJECTBESTELLING"-regel**
+(de vrije-tekst-knop onderaan de materiaallijst, `sectie: "PROJECTBESTELLING"`
+in `scherm/calculatie.js`, ook zonder `row`). Die regel heeft een ANDERE
+sectie dan `"APPARATUUR"` -- hem tóch in een APPARATUUR-rij zetten zou het
+bedrag wél zichtbaar maken, maar NIET meetellen in de APPARATUUR-subtotaal
+(die blijft op `item["sectie"] == "APPARATUUR"` sommeren), wat een blad zou
+opleveren dat zichzelf lijkt tegen te spreken (een zichtbare regel in een
+blok waarvan de eigen subtotaal 'm niet meetelt). Dit is dus een bewust
+losstaand, kleiner gat dat blijft bestaan -- vraag dit na bij Lars als een
+PROJECTBESTELLING-regel ook zichtbaar moet worden; dat vraagt een eigen
+afweging (een nieuwe sectie-subtotaalrij? meetellen in een bestaande?), geen
+kwestie van "ook maar een vrije rij lenen".
+
+**Bij het weer INLEZEN** komt zo'n geleende rij terug als een gewone
+catalogusregel (`bron: "projectbestelling"`, dezelfde regel als elke andere
+hand-ingevulde vrije APPARATUUR-rij) -- niet meer herkenbaar als
+oorspronkelijk Panasonic/Daikin (geen `panasonic_id`/`artikelcode`-koppeling
+terug), maar met de juiste omschrijving/aantal/prijs. Dat is dezelfde,
+al bestaande beperking als voor elke andere vrije rij, geen nieuwe.
+
+**Getest:** `tests/test_calculatieblad.py` -- `test_panasonic_materiaal_zonder_row_leent_een_vrije_apparatuur_rij`
+(schrijft naar de eerste vrije rij, totaal blijft kloppen, komt terug bij
+import), `test_meer_rijloze_apparatuur_regels_dan_vrije_rijen_crasht_niet`,
+en `test_projectbestelling_sectie_blijft_zonder_rij` (bevestigt dat die
+andere sectie bewust ongemoeid blijft). 305 tests groen (was 303). Live
+getest met Playwright + de draaiende server: een Panasonic-systeem
+(KIT-TZ20-CKE) via de zoekbalk toegevoegd, aantal op 3 gezet, het
+gedownloade calculatieblad liet rij 37 zien met `A37=3`,
+`D37="Wandmodel TZ — KIT-TZ20-CKE / CS-TZ20CKEW / CU-TZ20CKE"`, `F37=501,6`,
+`H37=1504,8`, en de APPARATUUR-subtotaalcel (`H30`) kwam uit op exact
+hetzelfde bedrag -- precies de informatie die een werkvoorbereider nodig
+heeft om te bestellen.

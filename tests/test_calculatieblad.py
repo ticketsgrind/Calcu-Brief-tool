@@ -546,20 +546,71 @@ class TestInlezenRondje(unittest.TestCase):
         _, _, orig, imp = _rondje(staat)
         self.assertAlmostEqual(orig["marge"]["materiaal"]["totaal"], imp["marge"]["materiaal"]["totaal"], places=2)
 
-    def test_materiaal_zonder_row_komt_bewust_niet_terug(self):
-        """Een via de Panasonic/Daikin-zoekbalk (scherm/calculatie.js, bron
-        "panasonic"/"daikin") of als PROJECTBESTELLING-vrije-regel toegevoegd
-        materiaalartikel heeft geen 'row' -- _vul_materiaal hierboven slaat
-        zo'n regel al over bij het EXPORTEREN (geen Excel-rij om in te
-        schrijven), dus is 'm ook bij het weer inlezen nooit terug te vinden.
-        Geen bug: dezelfde, al bestaande beperking in beide richtingen, zie
-        CLAUDE.md. Een calculatie met ALLEEN zo'n regel levert dus een lege
-        materiaallijst op na een rondje export+import."""
+    def test_panasonic_materiaal_zonder_row_leent_een_vrije_apparatuur_rij(self):
+        """Op verzoek van Lars (9 oktober 2026): een werkvoorbereider die het
+        gedownloade calculatieblad bekijkt, zag het totaalbedrag van een via
+        de Panasonic/Daikin-zoekbalk toegevoegd systeem (bron "panasonic"/
+        "daikin", geen eigen 'row' in de catalogus) wel terug in de
+        sectie-subtotaal, maar nergens welk model en hoeveel -- precies de
+        informatie die nodig is om te bestellen. _vul_materiaal leent
+        daarvoor nu een van de vrije, naamloze APPARATUUR-rijen (37-51/57-71)
+        die het sjabloon al had voor exact dit doel. Bij het weer INLEZEN komt
+        zo'n regel dus ook terug (als gewone, niet meer als Panasonic-
+        gemarkeerde rij -- dezelfde beperking als elke andere vrije rij, zie
+        CLAUDE.md)."""
         staat = rk.nieuwe_staat()
         staat["materiaal"] = [{
             "id": "m1", "sectie": "APPARATUUR", "bron": "panasonic", "panasonic_id": "RAC-4",
-            "artikelcode": "KIT-TZ20-CKE", "omschrijving": "Wandmodel TZ 20", "eenheid": "ST",
-            "prijs": 495.9, "aantal": 1, "row": None,
+            "artikelcode": "KIT-TZ20-CKE", "omschrijving": "Wandmodel TZ 20 — KIT-TZ20-CKE", "eenheid": "ST",
+            "prijs": 495.9, "aantal": 2, "row": None,
+        }]
+        _, calc, _, berekening = _bouw(staat)
+        vrije_rijen = cb._vrije_apparatuur_rijen(GEGEVENS)
+        row = vrije_rijen[0]
+        self.assertEqual(calc[f"A{row}"], 2)
+        self.assertEqual(calc[f"D{row}"], "Wandmodel TZ 20 — KIT-TZ20-CKE")
+        self.assertEqual(calc[f"E{row}"], "ST")
+        self.assertAlmostEqual(calc[f"F{row}"], 495.9)
+        self.assertAlmostEqual(calc[f"H{row}"], 991.8)
+        self.assertAlmostEqual(
+            calc[f"H{cb.SECTIE_SUBTOTAAL_RIJ['APPARATUUR']}"], berekening["marge"]["materiaal"]["totaal"])
+
+        geimporteerd, _, _, _ = _rondje(staat)
+        regel = next(m for m in geimporteerd["materiaal"] if m["row"] == row)
+        self.assertEqual(regel["omschrijving"], "Wandmodel TZ 20 — KIT-TZ20-CKE")
+        self.assertAlmostEqual(regel["prijs"], 495.9)
+        self.assertEqual(regel["aantal"], 2)
+
+    def test_meer_rijloze_apparatuur_regels_dan_vrije_rijen_crasht_niet(self):
+        """Zelfde graceful-degradation-patroon als uitbesteding/equipment:
+        meer rijloze regels dan er vrije APPARATUUR-rijen zijn, geeft geen
+        crash -- het totaal (uit _sectie_totalen, sectie-gebaseerd) blijft
+        kloppen, alleen niet elke regel krijgt een zichtbare rij."""
+        staat = rk.nieuwe_staat()
+        aantal_vrije_rijen = len(cb._vrije_apparatuur_rijen(GEGEVENS))
+        staat["materiaal"] = [
+            {"id": f"m{i}", "sectie": "APPARATUUR", "bron": "panasonic", "panasonic_id": f"RAC-{i}",
+             "artikelcode": f"CODE-{i}", "omschrijving": f"Systeem {i}", "eenheid": "ST",
+             "prijs": 100, "aantal": 1, "row": None}
+            for i in range(aantal_vrije_rijen + 5)
+        ]
+        _, calc, _, berekening = _bouw(staat)
+        self.assertAlmostEqual(
+            calc[f"H{cb.SECTIE_SUBTOTAAL_RIJ['APPARATUUR']}"], berekening["marge"]["materiaal"]["totaal"])
+
+    def test_projectbestelling_sectie_blijft_zonder_rij(self):
+        """Een losse PROJECTBESTELLING-regel (scherm/calculatie.js, een vrij
+        tekstveld los van elke materiaalsectie) heeft een andere sectie dan
+        APPARATUUR en leent daarom bewust geen APPARATUUR-rij: die zou dan wel
+        zichtbaar in het APPARATUUR-blok staan, maar niet meetellen in de
+        APPARATUUR-subtotaal (die blijft sectie-gebaseerd), wat een
+        tegenstrijdig ogend blad zou geven. Blijft dus de bestaande beperking
+        -- het totaalbedrag (rekenkern-breed, niet per sectie) klopt nog
+        steeds, zie test_blanco_staat_bouwt_zonder_fouten e.d."""
+        staat = rk.nieuwe_staat()
+        staat["materiaal"] = [{
+            "id": "m1", "sectie": "PROJECTBESTELLING", "bron": "projectbestelling",
+            "omschrijving": "Iets los besteld", "eenheid": "ST", "prijs": 250, "aantal": 1, "row": None,
         }]
         geimporteerd, _, _, _ = _rondje(staat)
         self.assertEqual(geimporteerd["materiaal"], [])
