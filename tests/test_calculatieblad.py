@@ -211,7 +211,7 @@ class TestMateriaal(unittest.TestCase):
 
     def test_afgeleide_regel_komt_ook_letterlijk_terecht(self):
         staat = rk.nieuwe_staat()
-        entry = next(e for e in GEGEVENS["materiaal_catalogus"] if e["row"] == 270)
+        entry = next(e for e in GEGEVENS["materiaal_catalogus"] if e["row"] == 269)  # Frontrooster FD-Q-Z 600
         regel = rk.materiaal_regel_uit_catalogus(entry, GEGEVENS["yimm"])
         regel["aantal"] = 4
         staat["materiaal"] = [regel]
@@ -235,9 +235,9 @@ class TestUren(unittest.TestCase):
     def test_definitieve_uren_en_kosten_matchen_rekenkern(self):
         staat = _voorbeeldstaat()
         _, calc, _, berekening = _bouw(staat)
-        for rol, rij in (("projectmanager", 330), ("projectleider", 333), ("werkvoorbereider", 336),
-                         ("engineering", 339), ("servicemonteur", 343), ("hoofdmonteur", 356),
-                         ("hulpmonteur", 377)):
+        for rol, rij in (("projectmanager", 329), ("projectleider", 332), ("werkvoorbereider", 335),
+                         ("engineering", 338), ("servicemonteur", 342), ("hoofdmonteur", 355),
+                         ("hulpmonteur", 376)):
             definitief = berekening["uren"][rol]["definitief"]
             tarief = staat["uren"][rol]["tarief"]
             self.assertAlmostEqual(calc[f"A{rij}"], definitief, msg=rol)
@@ -246,14 +246,14 @@ class TestUren(unittest.TestCase):
     def test_monteur_override_overschrijft_het_blad_ook(self):
         """Een handmatige override (rekenkern se enige weg om af te wijken van
         de auto-formule) moet in het blad ook echt het totaal veranderen --
-        dat kan alleen als A356/A377 een letterlijke waarde zijn, geen
-        formule die alleen de rijen 357-374 optelt."""
+        dat kan alleen als A355/A376 een letterlijke waarde zijn, geen
+        formule die alleen de rijen 356-373 optelt."""
         staat = _voorbeeldstaat()
         staat["uren"]["hoofdmonteur"]["override"] = 5
         _, calc, _, berekening = _bouw(staat)
         self.assertEqual(berekening["uren"]["hoofdmonteur"]["definitief"], 5)
-        self.assertEqual(calc["A356"], 5)
-        self.assertNotEqual(calc["A356"], calc["A377"])  # hulpmonteur bleef ongemoeid
+        self.assertEqual(calc["A355"], 5)
+        self.assertNotEqual(calc["A355"], calc["A376"])  # hulpmonteur bleef ongemoeid
 
     def test_verkoper_op_quotation_sheet(self):
         staat = _voorbeeldstaat()
@@ -269,18 +269,18 @@ class TestUitbestedingEquipmentOverig(unittest.TestCase):
     def test_bekende_regel_op_vaste_rij(self):
         staat = _voorbeeldstaat()
         _, calc, _, _ = _bouw(staat)
-        self.assertEqual(calc["A403"], 1)  # Betonboring
-        self.assertEqual(calc["H403"], 200)
-        self.assertEqual(calc["A420"], 2)  # Hoogwerker
-        self.assertEqual(calc["H420"], 1400)
+        self.assertEqual(calc["A402"], 1)  # Betonboring
+        self.assertEqual(calc["H402"], 200)
+        self.assertEqual(calc["A419"], 2)  # Hoogwerker
+        self.assertEqual(calc["H419"], 1400)
 
     def test_eigen_regel_naar_lege_rij(self):
         staat = _voorbeeldstaat()
         _, calc, _, _ = _bouw(staat)
-        self.assertEqual(calc["B412"], "Eigen extra werk")
-        self.assertEqual(calc["A412"], 1)
-        self.assertEqual(calc["F412"], 123)
-        self.assertEqual(calc["H412"], 123)
+        self.assertEqual(calc["B411"], "Eigen extra werk")
+        self.assertEqual(calc["A411"], 1)
+        self.assertEqual(calc["F411"], 123)
+        self.assertEqual(calc["H411"], 123)
 
     def test_meer_eigen_regels_dan_lege_rijen_crasht_niet(self):
         staat = rk.nieuwe_staat()
@@ -291,17 +291,17 @@ class TestUitbestedingEquipmentOverig(unittest.TestCase):
         data, calc, _, berekening = _bouw(staat)
         # de TOTAALCEL komt rechtstreeks uit rekenkern en blijft dus correct,
         # ook als niet elke regel een eigen rij in het blad kreeg.
-        self.assertAlmostEqual(calc["H417"], berekening["marge"]["uitbesteding"]["totaal"])
+        self.assertAlmostEqual(calc["H416"], berekening["marge"]["uitbesteding"]["totaal"])
 
     def test_totalen_matchen_marge(self):
         staat = _voorbeeldstaat()
         _, calc, _, berekening = _bouw(staat)
         marge = berekening["marge"]
-        self.assertAlmostEqual(calc["H417"], marge["uitbesteding"]["totaal"])
-        self.assertAlmostEqual(calc["H429"], marge["equipment"]["totaal"])
-        self.assertAlmostEqual(calc["H433"], marge["parkeerkosten"])
-        self.assertAlmostEqual(calc["H434"], marge["overnachtingen"])
-        self.assertAlmostEqual(calc["H437"], marge["reiskosten"])
+        self.assertAlmostEqual(calc["H416"], marge["uitbesteding"]["totaal"])
+        self.assertAlmostEqual(calc["H428"], marge["equipment"]["totaal"])
+        self.assertAlmostEqual(calc["H432"], marge["parkeerkosten"])
+        self.assertAlmostEqual(calc["H433"], marge["overnachtingen"])
+        self.assertAlmostEqual(calc["H436"], marge["reiskosten"])
 
 
 class TestQuotationSheet(unittest.TestCase):
@@ -316,7 +316,7 @@ class TestQuotationSheet(unittest.TestCase):
         self.assertAlmostEqual(
             quot["R42"], marge["arbeid"] + marge["shortTripKosten"] + marge["transferKosten"], places=4)
         for ref, veld in (("E41", "materiaal"), ("R61", "ic"), ("R67", "fullCost"),
-                          ("R69", "resultaat"), ("R74", "garantie"), ("R76", "verkoopprijs")):
+                          ("R69", "resultaat"), ("R75", "garantie"), ("R77", "verkoopprijs")):
             verwacht = marge[veld]["totaal"] if isinstance(marge[veld], dict) else marge[veld]
             self.assertAlmostEqual(quot[ref], verwacht, places=4, msg=ref)
 
@@ -339,7 +339,7 @@ class TestQuotationSheet(unittest.TestCase):
         staat["marge"]["projectPrice"] = None
         _, _, quot, berekening = _bouw(staat)
         self.assertIsNone(berekening["marge"]["verkoopprijs"])
-        for ref in ("R71", "R69", "P69", "R73", "R74", "R76"):
+        for ref in ("R71", "R69", "P69", "R73", "R74", "R75", "R77"):
             self.assertIsNone(quot[ref], msg=ref)
 
     def test_blanco_staat_bouwt_zonder_fouten(self):
@@ -347,6 +347,64 @@ class TestQuotationSheet(unittest.TestCase):
         data, calc, quot, berekening = _bouw(staat)
         self.assertGreater(len(data), 0)
         self.assertIsNone(calc["B1"])  # lege tekst wordt een echt lege cel, geen ""
+
+
+class TestBetalingskorting(unittest.TestCase):
+    """Nieuw sinds de sjabloonupdate van oktober 2026 (zie CLAUDE.md): een
+    derde debiteur-korting-lijst naast omzetbonus/provisie, met een eigen
+    Quotation sheet-rij (R74) tussen OMZETBONUS (R73) en GARANTIE (nu R75)."""
+
+    def test_schrijft_kortingklant_en_percentage(self):
+        staat = rk.nieuwe_staat()
+        staat["instellingen"]["kortingklant"] = "Hoppenbrouwers"
+        staat["marge"]["projectPrice"] = 1000
+        _, calc, quot, berekening = _bouw(staat)
+        self.assertEqual(calc["D442"], "Hoppenbrouwers")
+        self.assertAlmostEqual(calc["F442"], 0.02)
+        self.assertAlmostEqual(quot["P74"], 0.02)
+        self.assertAlmostEqual(quot["R74"], berekening["marge"]["betalingskorting"])
+        self.assertAlmostEqual(berekening["marge"]["betalingskorting"], 1000 * 0.02)
+
+    def test_telt_mee_in_de_verkoopprijs(self):
+        """Dezelfde optelsom als omzetbonus/garantie (Quotation sheet!R77 =
+        (R71+R73+R74+R75)/(1-F445)), niet een korting die van de prijs afgaat
+        -- zo staat de formule ook letterlijk in het sjabloon."""
+        staat = rk.nieuwe_staat()
+        staat["marge"]["projectPrice"] = 1000
+        zonder = rk.marge_berekening(staat, GEGEVENS)
+        staat["instellingen"]["kortingklant"] = "Hoppenbrouwers"
+        met = rk.marge_berekening(staat, GEGEVENS)
+        self.assertAlmostEqual(met["verkoopprijs"] - zonder["verkoopprijs"], 20, places=6)
+
+    def test_oud_opgeslagen_project_zonder_kortingklant_blijft_werken(self):
+        """Een staat van vóór deze toevoeging mist het veld instellingen.
+        kortingklant nog helemaal -- moet gewoon als 'geen korting' rekenen
+        i.p.v. een KeyError te geven (zie de .get() in rekenkern/calculatieblad)."""
+        staat = rk.nieuwe_staat()
+        del staat["instellingen"]["kortingklant"]
+        staat["marge"]["projectPrice"] = 1000
+        berekening = rk.bereken(staat, GEGEVENS)
+        self.assertAlmostEqual(berekening["marge"]["betalingskorting"], 0)
+        data, calc, _, _ = _bouw(staat)
+        self.assertEqual(calc["D442"], "Geen betalingskorting")
+
+
+class TestKortingklantRondje(unittest.TestCase):
+    def test_bekende_kortingklant_komt_over(self):
+        staat = rk.nieuwe_staat()
+        staat["instellingen"]["kortingklant"] = "Hoppenbrouwers"
+        data = cb.schrijf_calculatieblad(staat, GEGEVENS)
+        geimporteerd, waarschuwingen = cb.lees_calculatieblad(data, GEGEVENS)
+        self.assertEqual(geimporteerd["instellingen"]["kortingklant"], "Hoppenbrouwers")
+        self.assertEqual(waarschuwingen, [])
+
+    def test_onbekende_kortingklant_valt_terug_met_waarschuwing(self):
+        staat = rk.nieuwe_staat()
+        data = cb.schrijf_calculatieblad(staat, GEGEVENS)
+        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D442", "Een Klant Die Niet Bestaat")
+        geimporteerd, waarschuwingen = cb.lees_calculatieblad(data, GEGEVENS)
+        self.assertEqual(geimporteerd["instellingen"]["kortingklant"], "Geen betalingskorting")
+        self.assertTrue(any("betalingskorting" in w for w in waarschuwingen))
 
 
 # ============================================================================
@@ -597,6 +655,7 @@ class TestInlezenEchteSjabloon(unittest.TestCase):
         self.assertEqual(staat["instellingen"]["moeilijkheid"], "Standaard")
         self.assertEqual(staat["instellingen"]["provincie"], "Geen parkeerkosten")
         self.assertEqual(staat["instellingen"]["bonusklant"], "Geen bonusdragende klant")
+        self.assertEqual(staat["instellingen"]["kortingklant"], "Geen betalingskorting")
         self.assertEqual(staat["instellingen"]["provisieklant"], "Geen provisie")
 
     def test_blanco_sjabloon_rekent_door_zonder_fouten(self):
@@ -620,7 +679,7 @@ class TestInlezenWaarschuwingen(unittest.TestCase):
     def test_onbekende_provincie_valt_terug_met_waarschuwing(self):
         staat = _voorbeeldstaat()
         data = cb.schrijf_calculatieblad(staat, GEGEVENS)
-        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D433", "Een Provincie Die Niet Bestaat")
+        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D432", "Een Provincie Die Niet Bestaat")
         geimporteerd, waarschuwingen = cb.lees_calculatieblad(data, GEGEVENS)
         self.assertEqual(geimporteerd["instellingen"]["provincie"], "Geen parkeerkosten")
         self.assertTrue(any("provincie" in w for w in waarschuwingen))
@@ -636,7 +695,7 @@ class TestInlezenWaarschuwingen(unittest.TestCase):
     def test_onbekende_bonusklant_valt_terug_met_waarschuwing(self):
         staat = _voorbeeldstaat()
         data = cb.schrijf_calculatieblad(staat, GEGEVENS)
-        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D440", "Een Klant Die Niet Meer Bestaat")
+        data = _herschrijf_cel(data, cb.SHEET_CALCULATIE, "D439", "Een Klant Die Niet Meer Bestaat")
         geimporteerd, waarschuwingen = cb.lees_calculatieblad(data, GEGEVENS)
         self.assertEqual(geimporteerd["instellingen"]["bonusklant"], "Geen bonusdragende klant")
         self.assertTrue(any("bonusklant" in w for w in waarschuwingen))

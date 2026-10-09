@@ -4,63 +4,98 @@
   "omschrijving": "PM07SP.NSJ wandmodel binnenunit",
   "eenheid": "ST",
   "prijs": 184.99,
-  "voorraad": 8
+  "voorraad": 7
  },
  {
   "code": "BN0440006300000385",
   "omschrijving": "MU2R15.UL0 buitenunit",
   "eenheid": "ST",
   "prijs": 714.71,
-  "voorraad": 6
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000387",
   "omschrijving": "PC12SQ.NSJ wandmodel binnenunit",
   "eenheid": "ST",
   "prijs": 210,
-  "voorraad": 4
+  "voorraad": 3
+ },
+ {
+  "code": "BN0440006300000419",
+  "omschrijving": "ACT-Cat6 Patchkabel u/utp geel 3m",
+  "eenheid": "ST",
+  "prijs": 3,
+  "voorraad": 10
+ },
+ {
+  "code": "BN0440006300000420",
+  "omschrijving": "ACT-Cat6 Patchkabel u/utp geel 1m",
+  "eenheid": "ST",
+  "prijs": 1.54,
+  "voorraad": 10
+ },
+ {
+  "code": "BN0440006300000421",
+  "omschrijving": "ACT-Cat6 Patchkabel u/utp geel 1,5m",
+  "eenheid": "ST",
+  "prijs": 1.85,
+  "voorraad": 10
+ },
+ {
+  "code": "BN0440006300000422",
+  "omschrijving": "ACT-Cat6 Patchkabel u/utp geel 0,5m",
+  "eenheid": "ST",
+  "prijs": 1.27,
+  "voorraad": 10
+ },
+ {
+  "code": "BN0440006300000423",
+  "omschrijving": "ACT-Cat6 Patchkabel u/utp geel 2m",
+  "eenheid": "ST",
+  "prijs": 2.18,
+  "voorraad": 10
  },
  {
   "code": "BN0440006302010001",
-  "omschrijving": "Inoac CD-75W Leidinggoot wit",
+  "omschrijving": "CD-75W Leidinggoot wit",
   "eenheid": "M",
-  "prijs": 3.97,
-  "voorraad": 127
+  "prijs": 5.17,
+  "voorraad": 230
  },
  {
   "code": "BN0440006302010005",
-  "omschrijving": "Inoac Leidinggoot CD-75",
+  "omschrijving": "CD-75 Leidinggoot",
   "eenheid": "M",
   "prijs": 4.92,
-  "voorraad": 255
+  "voorraad": 170
  },
  {
   "code": "BN0440006302010006",
-  "omschrijving": "Inoac Leidinggoot CD-100",
+  "omschrijving": "Inoac CD-100 Leidinggoot",
   "eenheid": "M",
   "prijs": 7.5,
-  "voorraad": 58
+  "voorraad": 56
  },
  {
   "code": "BN0440006302010050",
-  "omschrijving": "Inoac leidinggoot 99x68mm CD-100W",
+  "omschrijving": "Inoac leidinggoot 2m 99x68mm CD-100W",
   "eenheid": "M",
-  "prijs": 16.64,
-  "voorraad": 46
+  "prijs": 10.35,
+  "voorraad": 176
  },
  {
   "code": "BN0440006302010066",
   "omschrijving": "Inoac goot 2 m 99x68mm CD-100BK",
   "eenheid": "M",
   "prijs": 8.78,
-  "voorraad": 38
+  "voorraad": 40
  },
  {
   "code": "BN0440006302010072",
   "omschrijving": "Inoac goot 2 m 99x68mm CD-75BK",
   "eenheid": "M",
   "prijs": 5.44,
-  "voorraad": 36
+  "voorraad": 16
  },
  {
   "code": "BN0440006302030014",
@@ -88,49 +123,49 @@
   "omschrijving": "Aspen Heavy-duty condenstankpomp 10m 4,0",
   "eenheid": "ST",
   "prijs": 245.04,
-  "voorraad": 2
+  "voorraad": 1
  },
  {
   "code": "BN0440006302040018",
   "omschrijving": "Aspen pomp Mini Aqua Silent+",
   "eenheid": "ST",
   "prijs": 91.43,
-  "voorraad": 4
+  "voorraad": 10
  },
  {
   "code": "BN0440006302040019",
   "omschrijving": "MiniBlue pomp sensor (temperatuur)",
   "eenheid": "ST",
-  "prijs": 98.18,
-  "voorraad": 9
+  "prijs": 90.84,
+  "voorraad": 15
  },
  {
   "code": "BN0440006302040020",
   "omschrijving": "Aspen pomp Mini Lime Silent+Inoac goot",
   "eenheid": "ST",
   "prijs": 101.66,
-  "voorraad": 16
+  "voorraad": 11
  },
  {
   "code": "BN0440006302040021",
   "omschrijving": "Aspen tankpomp MAX Hi-Flow 1,7L",
   "eenheid": "ST",
   "prijs": 58.29,
-  "voorraad": 7
+  "voorraad": 12
  },
  {
   "code": "BN0440006302040022",
   "omschrijving": "MaxiBlue pomp condenspomp met temp. sens",
   "eenheid": "ST",
   "prijs": 134.93,
-  "voorraad": 3
+  "voorraad": 4
  },
  {
   "code": "BN0440006302040023",
   "omschrijving": "Aspen pomp Mini Lime Silent+ (losse pomp",
   "eenheid": "ST",
   "prijs": 89.03,
-  "voorraad": 6
+  "voorraad": 18
  },
  {
   "code": "BN0440006302040028",
@@ -144,91 +179,91 @@
   "omschrijving": "Koudemiddel R32",
   "eenheid": "KG",
   "prijs": 24.55,
-  "voorraad": 97.34
+  "voorraad": 89.64
  },
  {
   "code": "BN04400063090000Z4",
   "omschrijving": "Zuurstof 4L",
   "eenheid": "BOT",
-  "prijs": 28.78,
-  "voorraad": 3
+  "prijs": 26,
+  "voorraad": 0
  },
  {
   "code": "BN0440006309000410",
   "omschrijving": "Koudemiddel R410A",
   "eenheid": "KG",
-  "prijs": 50.23,
-  "voorraad": 290.55
+  "prijs": 49.9,
+  "voorraad": 357.55
  },
  {
   "code": "BN0440006309000S10",
   "omschrijving": "Stikstof 10L",
   "eenheid": "BOT",
-  "prijs": 34,
-  "voorraad": 10
+  "prijs": 29.67,
+  "voorraad": 11
  },
  {
   "code": "BN0440006327000006",
-  "omschrijving": "Big foot balk RF1000 1000x160x95",
+  "omschrijving": "Big foot balk RF1000 1000x160x95 voorraa",
   "eenheid": "ST",
   "prijs": 9.74,
-  "voorraad": 161
+  "voorraad": 132
  },
  {
   "code": "BN0440006328000002",
-  "omschrijving": "Aircopipe PB2325 1/4 x 3/8 zwart",
+  "omschrijving": "aircopipe PB2325 1/4 x 3/8 voorraad zwar",
   "eenheid": "M",
   "prijs": 4.48,
-  "voorraad": 1048
+  "voorraad": 646
  },
  {
   "code": "BN0440006328000005",
   "omschrijving": "Aircopipe PB3525 3/8 x 5/8 zwart",
   "eenheid": "M",
-  "prijs": 8.16,
-  "voorraad": 327
+  "prijs": 9.23,
+  "voorraad": 302
  },
  {
   "code": "BN0440006328000016",
-  "omschrijving": "Aircopipe P2525 1/4 x 5/8",
+  "omschrijving": "aircopipe P2525 1/4 x 5/8 voorraad",
   "eenheid": "M",
   "prijs": 7.25,
   "voorraad": 55
  },
  {
   "code": "BN0440006328000017",
-  "omschrijving": "ILP bloc high 0,60 x 019 x 0,20m incl.",
+  "omschrijving": "ILP bloc high 0,60 x 0,22 x 0,20m incl.",
   "eenheid": "ST",
   "prijs": 24.58,
-  "voorraad": 18
+  "voorraad": 14
  },
  {
   "code": "BN0440006328000019",
   "omschrijving": "Premium opstelbalk - 60cm incl.bouten",
   "eenheid": "ST",
   "prijs": 10.18,
-  "voorraad": 94
+  "voorraad": 78
  },
  {
   "code": "BN0440006328000026",
-  "omschrijving": "Prem. balk hoog 1,00 x 0,19 x 0,20m",
+  "omschrijving": "ILP bloc high 1,00 x 0,22 x 0,20m incl.",
   "eenheid": "ST",
   "prijs": 43.5,
   "voorraad": 14
  },
  {
   "code": "BN0440006328000027",
-  "omschrijving": "Aircopipe PB2425 1/4 x 1/2 zwart",
+  "omschrijving": "aircopipe PB2425 1/4 x 1/2 voorraad zwar",
   "eenheid": "M",
   "prijs": 5.77,
-  "voorraad": 687
+  "voorraad": 475
  },
  {
   "code": "BN0440006399000039",
   "omschrijving": "Datakabel Cca 2x16AWG halogeenvrij grijs",
   "eenheid": "M",
   "prijs": 2.12,
-  "voorraad": 0
+  "voorraad": 5000
  },
  {
   "code": "BN0440006300000120",
@@ -242,7 +277,7 @@
   "omschrijving": "SLANGKLEM 26-38MM/9MM",
   "eenheid": "LN",
   "prijs": 0.93,
-  "voorraad": 60
+  "voorraad": 50
  },
  {
   "code": "BN0440006302040017",
@@ -290,8 +325,8 @@
   "code": "BN0440006300000328",
   "omschrijving": "ZS-5 3mm zilversoldeer 5%",
   "eenheid": "KG",
-  "prijs": 182.18,
-  "voorraad": 4
+  "prijs": 181.69,
+  "voorraad": 7
  },
  {
   "code": "BN0440006302010004",
@@ -312,42 +347,42 @@
   "omschrijving": "Inoac verbindingssok NS100W",
   "eenheid": "ST",
   "prijs": 3.03,
-  "voorraad": 16
+  "voorraad": 17
  },
  {
   "code": "BN0440006302010056",
   "omschrijving": "Inoac NT-100W T-stuk incl.2x verl. 60/75",
   "eenheid": "ST",
   "prijs": 13.37,
-  "voorraad": 8
+  "voorraad": 7
  },
  {
   "code": "BN0440006302010052",
   "omschrijving": "Inoac muur afdekkap NW100W",
   "eenheid": "ST",
   "prijs": 7.49,
-  "voorraad": 24
+  "voorraad": 22
  },
  {
   "code": "BN0440006302010053",
   "omschrijving": "Inoac platte bocht 90gr. NE100W",
   "eenheid": "ST",
   "prijs": 7.16,
-  "voorraad": 17
+  "voorraad": 15
  },
  {
   "code": "BN0440006302010055",
   "omschrijving": "Inoac stijgende lange bocht NC100W",
   "eenheid": "ST",
   "prijs": 6.68,
-  "voorraad": 22
+  "voorraad": 23
  },
  {
   "code": "BN044000630201054",
   "omschrijving": "Inoac plafond/wand eindstuk NA100W",
   "eenheid": "ST",
   "prijs": 5.08,
-  "voorraad": 15
+  "voorraad": 16
  },
  {
   "code": "BN0440006302010011",
@@ -365,35 +400,35 @@
  },
  {
   "code": "BN0440006302010010",
-  "omschrijving": "Inoac Platte lange bocht 90° NE-100",
+  "omschrijving": "NE-100 Platte lange bocht 90°",
   "eenheid": "ST",
   "prijs": 6.86,
   "voorraad": 34
  },
  {
   "code": "BN0440006302010008",
-  "omschrijving": "Inoac Muur afdekkap NW-100",
+  "omschrijving": "NW-100 Muur afdekkap",
   "eenheid": "ST",
   "prijs": 7.43,
-  "voorraad": 18
+  "voorraad": 17
  },
  {
   "code": "BN0440006302010013",
   "omschrijving": "Inoac verbindingssok NS100",
   "eenheid": "ST",
   "prijs": 2.97,
-  "voorraad": 16
+  "voorraad": 15
  },
  {
   "code": "BN0440006302010014",
   "omschrijving": "Inoac stijgende bocht 45° NU100",
   "eenheid": "ST",
   "prijs": 3.55,
-  "voorraad": 34
+  "voorraad": 32
  },
  {
   "code": "BN0440006302010015",
-  "omschrijving": "Inoac stijgende korte bocht 90° NL100",
+  "omschrijving": "Inoac stijgende korte bocht 90°",
   "eenheid": "ST",
   "prijs": 4.61,
   "voorraad": 18
@@ -410,7 +445,7 @@
   "omschrijving": "Inoac platte bocht 45° NM75",
   "eenheid": "ST",
   "prijs": 2.77,
-  "voorraad": 43
+  "voorraad": 42
  },
  {
   "code": "BN0440006302010031",
@@ -431,7 +466,7 @@
   "omschrijving": "Inoac platte korte bocht 90° NH75",
   "eenheid": "ST",
   "prijs": 2.88,
-  "voorraad": 43
+  "voorraad": 44
  },
  {
   "code": "BN0440006302010034",
@@ -445,14 +480,14 @@
   "omschrijving": "Inoac stijgende S-buiten bocht NZK75",
   "eenheid": "ST",
   "prijs": 6.86,
-  "voorraad": 40
+  "voorraad": 39
  },
  {
   "code": "BN0440006302010036",
   "omschrijving": "Inoac verbindingssok NS75",
   "eenheid": "ST",
-  "prijs": 1.43,
-  "voorraad": 27
+  "prijs": 1.46,
+  "voorraad": 41
  },
  {
   "code": "BN0440006302010037",
@@ -466,28 +501,28 @@
   "omschrijving": "Inoac plafond/wand-eindstuk NA75",
   "eenheid": "ST",
   "prijs": 3.77,
-  "voorraad": 167
+  "voorraad": 166
  },
  {
   "code": "BN0440006302010027",
   "omschrijving": "Inoac stijgende buiten bocht 90° NC75",
   "eenheid": "ST",
   "prijs": 3.77,
-  "voorraad": 23
+  "voorraad": 14
  },
  {
   "code": "BN0440006302010009",
-  "omschrijving": "Inoac Platte lange bocht 90° NE-75",
+  "omschrijving": "NE-75 Platte lange bocht 90°",
   "eenheid": "ST",
   "prijs": 4.04,
-  "voorraad": 43
+  "voorraad": 26
  },
  {
   "code": "BN0440006302010007",
   "omschrijving": "Inoac Muur afdekkap NW-75",
   "eenheid": "ST",
-  "prijs": 4.35,
-  "voorraad": 35
+  "prijs": 4.15,
+  "voorraad": 69
  },
  {
   "code": "BN0440006302010038",
@@ -515,14 +550,14 @@
   "omschrijving": "Inoac verstelb. bocht hor./vert. NCX75",
   "eenheid": "ST",
   "prijs": 5.32,
-  "voorraad": 25
+  "voorraad": 24
  },
  {
   "code": "BN0440006300000348",
   "omschrijving": "Taski foam",
   "eenheid": "ST",
   "prijs": 11.68,
-  "voorraad": 132
+  "voorraad": 66
  },
  {
   "code": "BN0440006300000349",
@@ -540,16 +575,16 @@
  },
  {
   "code": "BN0440006300000351",
-  "omschrijving": "GRIF SILIC. SPRY 300ML BS",
+  "omschrijving": "GRIF SILICONE FINISH 300ML BS",
   "eenheid": "ST",
   "prijs": 6.46,
-  "voorraad": 12
+  "voorraad": 6
  },
  {
   "code": "BN0440006300000352",
   "omschrijving": " WD40 450ML SMART MULTSPR BS",
   "eenheid": "ST",
-  "prijs": 8.88,
+  "prijs": 10.37,
   "voorraad": 6
  },
  {
@@ -578,7 +613,7 @@
   "omschrijving": "InduMaxx Lijm- & Bitumenremover",
   "eenheid": "BOX",
   "prijs": 123.98,
-  "voorraad": 1
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000346",
@@ -606,7 +641,7 @@
   "omschrijving": "Inoac verbindingssok NS-75BK",
   "eenheid": "ST",
   "prijs": 1.61,
-  "voorraad": 19
+  "voorraad": 21
  },
  {
   "code": "BN0440006302010073",
@@ -620,7 +655,7 @@
   "omschrijving": "Inoac stijg. buitenbocht 90 gr. NC-75BK",
   "eenheid": "ST",
   "prijs": 4.22,
-  "voorraad": 15
+  "voorraad": 14
  },
  {
   "code": "BN0440006302010071",
@@ -633,26 +668,26 @@
   "code": "BN0440006302010067",
   "omschrijving": "Inoac lange bocht 90gr. NE-75BK",
   "eenheid": "ST",
-  "prijs": 4.49,
-  "voorraad": 9
+  "prijs": 4.5,
+  "voorraad": 22
  },
  {
   "code": "BN0440006302010069",
   "omschrijving": "Inoac muur afdekkap NW-75BK",
   "eenheid": "ST",
-  "prijs": 4.33,
-  "voorraad": 12
+  "prijs": 4.34,
+  "voorraad": 21
  },
  {
   "code": "BN0440006300000003",
   "omschrijving": "Trillingsdempers Cilindrisch M8 40x30mm",
   "eenheid": "ST",
   "prijs": 1.31,
-  "voorraad": 34
+  "voorraad": 50
  },
  {
   "code": "BN0440006301030045",
-  "omschrijving": "Trillingsdemper M12 30x40 VRF",
+  "omschrijving": "Trillingsdemper M12 30x40",
   "eenheid": "ST",
   "prijs": 11.06,
   "voorraad": 28
@@ -661,40 +696,40 @@
   "code": "BN0440006302030015",
   "omschrijving": "Rodigas MS207 wandbeugel met aluminium",
   "eenheid": "ST",
-  "prijs": 32.48,
-  "voorraad": 9
+  "prijs": 35.63,
+  "voorraad": 8
  },
  {
   "code": "BN0440006302030019",
   "omschrijving": "MPC-consoleset zonder geluidd. l=560",
   "eenheid": "ST",
   "prijs": 42.21,
-  "voorraad": 24
+  "voorraad": 19
  },
  {
   "code": "BN0440006302010062",
-  "omschrijving": "Inoac verbindingssok NS-100BK",
+  "omschrijving": "Incoac verbindingssok NS-100BK",
   "eenheid": "ST",
   "prijs": 3.29,
   "voorraad": 16
  },
  {
   "code": "BN0440006302010065",
-  "omschrijving": "Inoac NT-100BK T-Stuk incl.2xverl 60/75",
+  "omschrijving": "Incoac NT-100BK T-Stuk incl.2xverl 60/75",
   "eenheid": "ST",
   "prijs": 14.45,
   "voorraad": 15
  },
  {
   "code": "BN0440006302010064",
-  "omschrijving": "Inoac stijgende lange bocht NC-100BK",
+  "omschrijving": "Incoac stijgende lange bocht NC-100BK",
   "eenheid": "ST",
   "prijs": 7.24,
   "voorraad": 15
  },
  {
   "code": "BN0440006302010063",
-  "omschrijving": "Inoac plafond/wand eindstuk NA-100BK",
+  "omschrijving": "Incoac plafond/wand eindstuk NA-100BK",
   "eenheid": "ST",
   "prijs": 5.5,
   "voorraad": 15
@@ -708,10 +743,10 @@
  },
  {
   "code": "BN0440006302010061",
-  "omschrijving": "Inoac muur afdekkap NW-100BK",
+  "omschrijving": "Incoac muur afdekkap NW-100BK",
   "eenheid": "ST",
   "prijs": 8.12,
-  "voorraad": 13
+  "voorraad": 14
  },
  {
   "code": "BN0440006302010049",
@@ -725,14 +760,14 @@
   "omschrijving": "Inoac verbindingssok NS75-W",
   "eenheid": "ST",
   "prijs": 1.54,
-  "voorraad": 32
+  "voorraad": 26
  },
  {
   "code": "BN0440006302010046",
   "omschrijving": "Inoac stijgende bocht 45°",
   "eenheid": "ST",
   "prijs": 2.73,
-  "voorraad": 69
+  "voorraad": 65
  },
  {
   "code": "BN0440006302010047",
@@ -752,29 +787,29 @@
   "code": "BN0440006302010039",
   "omschrijving": "Inoac stijgende buiten bocht 90° NC75-W",
   "eenheid": "ST",
-  "prijs": 4.05,
-  "voorraad": 11
+  "prijs": 3.92,
+  "voorraad": 30
  },
  {
   "code": "BN0440006302010040",
   "omschrijving": "Inoac plafond/wand eindstuk NA75-W",
   "eenheid": "ST",
   "prijs": 3.91,
-  "voorraad": 82
+  "voorraad": 70
  },
  {
   "code": "BN0440006302010003",
-  "omschrijving": "Inoac Platte lange bocht 90° NE-75W",
+  "omschrijving": "NE-75W Platte lange bocht 90°",
   "eenheid": "ST",
-  "prijs": 4.42,
-  "voorraad": 23
+  "prijs": 4.43,
+  "voorraad": 55
  },
  {
   "code": "BN0440006302010002",
-  "omschrijving": "Inoac Muur afdekkap wit NW-75W",
+  "omschrijving": "NW-75W Muur afdekkap wit",
   "eenheid": "ST",
-  "prijs": 4.28,
-  "voorraad": 38
+  "prijs": 4.12,
+  "voorraad": 46
  },
  {
   "code": "BN0440006302010041",
@@ -788,7 +823,7 @@
   "omschrijving": "Inoac platte bocht 45° NM75-W",
   "eenheid": "ST",
   "prijs": 2.99,
-  "voorraad": 213
+  "voorraad": 208
  },
  {
   "code": "BN0440006302010043",
@@ -802,7 +837,7 @@
   "omschrijving": "Inoac verstelb. pl. bocht 45-90° NX75-W",
   "eenheid": "ST",
   "prijs": 4.05,
-  "voorraad": 180
+  "voorraad": 176
  },
  {
   "code": "BN0440006300000004",
@@ -816,7 +851,7 @@
   "omschrijving": "Kabelbinder 300x7,6mm zwart",
   "eenheid": "BAG",
   "prijs": 4.08,
-  "voorraad": 0
+  "voorraad": 50
  },
  {
   "code": "BN0440006300000013",
@@ -899,14 +934,14 @@
   "code": "BN0440006300000009",
   "omschrijving": "Aspen leidingdrager plastic P2 3/8-5/8",
   "eenheid": "BAG",
-  "prijs": 7.82,
-  "voorraad": 0
+  "prijs": 8.35,
+  "voorraad": 15
  },
  {
   "code": "BN0440006300000010",
   "omschrijving": "Aspen leidingdrager plastic P3 1/2-7/8",
   "eenheid": "BAG",
-  "prijs": 7.77,
+  "prijs": 8.56,
   "voorraad": 15
  },
  {
@@ -914,7 +949,7 @@
   "omschrijving": "Aspen leidingdrager plastic P4 5/8-1.1/8",
   "eenheid": "BAG",
   "prijs": 9.12,
-  "voorraad": 100
+  "voorraad": 90
  },
  {
   "code": "BN0440006300000017",
@@ -928,28 +963,28 @@
   "omschrijving": "Alum. plakplaat 125mm EW",
   "eenheid": "ST",
   "prijs": 16.88,
-  "voorraad": 152
+  "voorraad": 148
  },
  {
   "code": "BN0440006301000021",
   "omschrijving": "PVC bocht grijs 45 gr. SN4 125 mm mof/sp",
   "eenheid": "ST",
   "prijs": 6.89,
-  "voorraad": 39
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000374",
   "omschrijving": " WAFX BOCHT 45GR 125MM 2XMOF",
   "eenheid": "ST",
   "prijs": 7.98,
-  "voorraad": 40
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000022",
   "omschrijving": "PVC drukleiding verloopstuk, 32-25x20mm",
   "eenheid": "ST",
   "prijs": 0.92,
-  "voorraad": 20
+  "voorraad": 30
  },
  {
   "code": "BN0440006300000023",
@@ -990,8 +1025,8 @@
   "code": "BN0440006300000027",
   "omschrijving": "PVC drukleiding knie 90gr, 20mm",
   "eenheid": "ST",
-  "prijs": 0.99,
-  "voorraad": 20
+  "prijs": 0.59,
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000028",
@@ -1033,14 +1068,14 @@
   "omschrijving": "PVC drukleiding sok, 20mm",
   "eenheid": "ST",
   "prijs": 0.55,
-  "voorraad": 50
+  "voorraad": 30
  },
  {
   "code": "BN0440006300000034",
   "omschrijving": "PVC drukleiding knie 45gr, 20mm",
   "eenheid": "ST",
-  "prijs": 0.99,
-  "voorraad": 30
+  "prijs": 2.14,
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000035",
@@ -1117,14 +1152,14 @@
   "omschrijving": "Pipelife bocht 45gr, 32mm m/s",
   "eenheid": "ST",
   "prijs": 0.5,
-  "voorraad": 30
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000046",
   "omschrijving": "Pipelife bocht 45gr, 32mm m/m",
   "eenheid": "ST",
   "prijs": 0.5,
-  "voorraad": 30
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000047",
@@ -1137,7 +1172,7 @@
   "code": "BN0440006300000048",
   "omschrijving": "Pipelife bocht 90gr, 32mm m/m",
   "eenheid": "ST",
-  "prijs": 0.72,
+  "prijs": 0.68,
   "voorraad": 30
  },
  {
@@ -1152,13 +1187,13 @@
   "omschrijving": "Inaba Denko VT-19-W tape 19mmx10m, wit",
   "eenheid": "ST",
   "prijs": 0.71,
-  "voorraad": 60
+  "voorraad": 200
  },
  {
   "code": "BN0440006300000051",
   "omschrijving": "Inaba Denko VT-19-K tape 19mmx10m, zwart",
   "eenheid": "ST",
-  "prijs": 0.71,
+  "prijs": 0.75,
   "voorraad": 200
  },
  {
@@ -1177,10 +1212,10 @@
  },
  {
   "code": "BN0440006300000054",
-  "omschrijving": "PVC tape 50x20 zwart HT-50-PVC",
+  "omschrijving": "PVC tape 50x10 zwart",
   "eenheid": "ST",
   "prijs": 4.05,
-  "voorraad": 160
+  "voorraad": 80
  },
  {
   "code": "BN0440006300000018",
@@ -1200,15 +1235,15 @@
   "code": "BN0440006300000020",
   "omschrijving": "Pipelife verloopring centrisch, 40x32mm",
   "eenheid": "ST",
-  "prijs": 0.56,
-  "voorraad": 20
+  "prijs": 0.52,
+  "voorraad": 30
  },
  {
   "code": "BN0440006300000021",
   "omschrijving": "PVC drukleiding verloopstuk, 40-32x20mm",
   "eenheid": "ST",
   "prijs": 1.39,
-  "voorraad": 30
+  "voorraad": 0
  },
  {
   "code": "BN0440006300000062",
@@ -1249,8 +1284,8 @@
   "code": "BN0440006300000055",
   "omschrijving": "WaTech lijmsifon universeel 32mm",
   "eenheid": "ST",
-  "prijs": 3,
-  "voorraad": 3
+  "prijs": 3.88,
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000067",
@@ -1278,14 +1313,14 @@
   "omschrijving": "WaTech lijmsifon universeel 40mm",
   "eenheid": "ST",
   "prijs": 7.64,
-  "voorraad": 11
+  "voorraad": 8
  },
  {
   "code": "BN0440006300000070",
   "omschrijving": "WADL T-STUK 45G 40 3XM L",
   "eenheid": "ST",
-  "prijs": 0.94,
-  "voorraad": 5
+  "prijs": 1.17,
+  "voorraad": 30
  },
  {
   "code": "BN0440006300000071",
@@ -1410,14 +1445,14 @@
   "code": "BN0440006300000089",
   "omschrijving": "Pipelife Polfix klembeugel 19mm ds100",
   "eenheid": "BOX",
-  "prijs": 50.51,
+  "prijs": 54.67,
   "voorraad": 1
  },
  {
   "code": "BN0440006300000091",
   "omschrijving": "PIPE POLF UVS KLMB 19 ZW DS100",
   "eenheid": "BOX",
-  "prijs": 53.33,
+  "prijs": 49.71,
   "voorraad": 1
  },
  {
@@ -1446,7 +1481,7 @@
   "omschrijving": "Airfit recht aansluitstuk 32x8,5-26,5mm",
   "eenheid": "ST",
   "prijs": 5.73,
-  "voorraad": 10
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000097",
@@ -1508,8 +1543,8 @@
   "code": "BN0440006300000359",
   "omschrijving": "RVS beugel Ø 125",
   "eenheid": "ST",
-  "prijs": 4.4,
-  "voorraad": 14
+  "prijs": 4.22,
+  "voorraad": 25
  },
  {
   "code": "BN0440006300000085",
@@ -1677,21 +1712,21 @@
   "omschrijving": "Voedingskabel YMvK - Dca - 3x2,50mm²-50m",
   "eenheid": "M",
   "prijs": 1.68,
-  "voorraad": 247
+  "voorraad": 192
  },
  {
   "code": "BN0440006300000131",
   "omschrijving": "Voedingskabel/1000 Dca 5G 2,5mm2 grijs",
   "eenheid": "M",
   "prijs": 2.51,
-  "voorraad": 100
+  "voorraad": 80
  },
  {
   "code": "BN0440006300000132",
   "omschrijving": "halogeenvrij CCA 2x0,75 kabel",
   "eenheid": "M",
   "prijs": 0.56,
-  "voorraad": 3070
+  "voorraad": 2490
  },
  {
   "code": "BN0440006300000133",
@@ -1704,8 +1739,8 @@
   "code": "BN0440007302010074",
   "omschrijving": "Aansluitkabel VMvL Eca wit 3x1,50mm -100",
   "eenheid": "M",
-  "prijs": 0.95,
-  "voorraad": 200
+  "prijs": 1.09,
+  "voorraad": 320
  },
  {
   "code": "BN0440006399000034",
@@ -1719,55 +1754,55 @@
   "omschrijving": "Stuurstroomkabel Cca 5x2,5 mm2",
   "eenheid": "M",
   "prijs": 2.51,
-  "voorraad": 1600
+  "voorraad": 1588
  },
  {
   "code": "BN0440006300000391",
   "omschrijving": "DRAK VULT DCA-S2 5G6 MT",
   "eenheid": "M",
   "prijs": 7.31,
-  "voorraad": 3.5
+  "voorraad": 8
  },
  {
   "code": "BN0440006399000012",
   "omschrijving": "Audio cable 1x2x1.23 mm 91002",
   "eenheid": "M",
   "prijs": 1.4,
-  "voorraad": 3951
+  "voorraad": 3731
  },
  {
   "code": "BN0440006300000134",
   "omschrijving": "Aansluitsnoer met stekker 3G1,5 mm²-Z 3M",
   "eenheid": "ST",
   "prijs": 6.18,
-  "voorraad": 18
+  "voorraad": 16
  },
  {
   "code": "BN0440006300000135",
   "omschrijving": "Aansluitsnoer met stekker 3G1,5 mm²-W 3M",
   "eenheid": "ST",
-  "prijs": 6.18,
-  "voorraad": 7
+  "prijs": 6.19,
+  "voorraad": 25
  },
  {
   "code": "BN0440006300000124",
   "omschrijving": " WAV AFVRBS 32 ULTRA3 LG4",
   "eenheid": "U",
   "prijs": 7.17,
-  "voorraad": 20
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000125",
   "omschrijving": "PVC KIWA BUIS 16X1,5 16ATO LG4",
   "eenheid": "U",
-  "prijs": 3.7,
+  "prijs": 4.77,
   "voorraad": 5
  },
  {
   "code": "BN0440006300000126",
   "omschrijving": "PVC KIWA BUIS 20X1.5 16ATO LG4",
   "eenheid": "U",
-  "prijs": 5.53,
+  "prijs": 6.69,
   "voorraad": 25
  },
  {
@@ -1792,18 +1827,11 @@
   "voorraad": 25
  },
  {
-  "code": "BN0440006399000035",
-  "omschrijving": "Stuurstroomkabel LSOH Cca 4x1,5 mm2",
-  "eenheid": "M",
-  "prijs": 1.36,
-  "voorraad": 914
- },
- {
   "code": "BN0440006399000038",
   "omschrijving": "Stuurstroomkabel CPR S1 D1 A1 4x1,5 mm2",
   "eenheid": "M",
   "prijs": 1.6,
-  "voorraad": 2500
+  "voorraad": 2129
  },
  {
   "code": "BN0440006300000130",
@@ -1821,10 +1849,10 @@
  },
  {
   "code": "BN0440006300000353",
-  "omschrijving": "draadeind 8mm 2meter (25 stuks)",
+  "omschrijving": "draadeind 8mm 2meter",
   "eenheid": "BOX",
-  "prijs": 23.8,
-  "voorraad": 10
+  "prijs": 23.79,
+  "voorraad": 7
  },
  {
   "code": "BN0440006300000354",
@@ -1835,7 +1863,7 @@
  },
  {
   "code": "BN0440006300000355",
-  "omschrijving": "Montagerail 30x15x2.0 L=2meter (10 st.)",
+  "omschrijving": "Montagerail 30x15x2.0    2meter",
   "eenheid": "BOX",
   "prijs": 28.35,
   "voorraad": 7
@@ -1879,8 +1907,8 @@
   "code": "BN0440006300000137",
   "omschrijving": "CAN LEIDKOK 15X10MM WIT LG2",
   "eenheid": "U",
-  "prijs": 6.45,
-  "voorraad": 20
+  "prijs": 6.54,
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000138",
@@ -1908,7 +1936,7 @@
   "omschrijving": "Wypall doeken",
   "eenheid": "BOX",
   "prijs": 82,
-  "voorraad": 7
+  "voorraad": 2
  },
  {
   "code": "BN0440006300000145",
@@ -1922,7 +1950,7 @@
   "omschrijving": "Doorz. PVC slang 6x10",
   "eenheid": "M",
   "prijs": 0.47,
-  "voorraad": 204
+  "voorraad": 604
  },
  {
   "code": "BN0440006300000142",
@@ -1942,8 +1970,8 @@
   "code": "BN0440006300000143",
   "omschrijving": "Condensslang 0016TU 16 mm, 30 m. per rol",
   "eenheid": "ROL",
-  "prijs": 24.38,
-  "voorraad": 12
+  "prijs": 21.68,
+  "voorraad": 4
  },
  {
   "code": "BN0440006300000144",
@@ -1956,15 +1984,15 @@
   "code": "BN0440006301000059",
   "omschrijving": "Gewapende PVC slang 10X 16X 3.0 transp.",
   "eenheid": "M",
-  "prijs": 1.06,
-  "voorraad": 232
+  "prijs": 1.07,
+  "voorraad": 576
  },
  {
   "code": "BN0440006300000392",
   "omschrijving": "SLANGKLEM 13-20MM/9MM",
   "eenheid": "ST",
   "prijs": 0.61,
-  "voorraad": 25
+  "voorraad": 30
  },
  {
   "code": "BN0440006300000146",
@@ -1978,14 +2006,14 @@
   "omschrijving": "Vikan kleine handwasborstel",
   "eenheid": "ST",
   "prijs": 8.06,
-  "voorraad": 0
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000156",
   "omschrijving": "wegwerpkwast plastik steel 35mm/nr. 20",
   "eenheid": "ST",
   "prijs": 1.86,
-  "voorraad": 20
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000157",
@@ -2005,8 +2033,8 @@
   "code": "BN0440006300000148",
   "omschrijving": "GRIF GASLEKZOEKER SHERLOCK BS",
   "eenheid": "ST",
-  "prijs": 5.18,
-  "voorraad": 5
+  "prijs": 5.14,
+  "voorraad": 14
  },
  {
   "code": "BN0440006300000149",
@@ -2101,17 +2129,17 @@
  },
  {
   "code": "BN0440006328000003",
-  "omschrijving": "Sontheimer werkschakelaar 4P/25A 230/400",
+  "omschrijving": "Sontheimer RLO werkschakelaar 4P/25A",
   "eenheid": "ST",
   "prijs": 18.75,
-  "voorraad": 19
+  "voorraad": 13
  },
  {
   "code": "BN0440006300000178",
   "omschrijving": "Zadel met schroefbev. 21,9x15,9 zw",
   "eenheid": "BAG",
   "prijs": 5.95,
-  "voorraad": 57
+  "voorraad": 53
  },
  {
   "code": "BN0440006300000179",
@@ -2132,14 +2160,14 @@
   "omschrijving": "ATT KABELDOOS  AK1 IP65 M20",
   "eenheid": "ST",
   "prijs": 4.24,
-  "voorraad": 15
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000361",
   "omschrijving": "WAGO DOORVOERCONN 4M DS60",
   "eenheid": "BOX",
   "prijs": 17.41,
-  "voorraad": 6
+  "voorraad": 4
  },
  {
   "code": "BN0440006300000171",
@@ -2187,22 +2215,22 @@
   "code": "BN0440006300000177",
   "omschrijving": "MK CONTST RA/BA 16A KL H WIT",
   "eenheid": "ST",
-  "prijs": 1,
+  "prijs": 1.02,
   "voorraad": 15
  },
  {
   "code": "BN0440006328000028",
-  "omschrijving": "Sontheimer werkschakelaar 3P/16A 230V",
+  "omschrijving": "Sontheimer RLO werkschakelaar 3P/16A",
   "eenheid": "ST",
-  "prijs": 15.02,
-  "voorraad": 55
+  "prijs": 15.03,
+  "voorraad": 28
  },
  {
   "code": "BN0440006300000188",
   "omschrijving": "KLEM PERSKBSC A2553R 2,5 DS100 100730",
   "eenheid": "BOX",
   "prijs": 8.51,
-  "voorraad": 8
+  "voorraad": 7
  },
  {
   "code": "BN0440006300000189",
@@ -2222,15 +2250,15 @@
   "code": "BN0440006300000191",
   "omschrijving": "Grif T88 kiwa lijm 250ml",
   "eenheid": "ST",
-  "prijs": 6.79,
-  "voorraad": 12
+  "prijs": 6.78,
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000192",
   "omschrijving": "Grif cleaner PVC 125ml",
   "eenheid": "ST",
   "prijs": 4.85,
-  "voorraad": 6
+  "voorraad": 5
  },
  {
   "code": "BN0440006300000329",
@@ -2255,10 +2283,10 @@
  },
  {
   "code": "BN0440006328000007",
-  "omschrijving": "Sontheimer werkschakelaar 4P/63A 400V",
+  "omschrijving": "Sontheimer RLT werkschakelaar 4P/63A 380",
   "eenheid": "ST",
   "prijs": 62.85,
-  "voorraad": 8
+  "voorraad": 3
  },
  {
   "code": "BN0440006300000193",
@@ -2314,14 +2342,14 @@
   "omschrijving": "WISK PAKBUS ESKV M20X1,5",
   "eenheid": "ST",
   "prijs": 0.4,
-  "voorraad": 65
+  "voorraad": 50
  },
  {
   "code": "BN0440006300000196",
   "omschrijving": "WISK Contmoer M20x1,5",
   "eenheid": "ST",
   "prijs": 0.11,
-  "voorraad": 0
+  "voorraad": 50
  },
  {
   "code": "BN0440006300000199",
@@ -2335,7 +2363,7 @@
   "omschrijving": "WISK PAKBUS ESKV M25X1,5",
   "eenheid": "ST",
   "prijs": 0.51,
-  "voorraad": 190
+  "voorraad": 170
  },
  {
   "code": "BN0440006300000201",
@@ -2377,21 +2405,21 @@
   "omschrijving": "KLEM PERSKBSC A1543R 1,5 DS100 100270",
   "eenheid": "BOX",
   "prijs": 7.7,
-  "voorraad": 7
+  "voorraad": 6
  },
  {
   "code": "BN0440006300000185",
   "omschrijving": "KLEM DOORVERBIND A1525SK DS100  100170",
   "eenheid": "BOX",
-  "prijs": 10.62,
-  "voorraad": 4
+  "prijs": 11.82,
+  "voorraad": 6
  },
  {
   "code": "BN0440006300000186",
   "omschrijving": "KLEM VORKKBSCH A2530GS DS100 100600",
   "eenheid": "BOX",
-  "prijs": 8.06,
-  "voorraad": 1
+  "prijs": 8.68,
+  "voorraad": 6
  },
  {
   "code": "BN0440006300000187",
@@ -2408,81 +2436,11 @@
   "voorraad": 5
  },
  {
-  "code": "BN0440006300000205",
-  "omschrijving": "B 2-6 afdichtring koper 3/8\"",
-  "eenheid": "ST",
-  "prijs": 0.36,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000206",
-  "omschrijving": "B 2-12 afdichtring koper 3/4\"",
-  "eenheid": "ST",
-  "prijs": 0.71,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000386",
-  "omschrijving": "Soldeer T-stuk 5/8\"",
-  "eenheid": "ST",
-  "prijs": 2.15,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000207",
-  "omschrijving": "9600 3/8 1/2 verloop",
-  "eenheid": "ST",
-  "prijs": 1.36,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000208",
-  "omschrijving": "9600-R soldeerverloopsok i x i 3/4\"-5/8\"",
-  "eenheid": "ST",
-  "prijs": 2.01,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000209",
-  "omschrijving": "B 2-4 afdichtring koper 1/4\"",
-  "eenheid": "ST",
-  "prijs": 0.3,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000210",
-  "omschrijving": "B 2-10 afdichtring koper 5/8\"",
-  "eenheid": "ST",
-  "prijs": 0.45,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000211",
-  "omschrijving": "9611 soldeer T-stuk 1/2\"",
-  "eenheid": "ST",
-  "prijs": 3.41,
-  "voorraad": 24
- },
- {
-  "code": "BN0440006300000212",
-  "omschrijving": "9600 1/4 3/8 verloop",
-  "eenheid": "ST",
-  "prijs": 1.61,
-  "voorraad": 0
- },
- {
   "code": "BN0440006300000213",
   "omschrijving": "9600-R soldeerverloopsok i x i 3/4\"-1/2\"",
   "eenheid": "ST",
   "prijs": 5.63,
   "voorraad": 0
- },
- {
-  "code": "BN0440006302060005",
-  "omschrijving": "Danfoss flare/soldeer FSA 66 3/4\"",
-  "eenheid": "ST",
-  "prijs": 9.3,
-  "voorraad": 4
  },
  {
   "code": "BN0440006300000214",
@@ -2499,10 +2457,45 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000216",
-  "omschrijving": "9606 soldeerbocht 45° i x i 1/2\"",
+  "code": "BN0440006300000209",
+  "omschrijving": "B 2-4 afdichtring koper 1/4\"",
   "eenheid": "ST",
-  "prijs": 1.68,
+  "prijs": 0.3,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000205",
+  "omschrijving": "B 2-6 afdichtring koper 3/8\"",
+  "eenheid": "ST",
+  "prijs": 0.36,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000203",
+  "omschrijving": "B 2-8 afdichtring koper 1/2\"",
+  "eenheid": "ST",
+  "prijs": 0.42,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000210",
+  "omschrijving": "B 2-10 afdichtring koper 5/8\"",
+  "eenheid": "ST",
+  "prijs": 0.45,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000206",
+  "omschrijving": "B 2-12 afdichtring koper 3/4\"",
+  "eenheid": "ST",
+  "prijs": 0.71,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000208",
+  "omschrijving": "9600-R soldeerverloopsok i x i 3/4\"-5/8\"",
+  "eenheid": "ST",
+  "prijs": 2.01,
   "voorraad": 0
  },
  {
@@ -2513,39 +2506,18 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000218",
-  "omschrijving": "45° bocht 3/4 9606",
+  "code": "BN0440006302060005",
+  "omschrijving": "Danfoss flare/soldeer FSA 66 3/4\"",
   "eenheid": "ST",
-  "prijs": 3.17,
+  "prijs": 9.3,
+  "voorraad": 2
+ },
+ {
+  "code": "BN0440006300000216",
+  "omschrijving": "9606 soldeerbocht 45° i x i 1/2\"",
+  "eenheid": "ST",
+  "prijs": 1.68,
   "voorraad": 0
- },
- {
-  "code": "BN0440006300000219",
-  "omschrijving": "9607-LT soldeerbocht 90° i x i 3/4\"",
-  "eenheid": "ST",
-  "prijs": 3.95,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000220",
-  "omschrijving": "AV6 CPS schraderventiel 3/8\" met pijpje",
-  "eenheid": "ST",
-  "prijs": 3.38,
-  "voorraad": 10
- },
- {
-  "code": "BN0440006300000221",
-  "omschrijving": "AV4 schraderventiel 1/4\" met pijpje",
-  "eenheid": "ST",
-  "prijs": 2.5,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006302010074",
-  "omschrijving": "9611 soldeer T-stuk 3/8\"",
-  "eenheid": "ST",
-  "prijs": 3.13,
-  "voorraad": 50
  },
  {
   "code": "BN0440006300000222",
@@ -2562,10 +2534,66 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000224",
-  "omschrijving": "45° bocht 7/8 9606",
+  "code": "BN0440006300000219",
+  "omschrijving": "9607-LT soldeerbocht 90° i x i 3/4\"",
   "eenheid": "ST",
-  "prijs": 3.25,
+  "prijs": 3.95,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000414",
+  "omschrijving": "9611 soldeer T-stuk 1/4\"",
+  "eenheid": "ST",
+  "prijs": 4.23,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006302010074",
+  "omschrijving": "9611 soldeer T-stuk 3/8\"",
+  "eenheid": "ST",
+  "prijs": 3.13,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000211",
+  "omschrijving": "9611 soldeer T-stuk 1/2\"",
+  "eenheid": "ST",
+  "prijs": 3.41,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000386",
+  "omschrijving": "Soldeer T-stuk 5/8\"",
+  "eenheid": "ST",
+  "prijs": 2.15,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000415",
+  "omschrijving": "9611 soldeer T-stuk 3/4\"",
+  "eenheid": "ST",
+  "prijs": 5,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000416",
+  "omschrijving": "9611 soldeer T-stuk 7/8\"",
+  "eenheid": "ST",
+  "prijs": 5.32,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006321000013",
+  "omschrijving": "Danfoss flare/soldeer FSA 516 5/8",
+  "eenheid": "ST",
+  "prijs": 5.54,
+  "voorraad": 231
+ },
+ {
+  "code": "BN0440006300000417",
+  "omschrijving": "9611 soldeer T-stuk 1.1/8\"",
+  "eenheid": "ST",
+  "prijs": 10.67,
   "voorraad": 0
  },
  {
@@ -2576,59 +2604,17 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006321000013",
-  "omschrijving": "Danfoss flare/soldeer FSA 516 5/8",
+  "code": "BN0440006300000243",
+  "omschrijving": "9607-LT 1.1/8\" bocht 90° i x i",
   "eenheid": "ST",
-  "prijs": 5.49,
-  "voorraad": 142
- },
- {
-  "code": "BN0440006321000010",
-  "omschrijving": "Danfoss flare/soldeer FSA 22 1/4",
-  "eenheid": "ST",
-  "prijs": 2.67,
-  "voorraad": 225
- },
- {
-  "code": "BN0440006321000011",
-  "omschrijving": "Danfoss flare/soldeer FSA 33 3/8",
-  "eenheid": "ST",
-  "prijs": 3.62,
-  "voorraad": 220
- },
- {
-  "code": "BN0440006321000012",
-  "omschrijving": "Danfoss flare/soldeer FSA 44 1/2",
-  "eenheid": "ST",
-  "prijs": 4.46,
-  "voorraad": 181
- },
- {
-  "code": "BN0440006300000203",
-  "omschrijving": "B 2-8 afdichtring koper 1/2\"",
-  "eenheid": "ST",
-  "prijs": 0.42,
+  "prijs": 8.54,
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000204",
-  "omschrijving": "9600-R 5/8'' - 3/8'' verloopsok i x i",
+  "code": "BN0440006300000235",
+  "omschrijving": "9600 1/4\"sok",
   "eenheid": "ST",
-  "prijs": 1.73,
-  "voorraad": 0
- },
- {
-  "code": "BN0440006300000397",
-  "omschrijving": "FLEX-PUR NBS KELFORT DSR NBS PISTOOL 750",
-  "eenheid": "ST",
-  "prijs": 9.71,
-  "voorraad": 9
- },
- {
-  "code": "BN0440006300000236",
-  "omschrijving": "9600 3/8\"sok",
-  "eenheid": "ST",
-  "prijs": 1.24,
+  "prijs": 0.61,
   "voorraad": 0
  },
  {
@@ -2636,6 +2622,48 @@
   "omschrijving": "9600 soldeersok 1/2\"",
   "eenheid": "ST",
   "prijs": 0.7,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000241",
+  "omschrijving": "9600 7/8 sok",
+  "eenheid": "ST",
+  "prijs": 2.34,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000218",
+  "omschrijving": "45° bocht 3/4 9606",
+  "eenheid": "ST",
+  "prijs": 3.17,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000224",
+  "omschrijving": "45° bocht 7/8 9606",
+  "eenheid": "ST",
+  "prijs": 3.25,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000244",
+  "omschrijving": "9606 soldeerbocht 45° i x i 1.1/8\"",
+  "eenheid": "ST",
+  "prijs": 6.12,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006321000010",
+  "omschrijving": "Danfoss flare/soldeer FSA 22 1/4",
+  "eenheid": "ST",
+  "prijs": 2.63,
+  "voorraad": 359
+ },
+ {
+  "code": "BN0440006300000236",
+  "omschrijving": "9600 3/8\"sok",
+  "eenheid": "ST",
+  "prijs": 1.24,
   "voorraad": 0
  },
  {
@@ -2653,38 +2681,171 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000240",
-  "omschrijving": "sok 1 3/8",
+  "code": "BN0440006321000011",
+  "omschrijving": "Danfoss flare/soldeer FSA 33 3/8",
   "eenheid": "ST",
-  "prijs": 4.97,
+  "prijs": 3.62,
+  "voorraad": 142
+ },
+ {
+  "code": "BN0440006321000012",
+  "omschrijving": "Danfoss flare/soldeer FSA 44 1/2",
+  "eenheid": "ST",
+  "prijs": 4.46,
+  "voorraad": 153
+ },
+ {
+  "code": "BN0440006300000212",
+  "omschrijving": "9600 1/4 3/8 verloop",
+  "eenheid": "ST",
+  "prijs": 1.61,
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000241",
-  "omschrijving": "9600 7/8 sok",
+  "code": "BN0440006300000207",
+  "omschrijving": "9600 3/8 1/2 verloop",
   "eenheid": "ST",
-  "prijs": 2.34,
+  "prijs": 1.36,
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000242",
-  "omschrijving": "9600 1.1/8\" sok",
+  "code": "BN0440006300000204",
+  "omschrijving": "9600-R 5/8'' - 3/8'' verloopsok i x i",
   "eenheid": "ST",
-  "prijs": 4.27,
+  "prijs": 1.73,
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000243",
-  "omschrijving": "9607-LT 1.1/8\" bocht 90° i x i",
+  "code": "BN0440006300000397",
+  "omschrijving": "FLEX-PUR NBS KELFORT DSR NBS PISTOOL 750",
   "eenheid": "ST",
-  "prijs": 8.54,
+  "prijs": 9.71,
+  "voorraad": 9
+ },
+ {
+  "code": "BN0440006300000400",
+  "omschrijving": "9600-R soldeerverl.sok i x i 1/2\"-1/4\"",
+  "eenheid": "ST",
+  "prijs": 2.69,
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000244",
-  "omschrijving": "9606 soldeerbocht 45° i x i 1.1/8\"",
+  "code": "BN0440006300000401",
+  "omschrijving": "9600-R soldeerverl.sok i x i 1/2\"-3/8\"",
+  "eenheid": "ST",
+  "prijs": 1.47,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000402",
+  "omschrijving": "9600-R soldeerverl.sok i x i 5/8\"-1/4\"",
+  "eenheid": "ST",
+  "prijs": 2.73,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000403",
+  "omschrijving": "9600-R soldeerverl.sok i x i 5/8\"-3/8\"",
+  "eenheid": "ST",
+  "prijs": 1.87,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000404",
+  "omschrijving": "9600-R soldeerverl.sok i x i 5/8\"-1/2\"",
+  "eenheid": "ST",
+  "prijs": 1.78,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000405",
+  "omschrijving": "9600-R soldeerverl.sok i x i 3/4\"-3/8\"",
+  "eenheid": "ST",
+  "prijs": 5.42,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000406",
+  "omschrijving": "9600-R soldeerverl.sok i x i 3/4\"-1/2\"",
   "eenheid": "ST",
   "prijs": 6.12,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000407",
+  "omschrijving": "9600-R soldeerverl.sok i x i 3/4\"-5/8\"",
+  "eenheid": "ST",
+  "prijs": 2.19,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000408",
+  "omschrijving": "9600-R soldeerverl.sok i x i 7/8\"-3/8\"",
+  "eenheid": "ST",
+  "prijs": 4.4,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000418",
+  "omschrijving": "9600-R soldeerverloopsok i x i 7/8\"-1/2\"",
+  "eenheid": "ST",
+  "prijs": 4.37,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000409",
+  "omschrijving": "9600-R soldeerverl.sok i x i 7/8\"-5/8\"",
+  "eenheid": "ST",
+  "prijs": 4.37,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000410",
+  "omschrijving": "9600-R soldeerverl.sok i x i 7/8\"-3/4\"",
+  "eenheid": "ST",
+  "prijs": 4.51,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000411",
+  "omschrijving": "9600-R soldeerverl.sok i x i 1.1/8\"-5/8\"",
+  "eenheid": "ST",
+  "prijs": 4.51,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000220",
+  "omschrijving": "AV6 CPS schraderventiel 3/8\" met pijpje",
+  "eenheid": "ST",
+  "prijs": 3.38,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000412",
+  "omschrijving": "9600-R soldeerverl.sok i x i 1.1/8\"-3/4\"",
+  "eenheid": "ST",
+  "prijs": 4.69,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000413",
+  "omschrijving": "9600-R soldeerverl.sok i x i 1.1/8\"-7/8\"",
+  "eenheid": "ST",
+  "prijs": 4.79,
+  "voorraad": 0
+ },
+ {
+  "code": "BN0440006300000221",
+  "omschrijving": "AV4 schraderventiel 1/4\" met pijpje",
+  "eenheid": "ST",
+  "prijs": 2.52,
+  "voorraad": 10
+ },
+ {
+  "code": "BN0440006300000246",
+  "omschrijving": "9606 soldeerbocht 45° i x i 1.5/8\"",
+  "eenheid": "ST",
+  "prijs": 11.62,
   "voorraad": 0
  },
  {
@@ -2695,31 +2856,38 @@
   "voorraad": 0
  },
  {
-  "code": "BN0440006300000246",
-  "omschrijving": "9606 soldeerbocht 45° i x i 1.5/8\"",
+  "code": "BN0440006300000242",
+  "omschrijving": "9600 1.1/8\" sok",
   "eenheid": "ST",
-  "prijs": 11.62,
+  "prijs": 4.27,
   "voorraad": 0
  },
  {
   "code": "BN0440006300000227",
   "omschrijving": "Purschuim PU-Foam B3 Zwaluw CE 300m",
   "eenheid": "ST",
-  "prijs": 3.54,
-  "voorraad": 5
+  "prijs": 5.06,
+  "voorraad": 11
  },
  {
   "code": "BN0440006300000228",
   "omschrijving": "PURSCHUIM BLIKBS NBS KELFORT BRANDWEREND",
   "eenheid": "ST",
   "prijs": 20.89,
-  "voorraad": 8
+  "voorraad": 7
  },
  {
   "code": "BN0440006300000229",
   "omschrijving": "WP7-301 ROOFING WATERDICHT 310ML ZWART",
   "eenheid": "ST",
   "prijs": 8.23,
+  "voorraad": 9
+ },
+ {
+  "code": "BN0440006300000240",
+  "omschrijving": "sok 1 3/8",
+  "eenheid": "ST",
+  "prijs": 4.97,
   "voorraad": 0
  },
  {
@@ -2727,14 +2895,14 @@
   "omschrijving": "Seal-it Super-Pro wit 290ml",
   "eenheid": "ST",
   "prijs": 4.13,
-  "voorraad": 12
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000231",
   "omschrijving": "Seal-it 352 Super-Pro zwart 290ml",
   "eenheid": "ST",
   "prijs": 4.13,
-  "voorraad": 12
+  "voorraad": 9
  },
  {
   "code": "BN0440006300000232",
@@ -2758,10 +2926,10 @@
   "voorraad": 12
  },
  {
-  "code": "BN0440006300000235",
-  "omschrijving": "9600 1/4\"sok",
+  "code": "BN0440006300000399",
+  "omschrijving": "9600-R soldeerverl.sok i x i 3/8\"-1/4\"",
   "eenheid": "ST",
-  "prijs": 0.61,
+  "prijs": 1.75,
   "voorraad": 0
  },
  {
@@ -2776,7 +2944,7 @@
   "omschrijving": "Spaanpl. Schroef 4,0x40 plakt.verz.",
   "eenheid": "BOX",
   "prijs": 2.82,
-  "voorraad": 6
+  "voorraad": 4
  },
  {
   "code": "BN0440006300000256",
@@ -2801,9 +2969,9 @@
  },
  {
   "code": "BN0440006300000259",
-  "omschrijving": "Spaanpl. Schroef 5,0x30 platk.v. (200st)",
+  "omschrijving": "Spaanpl. Schroef 5,0x30 platk.verz.",
   "eenheid": "BOX",
-  "prijs": 3.76,
+  "prijs": 3.82,
   "voorraad": 4
  },
  {
@@ -2811,14 +2979,14 @@
   "omschrijving": "Spaanpl. Schroef 5,0x45 platk. Verz.",
   "eenheid": "BOX",
   "prijs": 5.28,
-  "voorraad": 6
+  "voorraad": 3
  },
  {
   "code": "BN0440006300000261",
   "omschrijving": "Spaanpl. Schroef 5,0x60 platk. Verz.",
   "eenheid": "BOX",
   "prijs": 6.76,
-  "voorraad": 4
+  "voorraad": 3
  },
  {
   "code": "BN0440006300000262",
@@ -2943,8 +3111,8 @@
   "code": "BN0440006300000279",
   "omschrijving": "Houtdraadbout DIN 571 verz. 8x60 (200st)",
   "eenheid": "BOX",
-  "prijs": 11.78,
-  "voorraad": 1
+  "prijs": 11.31,
+  "voorraad": 3
  },
  {
   "code": "BN0440006300000280",
@@ -3035,14 +3203,14 @@
   "omschrijving": "Spaanpl. Schroef 4,0x30 platk.verz.",
   "eenheid": "BOX",
   "prijs": 2.52,
-  "voorraad": 3
+  "voorraad": 2
  },
  {
   "code": "BN0440006300000288",
   "omschrijving": "Gipsplaatplug metaal Fischer",
   "eenheid": "BOX",
-  "prijs": 22.57,
-  "voorraad": 3
+  "prijs": 23.46,
+  "voorraad": 7
  },
  {
   "code": "BN0440006300000293",
@@ -3062,8 +3230,8 @@
   "code": "BN0440006300000295",
   "omschrijving": "Inslaganker M8x25 MKT ES",
   "eenheid": "BOX",
-  "prijs": 12.03,
-  "voorraad": 7
+  "prijs": 11.89,
+  "voorraad": 10
  },
  {
   "code": "BN0440006300000296",
@@ -3081,31 +3249,31 @@
  },
  {
   "code": "BN0440006300000298",
-  "omschrijving": "Carrosseriering M8x30 verzinkt (100 st.)",
+  "omschrijving": "Carrosseriering M8x30 verzinkt",
   "eenheid": "BOX",
   "prijs": 3.48,
-  "voorraad": 33
+  "voorraad": 22
  },
  {
   "code": "BN0440006300000299",
-  "omschrijving": "Carrosseriering M8 8,4x24x2,0 (200 st)",
+  "omschrijving": "Carrosseriering verzinkt 8,4x24x2,0",
   "eenheid": "BOX",
   "prijs": 5.18,
-  "voorraad": 12
+  "voorraad": 9
  },
  {
   "code": "BN0440006300000300",
-  "omschrijving": "Zeskantmoer Din 934 M 8 verzinkt (200st)",
+  "omschrijving": "Zeskantmoer Din 934 M 8 verzinkt",
   "eenheid": "BOX",
   "prijs": 3.63,
-  "voorraad": 14
+  "voorraad": 8
  },
  {
   "code": "BN0440006300000289",
   "omschrijving": "Superplug Duopower 6x30",
   "eenheid": "BOX",
-  "prijs": 5.79,
-  "voorraad": 12
+  "prijs": 5.93,
+  "voorraad": 13
  },
  {
   "code": "BN0440006300000330",
@@ -3126,13 +3294,13 @@
   "omschrijving": "Tapbout A2 M 8x25 zeskantkop, volle dr.",
   "eenheid": "BOX",
   "prijs": 29.78,
-  "voorraad": 3
+  "voorraad": 2
  },
  {
   "code": "BN0440006300000303",
   "omschrijving": "Carrosserieringen dia. 3 DIN 9021 A2 M8",
   "eenheid": "BOX",
-  "prijs": 18.78,
+  "prijs": 19.29,
   "voorraad": 3
  },
  {
@@ -3147,7 +3315,7 @@
   "omschrijving": "HM-schuifmoer M8 trad. verzinkt (50 st.)",
   "eenheid": "BOX",
   "prijs": 4.5,
-  "voorraad": 19
+  "voorraad": 17
  },
  {
   "code": "BN0440006300000306",
@@ -3167,8 +3335,8 @@
   "code": "BN0440006300000308",
   "omschrijving": "Zeskantmoer H = 0,8D DIN 934 A2 M 8",
   "eenheid": "BOX",
-  "prijs": 21.36,
-  "voorraad": 3
+  "prijs": 8.55,
+  "voorraad": 2
  },
  {
   "code": "BN0440006300000309",
@@ -3228,10 +3396,10 @@
  },
  {
   "code": "BN0440006300000291",
-  "omschrijving": "Superplug Duopower 10x50 (50 st.)",
+  "omschrijving": "Superplug Duopower 10x50",
   "eenheid": "BOX",
   "prijs": 15.65,
-  "voorraad": 23
+  "voorraad": 20
  },
  {
   "code": "BN0440006300000316",
@@ -3263,7 +3431,7 @@
  },
  {
   "code": "BN0440006300000320",
-  "omschrijving": "Zelfborende schroef 5,5 x 19 (100 st.)",
+  "omschrijving": "Zelfborende schroef 5,5 x 19, SW: 8",
   "eenheid": "BOX",
   "prijs": 2.57,
   "voorraad": 3
@@ -3272,7 +3440,7 @@
   "code": "BN0440006300000321",
   "omschrijving": "Zelfborende plaatschroef 4,2x13",
   "eenheid": "BOX",
-  "prijs": 7.53,
+  "prijs": 7.52,
   "voorraad": 2
  },
  {
@@ -3284,7 +3452,7 @@
  },
  {
   "code": "BN0440006300000323",
-  "omschrijving": "Zeskantmoer M12 DIN 934 RVS A2",
+  "omschrijving": "Zeskantmoer DIN 934 RVS A2",
   "eenheid": "BOX",
   "prijs": 21.84,
   "voorraad": 1
@@ -3314,7 +3482,7 @@
   "code": "BN0440006300000326",
   "omschrijving": "Zelfborende plaatschr. 4,2x19 (1000 st)",
   "eenheid": "BOX",
-  "prijs": 10.94,
-  "voorraad": 1
+  "prijs": 10.61,
+  "voorraad": 4
  }
 ]

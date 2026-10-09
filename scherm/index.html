@@ -121,6 +121,10 @@
         <select id="i_bonusklant"></select>
       </div>
       <div class="field">
+        <label>Betalingskorting</label>
+        <select id="i_kortingklant"></select>
+      </div>
+      <div class="field">
         <label>Provisie</label>
         <select id="i_provisieklant"></select>
       </div>
@@ -246,8 +250,8 @@
         <tr><td>Contingency (reserves)<br><input type="number" min="0" step="10" id="mg_contingency_reserves" value="0" class="price-input"></td><td class="right" id="mg_contingency_reserves_out"></td></tr>
         <tr><td>Contingency (onderhandelingsruimte)<br><input type="number" min="0" step="10" id="mg_contingency_onderhandeling" value="0" class="price-input"></td><td class="right" id="mg_contingency_onderhandeling_out"></td></tr>
         <tr style="font-weight:700;"><td>Intermediary cost (IC)</td><td class="right" id="mg_ic"></td></tr>
-        <tr><td>Lost quotation costs (4%)</td><td class="right" id="mg_lost"></td></tr>
-        <tr><td>Financial costs (0,7%)</td><td class="right" id="mg_financial"></td></tr>
+        <tr><td>Lost quotation costs (5%)</td><td class="right" id="mg_lost"></td></tr>
+        <tr><td>Financial costs (0,75%)</td><td class="right" id="mg_financial"></td></tr>
         <tr><td>Group fees (4%)</td><td class="right" id="mg_groupfees"></td></tr>
         <tr style="font-weight:700;"><td>Full cost (interne kostprijs)</td><td class="right" id="mg_fullcost"></td></tr>
         <tr><td><b>Project price</b> (hier zelf de verkoopprijs bepalen, excl. bonus/garantie/provisie)<br>
@@ -256,6 +260,7 @@
         <tr><td>Resultaat</td><td class="right" id="mg_resultaat"></td></tr>
         <tr><td>Resultaat % van verkoopprijs</td><td class="right" id="mg_resultaat_pct"></td></tr>
         <tr><td>Omzetbonus</td><td class="right" id="mg_omzetbonus"></td></tr>
+        <tr><td>Betalingskorting</td><td class="right" id="mg_betalingskorting"></td></tr>
         <tr><td>Garantie (1,25%)</td><td class="right" id="mg_garantie"></td></tr>
         <tr style="font-weight:700; font-size:15px;"><td>Verkoopprijs (incl. provisie) — te communiceren met de klant</td><td class="right" id="mg_verkoopprijs"></td></tr>
       </tbody>

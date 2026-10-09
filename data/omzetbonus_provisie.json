@@ -30,7 +30,7 @@
   },
   {
    "klant": "DGC groep",
-   "bonus": 0.04
+   "bonus": 0.05
   },
   {
    "klant": "Roodenburg",
@@ -85,6 +85,16 @@
   {
    "klant": "GF Deko",
    "provisie": 0.08
+  }
+ ],
+ "korting": [
+  {
+   "klant": "Geen betalingskorting",
+   "korting": 0
+  },
+  {
+   "klant": "Hoppenbrouwers",
+   "korting": 0.02
   }
  ]
 }

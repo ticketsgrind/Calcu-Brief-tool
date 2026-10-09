@@ -59,42 +59,51 @@ CALC_CHAIN = "xl/calcChain.xml"
 # equipmentregels (zie rekenkern.UITBESTEDING_DEFAULTS/EQUIPMENT_DEFAULTS) --
 # de volgorde in het Excel-blad wijkt af van de volgorde in die Python-lijst,
 # vandaar een expliciete naam->rij-koppeling in plaats van positioneel zippen.
+#
+# Alle rijnummers in dit bestand (ook SECTIE_SUBTOTAAL_RIJ en de rijen in
+# _vul_uren/_lees_uren hieronder) zijn -1 t.o.v. een sjabloon van vóór
+# oktober 2026: de sjabloonupdate van die maand verwijderde één vervallen
+# materiaalartikel (rij 117, "Stuurstroomkabel LSOH" -- zie ook de
+# YIMM-sectie in CLAUDE.md), waardoor alles erna een rij opschuift. Rijen
+# vanaf de nieuwe Betalingskorting-toevoeging (zie D442/F442 hieronder)
+# schuiven vervolgens weer 3 rijen terug (een nieuw ingevoegd blok), dus die
+# liggen *hoger* dan in het vorige sjabloon (bijv. Provisie: 443 -> 445).
 UITBESTEDING_RIJEN: dict[str, int] = {
-    "IBS / Support Leverancier": 399,
-    "Luchtverdeelslang KE Fibertec, incl. inmeten en montage": 400,
-    "Kleine kraan": 401,
-    "Grote kraan": 402,
-    "Betonboring": 403,
-    "Dakdekker": 404,
-    "Brandwerende afwerking": 405,
-    "Hulpconstructie": 406,
-    "Elektrotechnisch": 407,
-    "Loodgieter/CV": 408,
-    "Spuiten grille": 409,
-    "Sloopwerkzaamheden": 410,
-    "PED keuring (per VRF systeem)": 411,
+    "IBS / Support Leverancier": 398,
+    "Luchtverdeelslang KE Fibertec, incl. inmeten en montage": 399,
+    "Kleine kraan": 400,
+    "Grote kraan": 401,
+    "Betonboring": 402,
+    "Dakdekker": 403,
+    "Brandwerende afwerking": 404,
+    "Hulpconstructie": 405,
+    "Elektrotechnisch": 406,
+    "Loodgieter/CV": 407,
+    "Spuiten grille": 408,
+    "Sloopwerkzaamheden": 409,
+    "PED keuring (per VRF systeem)": 410,
 }
-UITBESTEDING_LEGE_RIJEN = [412, 413, 414, 415, 416]
+UITBESTEDING_LEGE_RIJEN = [411, 412, 413, 414, 415]
 
 EQUIPMENT_RIJEN: dict[str, int] = {
-    "Hoogwerker": 420,
-    "Heftruck": 421,
-    "Steiger": 422,
-    "Huur cilinder koudemiddel (per dag)": 423,
+    "Hoogwerker": 419,
+    "Heftruck": 420,
+    "Steiger": 421,
+    "Huur cilinder koudemiddel (per dag)": 422,
 }
-EQUIPMENT_LEGE_RIJEN = [424, 425, 426, 427, 428]
+EQUIPMENT_LEGE_RIJEN = [423, 424, 425, 426, 427]
 
 SECTIE_SUBTOTAAL_RIJ: dict[str, int] = {
     "APPARATUUR": 30,
     "BALKEN/VOETEN/MUURSTEUN": 73,
     "LEIDINGEN/KABELS/SIFON": 92,
-    "POMPEN": 136,
-    "INOAC": 155,
-    "SOLDEER": 228,
-    "WERKSCHAKELAAR": 239,
-    "KOUDE MIDDEL": 247,
-    "DAKDOORVOERING": 255,
-    "TOEBEHOREN LUCHTVERDELING": 265,
+    "POMPEN": 135,
+    "INOAC": 154,
+    "SOLDEER": 227,
+    "WERKSCHAKELAAR": 238,
+    "KOUDE MIDDEL": 246,
+    "DAKDOORVOERING": 254,
+    "TOEBEHOREN LUCHTVERDELING": 264,
 }
 # Volgorde van de secties zoals ze in Quotation sheet!C30:C39 staan (voor de
 # "Detail Purchases"-uitsplitsing daar).
@@ -209,16 +218,21 @@ def _sectie_totalen(materiaal: list[dict[str, Any]]) -> dict[str, float]:
     return totalen
 
 
-def _bonus_en_provisie_pct(staat: dict[str, Any], gegevens: dict[str, Any]) -> tuple[float, float]:
+def _bonus_korting_en_provisie_pct(staat: dict[str, Any], gegevens: dict[str, Any]) -> tuple[float, float, float]:
     """Zelfde opzoeking als rekenkern.marge_berekening -- hier herhaald (niet
-    opnieuw uitgevonden) om ook Calculatie!F440/F443 en Quotation sheet!P73
-    letterlijk te kunnen vullen in plaats van via de VLOOKUP-formule."""
+    opnieuw uitgevonden) om ook Calculatie!F439/F442/F445 en Quotation
+    sheet!P73/P74 letterlijk te kunnen vullen in plaats van via de
+    VLOOKUP-formule. .get() voor kortingklant: een al bewaard project van
+    vóór de Betalingskorting-toevoeging mist dit veld nog."""
     omzetbonus_provisie = gegevens["omzetbonus_provisie"]
     bonus_pct = next((b["bonus"] for b in omzetbonus_provisie["omzetbonus"]
                       if b["klant"] == staat["instellingen"]["bonusklant"]), 0)
+    kortingklant = staat["instellingen"].get("kortingklant", "Geen betalingskorting")
+    korting_pct = next((k["korting"] for k in omzetbonus_provisie["korting"]
+                        if k["klant"] == kortingklant), 0)
     provisie_pct = next((p["provisie"] for p in omzetbonus_provisie["provisie"]
                          if p["klant"] == staat["instellingen"]["provisieklant"]), 0)
-    return bonus_pct, provisie_pct
+    return bonus_pct, korting_pct, provisie_pct
 
 
 def _parkeertarief(staat: dict[str, Any], gegevens: dict[str, Any]) -> float:
@@ -310,7 +324,7 @@ def _monteur_termen(staat: dict[str, Any]) -> dict[str, float]:
     vrf_buiten = (rk.UUR_TABEL["VRF"]["buiten1"] if t["VRF"]["buiten"] == 1
                   else rk.UUR_TABEL["VRF"]["buitenN"] * t["VRF"]["buiten"] if t["VRF"]["buiten"] > 1 else 0)
     materiaal_op_row = {item["row"]: item for item in staat["materiaal"] if item.get("row") is not None}
-    kabelgoot_m = sum(_num(materiaal_op_row[r]["aantal"]) for r in (123, 124, 125) if r in materiaal_op_row)
+    kabelgoot_m = sum(_num(materiaal_op_row[r]["aantal"]) for r in (122, 123, 124) if r in materiaal_op_row)
     return {
         "vrf_buiten": vrf_buiten,
         "vrf_binnen": t["VRF"]["binnen"] * rk.UUR_TABEL["VRF"]["binnen"],
@@ -342,45 +356,45 @@ def _vul_uren(w: SheetSchrijver, staat: dict[str, Any], berekening: dict[str, An
         w.zet(f"A{totaal_rij}", definitief)
         w.zet(f"H{totaal_rij}", definitief * tarief)
 
-    eenvoudige_rol("projectmanager", 330, 331, 332, 330)
-    eenvoudige_rol("projectleider", 333, 334, 335, 333)
-    eenvoudige_rol("werkvoorbereider", 336, 337, 338, 336)
-    eenvoudige_rol("engineering", 339, 340, 341, 339)
+    eenvoudige_rol("projectmanager", 329, 330, 331, 329)
+    eenvoudige_rol("projectleider", 332, 333, 334, 332)
+    eenvoudige_rol("werkvoorbereider", 335, 336, 337, 335)
+    eenvoudige_rol("engineering", 338, 339, 340, 338)
 
-    # Servicemonteur (343): rijen 344-353 zijn de voorstel-opbouw, rekenkern
+    # Servicemonteur (342): rijen 343-352 zijn de voorstel-opbouw, rekenkern
     # kent alleen "auto" (centrale regelaar), "vrfIbs" en één vrije "overig"
-    # -- die laatste komt op rij 347 (TOESLAG UREN OPTIONEEL), de enige van
+    # -- die laatste komt op rij 346 (TOESLAG UREN OPTIONEEL), de enige van
     # de resterende sjabloonregels die als vrij invulveld bedoeld is.
     sm = rk.servicemonteur_voorstel(staat)
-    w.zet("B344", sm["auto"]); w.zet("C344", sm["auto"])
-    w.zet("B345", sm["vrfIbs"]); w.zet("C345", sm["vrfIbs"])
+    w.zet("B343", sm["auto"]); w.zet("C343", sm["auto"])
+    w.zet("B344", sm["vrfIbs"]); w.zet("C344", sm["vrfIbs"])
     overig = _num(uren_staat["servicemonteur"].get("overig"))
-    w.zet("B347", overig); w.zet("C347", overig)
-    w.zet("B354", sm["reis"]); w.zet("C354", sm["reis"])
+    w.zet("B346", overig); w.zet("C346", overig)
+    w.zet("B353", sm["reis"]); w.zet("C353", sm["reis"])
     tarief_sm = _num(uren_staat["servicemonteur"].get("tarief"))
-    w.zet("F343", tarief_sm)
+    w.zet("F342", tarief_sm)
     definitief_sm = uren_out["servicemonteur"]["definitief"]
-    w.zet("A343", definitief_sm)
-    w.zet("H343", definitief_sm * tarief_sm)
+    w.zet("A342", definitief_sm)
+    w.zet("H342", definitief_sm * tarief_sm)
 
-    # Hoofd- en hulpmonteur (356/377): identieke opbouw, zie
+    # Hoofd- en hulpmonteur (355/376): identieke opbouw, zie
     # rekenkern.monteur_werkuren_auto(). De uitsplitsing hieronder is puur
-    # voor de leesbaarheid van het blad -- het totaal (A356/A377) komt
+    # voor de leesbaarheid van het blad -- het totaal (A355/A376) komt
     # rechtstreeks uit rekenkern, ook als daar een handmatige override op
     # staat (dan wijkt het totaal af van de som van deze rijen, met opzet).
     termen = _monteur_termen(staat)
     reis_monteur = rk.reisuren_monteur(staat)
     for rol, totaal_rij, rijen in (
-        ("hoofdmonteur", 356, dict(vrf_buiten=357, vrf_binnen=358, verdeelboxen=359, rac_buiten=360,
-                                    rac_binnen=361, pac_overig_buiten=362, pac_overig_binnen=363,
-                                    montage_kabelgoot=364, montage_toebehoren=365,
-                                    leiding_hard_2pijps=366, leiding_zacht_2pijps=367, leiding_hard_3pijps=368,
-                                    reis=375, f=356)),
-        ("hulpmonteur", 377, dict(vrf_buiten=378, vrf_binnen=379, verdeelboxen=380, rac_buiten=381,
-                                   rac_binnen=382, pac_overig_buiten=383, pac_overig_binnen=384,
-                                   montage_kabelgoot=385, montage_toebehoren=386,
-                                   leiding_hard_2pijps=387, leiding_zacht_2pijps=388, leiding_hard_3pijps=389,
-                                   reis=396, f=377)),
+        ("hoofdmonteur", 355, dict(vrf_buiten=356, vrf_binnen=357, verdeelboxen=358, rac_buiten=359,
+                                    rac_binnen=360, pac_overig_buiten=361, pac_overig_binnen=362,
+                                    montage_kabelgoot=363, montage_toebehoren=364,
+                                    leiding_hard_2pijps=365, leiding_zacht_2pijps=366, leiding_hard_3pijps=367,
+                                    reis=374, f=355)),
+        ("hulpmonteur", 376, dict(vrf_buiten=377, vrf_binnen=378, verdeelboxen=379, rac_buiten=380,
+                                   rac_binnen=381, pac_overig_buiten=382, pac_overig_binnen=383,
+                                   montage_kabelgoot=384, montage_toebehoren=385,
+                                   leiding_hard_2pijps=386, leiding_zacht_2pijps=387, leiding_hard_3pijps=388,
+                                   reis=395, f=376)),
     ):
         for term, rijnum in rijen.items():
             if term in ("reis", "f"):
@@ -427,24 +441,26 @@ def _vul_uitbesteding_equipment_overig(
 ) -> None:
     marge = berekening["marge"]
     _vul_kosten_lijst(w, staat["uitbesteding"], UITBESTEDING_RIJEN, UITBESTEDING_LEGE_RIJEN)
-    w.zet("H417", marge["uitbesteding"]["totaal"])
+    w.zet("H416", marge["uitbesteding"]["totaal"])
     _vul_kosten_lijst(w, staat["equipment"], EQUIPMENT_RIJEN, EQUIPMENT_LEGE_RIJEN)
-    w.zet("H429", marge["equipment"]["totaal"])
+    w.zet("H428", marge["equipment"]["totaal"])
 
-    w.zet("A432", marge["parkeeruren"])
-    w.zet("D433", staat["instellingen"]["provincie"])
-    w.zet("F433", _parkeertarief(staat, gegevens))
-    w.zet("H433", marge["parkeerkosten"])
-    w.zet("A434", _num(staat["overig"].get("nachten")))
-    w.zet("F434", _num(staat["overig"].get("nachtprijs")))
-    w.zet("H434", marge["overnachtingen"])
-    w.zet("H437", marge["reiskosten"])
+    w.zet("A431", marge["parkeeruren"])
+    w.zet("D432", staat["instellingen"]["provincie"])
+    w.zet("F432", _parkeertarief(staat, gegevens))
+    w.zet("H432", marge["parkeerkosten"])
+    w.zet("A433", _num(staat["overig"].get("nachten")))
+    w.zet("F433", _num(staat["overig"].get("nachtprijs")))
+    w.zet("H433", marge["overnachtingen"])
+    w.zet("H436", marge["reiskosten"])
 
-    bonus_pct, provisie_pct = _bonus_en_provisie_pct(staat, gegevens)
-    w.zet("D440", staat["instellingen"]["bonusklant"])
-    w.zet("F440", bonus_pct)
-    w.zet("D443", staat["instellingen"]["provisieklant"])
-    w.zet("F443", provisie_pct)
+    bonus_pct, korting_pct, provisie_pct = _bonus_korting_en_provisie_pct(staat, gegevens)
+    w.zet("D439", staat["instellingen"]["bonusklant"])
+    w.zet("F439", bonus_pct)
+    w.zet("D442", staat["instellingen"].get("kortingklant", "Geen betalingskorting"))
+    w.zet("F442", korting_pct)
+    w.zet("D445", staat["instellingen"]["provisieklant"])
+    w.zet("F445", provisie_pct)
 
 
 # --------------------------------------------------------------------------
@@ -521,11 +537,16 @@ def _vul_quotation(
     w.zet("R71", marge["projectPrice"])
     w.zet("R69", marge["resultaat"])
     w.zet("P69", marge["resultaatPct"])
-    bonus_pct, _ = _bonus_en_provisie_pct(staat, gegevens)
+    bonus_pct, korting_pct, _ = _bonus_korting_en_provisie_pct(staat, gegevens)
     w.zet("P73", bonus_pct)
     w.zet("R73", marge["omzetbonus"])
-    w.zet("R74", marge["garantie"])
-    w.zet("R76", marge["verkoopprijs"])
+    # Rij 74 (BETALINGSKORTING) is nieuw in het sjabloon van oktober 2026,
+    # ingevoegd vlak vóór GARANTIE -- die schuift daardoor van R74 naar R75,
+    # en SALES PRICE (was R76) naar R77, zie de moduledocstring/CLAUDE.md.
+    w.zet("P74", korting_pct)
+    w.zet("R74", marge["betalingskorting"])
+    w.zet("R75", marge["garantie"])
+    w.zet("R77", marge["verkoopprijs"])
 
 
 # --------------------------------------------------------------------------
@@ -808,7 +829,7 @@ def _lees_instellingen(
     instellingen["reistijd"] = l.getal("B8", 1)
 
     provincies = {p["provincie"] for p in gegevens["parkeertarieven"]}
-    provincie = l.tekst("D433")
+    provincie = l.tekst("D432")
     if provincie in provincies:
         instellingen["provincie"] = provincie
     elif provincie:
@@ -816,15 +837,24 @@ def _lees_instellingen(
             f"onbekende provincie {provincie!r} in het bestand -- teruggevallen op 'Geen parkeerkosten'")
 
     bonusklanten = {b["klant"] for b in gegevens["omzetbonus_provisie"]["omzetbonus"]}
-    bonusklant = l.tekst("D440")
+    bonusklant = l.tekst("D439")
     if bonusklant in bonusklanten:
         instellingen["bonusklant"] = bonusklant
     elif bonusklant:
         waarschuwingen.append(
             f"onbekende bonusklant {bonusklant!r} in het bestand -- teruggevallen op 'Geen bonusdragende klant'")
 
+    kortingklanten = {k["klant"] for k in gegevens["omzetbonus_provisie"]["korting"]}
+    kortingklant = l.tekst("D442")
+    if kortingklant in kortingklanten:
+        instellingen["kortingklant"] = kortingklant
+    elif kortingklant:
+        waarschuwingen.append(
+            f"onbekende betalingskorting-klant {kortingklant!r} in het bestand -- "
+            f"teruggevallen op 'Geen betalingskorting'")
+
     provisieklanten = {p["klant"] for p in gegevens["omzetbonus_provisie"]["provisie"]}
-    provisieklant = l.tekst("D443")
+    provisieklant = l.tekst("D445")
     if provisieklant in provisieklanten:
         instellingen["provisieklant"] = provisieklant
     elif provisieklant:
@@ -885,8 +915,8 @@ def _lees_materiaal(l: SheetLezer, staat: dict[str, Any], gegevens: dict[str, An
 
 
 def _lees_overig(l: SheetLezer, staat: dict[str, Any]) -> None:
-    staat["overig"]["nachten"] = l.getal("A434", 0)
-    staat["overig"]["nachtprijs"] = l.getal("F434", 150)
+    staat["overig"]["nachten"] = l.getal("A433", 0)
+    staat["overig"]["nachtprijs"] = l.getal("F433", 150)
 
 
 def _lees_quotation_overig(lq: SheetLezer, staat: dict[str, Any]) -> None:
@@ -960,15 +990,15 @@ def _lees_uren(l: SheetLezer, lq: SheetLezer, staat: dict[str, Any]) -> None:
         uren[rol]["reis"] = l.getal(f"B{reis_rij}", 0)
         uren[rol]["tarief"] = l.getal(f"F{f_rij}", rk.DEFAULT_TARIEVEN[rol])
 
-    eenvoudige_rol("projectmanager", 331, 332, 330)
-    eenvoudige_rol("projectleider", 334, 335, 333)
-    eenvoudige_rol("werkvoorbereider", 337, 338, 336)
-    eenvoudige_rol("engineering", 340, 341, 339)
+    eenvoudige_rol("projectmanager", 330, 331, 329)
+    eenvoudige_rol("projectleider", 333, 334, 332)
+    eenvoudige_rol("werkvoorbereider", 336, 337, 335)
+    eenvoudige_rol("engineering", 339, 340, 338)
 
-    uren["servicemonteur"]["overig"] = l.getal("B347", 0)
-    uren["servicemonteur"]["tarief"] = l.getal("F343", rk.DEFAULT_TARIEVEN["servicemonteur"])
-    uren["hoofdmonteur"]["tarief"] = l.getal("F356", rk.DEFAULT_TARIEVEN["hoofdmonteur"])
-    uren["hulpmonteur"]["tarief"] = l.getal("F377", rk.DEFAULT_TARIEVEN["hulpmonteur"])
+    uren["servicemonteur"]["overig"] = l.getal("B346", 0)
+    uren["servicemonteur"]["tarief"] = l.getal("F342", rk.DEFAULT_TARIEVEN["servicemonteur"])
+    uren["hoofdmonteur"]["tarief"] = l.getal("F355", rk.DEFAULT_TARIEVEN["hoofdmonteur"])
+    uren["hulpmonteur"]["tarief"] = l.getal("F376", rk.DEFAULT_TARIEVEN["hulpmonteur"])
 
     # Verkoper staat alleen op Quotation sheet (geen eigen rij op Calculatie),
     # zie _vul_quotation hierboven.
@@ -984,12 +1014,12 @@ def _lees_uren(l: SheetLezer, lq: SheetLezer, staat: dict[str, Any]) -> None:
     # wijken ze meer dan een kleine afrondingsmarge af, dan was het een
     # override, en komt die met de geïmporteerde, echte waarde mee.
     sm_voorstel = rk.servicemonteur_voorstel(staat)["totaal"]
-    sm_definitief = l.getal("A343")
+    sm_definitief = l.getal("A342")
     if abs(sm_definitief - sm_voorstel) > _OVEREENKOMST_MARGE:
         uren["servicemonteur"]["override"] = sm_definitief
 
     mv_voorstel = rk.monteur_voorstel(staat)
-    for rol, ref in (("hoofdmonteur", "A356"), ("hulpmonteur", "A377")):
+    for rol, ref in (("hoofdmonteur", "A355"), ("hulpmonteur", "A376")):
         definitief = l.getal(ref)
         if abs(definitief - mv_voorstel) > _OVEREENKOMST_MARGE:
             uren[rol]["override"] = definitief

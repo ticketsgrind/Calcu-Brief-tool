@@ -1436,3 +1436,167 @@ afgeleide systeemsoort (RAC + 1 binnendeel → splitsystem) toont nog
 steeds gewoon de juiste waarde; de materiaal-koppeling geeft nog steeds het
 juiste modelnummer door; de controleerbalk noemt het veld nu "type
 installatie (model)".
+
+## Nieuw Excel-bedrijfssjabloon (9 oktober 2026): rij-layout verschoven, nieuwe Betalingskorting
+
+Lars leverde een nieuwe versie van `Template_Calculatieblad.xltx` aan: "Zo
+hebben er een aantal veranderingen plaatsgevonden in het calculatieblad.
+Producten hebben andere namen gekregen, prijzen zijn veranderd etc etc." Een
+cel-voor-cel diff tegen het vorige sjabloon (beide uitgepakt als ZIP+XML,
+zelfde aanpak als `calculatieblad.py` zelf gebruikt) liet zien dat dit meer
+was dan alleen productdata: de rij-layout van het blad "Calculatie" zelf
+verschoof, en er is een nieuw kortingsmechanisme bijgekomen.
+
+**Eén rij verwijderd, dus alles erna schuift op.** Rij 117 (een vervallen
+artikel, "Stuurstroomkabel LSOH Cca 4x1,5 mm2" -- hetzelfde artikel is ook
+uit de YIMM-lijst verdwenen, zie hieronder) bestaat niet meer in het nieuwe
+sjabloon. Elke rij ná 117 ligt daardoor één lager dan voorheen -- bevestigd
+door de materiaalcatalogus-rijen (80-242) te matchen op artikelcode
+(stabiel, rij-onafhankelijk) tussen oud en nieuw sjabloon: nul onverwachte
+afwijkingen voor alle 159 YIMM-gekoppelde regels zodra de -1-regel werd
+toegepast.
+
+**Een nieuw ingevoegd blok (Betalingskorting) schuift op zijn beurt weer
+3 rijen terug.** Tussen de bestaande Omzetbonus- en Provisie-blokken (rijen
+438-440 resp. 444-445 in de nieuwe nummering) staat nu een derde,
+gelijkvormig blok: Betalingskorting (rij 441-443). Het resultaat is dus geen
+uniforme verschuiving over het hele blad: rijen 118 t/m 441 liggen -1 t.o.v.
+het vorige sjabloon, rijen 442 en hoger weer +2 (per saldo) t.o.v. het vorige
+sjabloon. Dezelfde twee verschuivingen gelden voor de corresponderende
+formules op "Quotation sheet" die naar "Calculatie" verwijzen (bijv.
+`Calculatie!A330` → `Calculatie!A329`) -- de Quotation-sheet-rijen zelf
+onder rij 74 zijn ongewijzigd, pas vanaf rij 74 (de nieuwe BETALINGSKORTING-
+rij, zie hieronder) schuift ook dat blad.
+
+**Alle rij-constanten in `calculatie/calculatieblad.py` zijn dienovereenkomstig
+bijgewerkt**, zowel de schrijf- als de leeskant: `SECTIE_SUBTOTAAL_RIJ`,
+`UITBESTEDING_RIJEN`/`UITBESTEDING_LEGE_RIJEN`, `EQUIPMENT_RIJEN`/
+`EQUIPMENT_LEGE_RIJEN`, alle rijen in `_vul_uren`/`_lees_uren`, de
+instellingen-cellen (provincie/bonusklant/kortingklant/provisieklant,
+nu D432/D439/D442/D445), de kabelgoot-materiaalrijen in `_monteur_termen`
+(123-125 → 122-124), en de Quotation-sheet-cellen voor
+garantie/verkoopprijs (zie hieronder). **`data/materiaal_catalogus.json`'s
+`row`-veld is voor elke regel met een oude rij > 117 met 1 verlaagd**, de
+regel op de verwijderde rij 117 is uit de catalogus gehaald, en de
+nieuwe prijzen/namen (zie hieronder) zijn erin verwerkt.
+
+**Een subtiele tweede trap: `afgeleid_van`-verwijzingen binnen de catalogus
+zelf.** Een paar materiaalregels (trillingsdempers, een paar luchtverdeel-
+onderdelen) worden automatisch afgeleid van het aantal van een ANDERE regel
+in dezelfde catalogus (`rekenkern.sync_afgeleide_aantallen()`,
+`afgeleid_van: [{"row": N, "factor": F}, ...]`). Die `row`-verwijzingen zijn
+GEEN Excel-celadressen maar interne verwijzingen tussen catalogusregels --
+en dus net zo goed onderhevig aan dezelfde -1-verschuiving als de regels
+zelf. De eerste migratiepas verschoof alleen het top-level `row`-veld van
+elke regel, niet deze geneste verwijzingen -- een test die een specifieke
+bronrij hardcodeerde (`test_afgeleide_regel_komt_ook_letterlijk_terecht`)
+ving dit direct op (de bronregel die hij aansprak bleek na de migratie een
+ANDERE, zelf-afgeleide regel geworden, dus "geen enkele afgeleide regel"
+in plaats van de verwachte). Rechtgezet met een aparte migratiepas specifiek
+voor deze geneste `row`-velden, en de test zelf bijgewerkt naar de nieuwe
+rijnummering.
+
+## Nieuw: Betalingskorting (derde debiteur-kortingslijst naast Omzetbonus/Provisie)
+
+Het nieuwe sjabloon heeft een hernoemd verborgen blad
+("Omzetbonus+Provisie" → "Omzetbonus+Provisie+Bet. korting") met een derde
+kolomgroep (G/H: debiteur → kortingspercentage, bijv. "Hoppenbrouwers" → 2%)
+naast de bestaande Bonus- (A/B) en Provisie-kolommen (D/E). Qua Excel-formule
+werkt het identiek aan Omzetbonus: `Calculatie!F442` doet een VLOOKUP tegen
+deze lijst, en `Quotation sheet!R74` (`=R71*P74`) telt die korting bij de
+verkoopprijs op -- **niet als een korting die van de prijs afgaat**, maar
+net als omzetbonus/garantie als een bedrag dat MEE gegrossdeerd wordt in de
+`SALES PRICE`-formule (nu `R77 = (R71+R73+R74+R75)/(1-F445)`, was
+`R76 = (R71+R73+R74)/(1-F443)` met R74=garantie): wie een klant een
+betalingskorting geeft, moet de eigenlijke verkoopprijs dus naar boven
+bijstellen om toch het beoogde projectresultaat te halen.
+
+**Doorgevoerd als een volwaardig vierde instellingenveld**, hetzelfde patroon
+als bonusklant/provisieklant:
+- `data/omzetbonus_provisie.json` kreeg een derde lijst, `"korting"`
+  (`"Geen betalingskorting"` → 0, `"Hoppenbrouwers"` → 0.02).
+- `rekenkern.nieuwe_staat()`'s `instellingen` kreeg `kortingklant: "Geen
+  betalingskorting"`; `marge_berekening()` zoekt het percentage op en telt
+  `betalingskorting = project_price * korting_pct` nu mee in de
+  `verkoopprijs`-formule, naast omzetbonus en garantie.
+- **`.get()` in plaats van directe indexering** voor dit ene nieuwe veld
+  (zowel in `rekenkern.py` als `calculatieblad.py`'s
+  `_bonus_korting_en_provisie_pct()`): een al bewaard project/autosave van
+  vóór deze toevoeging mist `instellingen.kortingklant` nog helemaal, en
+  JSON laat een ontbrekende sleutel gewoon weg (geen `null`) -- zonder
+  `.get()`-terugval zou zo'n bestaand project een `KeyError` geven zodra
+  `/bereken` erop wordt losgelaten. `bonusklant`/`provisieklant` zelf blijven
+  bewust ongemoeid (directe indexering): die velden bestonden al vanaf het
+  begin van deze samenvoeging, dus er bestaat geen opgeslagen project zonder.
+- `calculatie/calculatieblad.py`: nieuwe cellen `Calculatie!D442` (debiteur-
+  naam) / `F442` (percentage, net als F439/F445 voor bonus/provisie
+  rechtstreeks geschreven, niet via de VLOOKUP-formule) en
+  `Quotation sheet!P74`/`R74`; `_vul_quotation`'s garantie/verkoopprijs-
+  schrijfregels verschoven mee naar R75/R77 (zie hierboven). `_lees_instellingen`
+  leest `D442` terug net als de andere twee kortingslijsten, met dezelfde
+  "onbekende klant → standaardwaarde + waarschuwing"-aanpak.
+- **Scherm**: nieuwe dropdown "Betalingskorting" (`#i_kortingklant`,
+  `scherm/index.html`/`calculatie.js`) naast Bonusdragende klant/Provisie, en
+  een nieuwe margetabel-regel `mg_betalingskorting` tussen Omzetbonus en
+  Garantie.
+
+## DGC-bonus 4% → 5%, en Lost/Financial costs 4%/0,7% → 5%/0,75%
+
+Het nieuwe sjabloon laat drie percentages anders zien dan voorheen:
+`Omzetbonus+Provisie`-blad B9 (DGC groep) 0.04 → 0.05
+(`data/omzetbonus_provisie.json` bijgewerkt), en `Quotation sheet!P63`
+(LOST QUOTATION COSTS) 0.04 → 0.05 resp. `P64` (FINANCIAL COSTS)
+0.007 → 0.0075. Die laatste twee staan niet in een databestand maar
+hardcoded in `rekenkern.marge_berekening()` (`lost = ic * 0.05`,
+`financial = ic * 0.0075`, was `0.04`/`0.007`) -- rechtgezet, met de
+bijbehorende labels in `scherm/index.html` ("Lost quotation costs (5%)",
+"Financial costs (0,75%)") en de verwachte waarde in
+`tests/test_rekenkern.py`'s scenario-3-test herrekend (`fullCost` 2697,934
+→ 2723,995, `resultaat` 302,066 → 276,005).
+
+## YIMM- en materiaalcatalogus-data bijgewerkt
+
+`data/yimm.json`: 474 → 498 artikelen (1 verwijderd -- hetzelfde
+Stuurstroomkabel-artikel als hierboven, 25 toegevoegd -- nieuwe
+soldeerverloopsokken/-T-stukken en ACT-Cat6-patchkabels). Opnieuw
+gegenereerd met een kale stdlib-extractor (zelfde beperking als bij de
+Panasonic-prijscatalogus eerder: geen PDF/Excel-bibliotheek beschikbaar in
+deze sandbox) die eerst tegen het VORIGE sjabloon is gevalideerd (moest
+byte-exact `data/yimm.json` reproduceren -- ving een afrondingsbug op:
+`voorraad` werd geforceerd naar `int()`, wat 3 artikelen met een fractionele
+voorraad (koudemiddel in KG) afrondde; losgelaten ten gunste van dezelfde
+`int(f) if f == int(f) else f`-opmaak die `prijs` al gebruikte) vóór de
+aanname dat hij ook op het NIEUWE sjabloon te vertrouwen is.
+
+`data/materiaal_catalogus.json` (de materiaalregels die rechtstreeks op het
+blad "Calculatie" staan, met een `row`-veld -- zie "Rijnummers komen uit..."
+verderop in dit bestand): 20 prijswijzigingen en 25 naamwijzigingen
+(gevonden door te matchen op `artikelcode`, niet op positie, net als bij de
+Panasonic-catalogus-update) zijn overgenomen, samen met de rij-verschuiving
+hierboven. Twee opvallende, bewust ONGECORRIGEERDE eigenaardigheden: een
+paar omschrijvingen in het nieuwe sjabloon zijn zelf halverwege afgekapt
+("...voorraa", "...zwar", "4P/63A 380" zonder "V") -- bevestigd dat dit ook
+letterlijk zo in de YIMM-brondata van het sjabloon staat (niet een eigen
+extractiefout), dus overgenomen zoals het er staat, geen gok naar wat de
+volledige tekst "hoort" te zijn.
+
+**Getest:** alle bestaande tests bijgewerkt naar de nieuwe rijnummering (zie
+hierboven), 8 nieuwe tests (`TestBetalingskorting`, `TestKortingklantRondje`
+in `tests/test_calculatieblad.py`): schrijven/lezen van de nieuwe cellen,
+het effect op de verkoopprijs-formule, en dat een staat zonder
+`kortingklant`-sleutel (oud project) niet crasht. 303 tests groen (was 298).
+Live getest met Playwright: de Betalingskorting-dropdown ("Geen
+betalingskorting"/"Hoppenbrouwers"), de nieuwe margetabel-regel, en de
+bijgewerkte Lost/Financial-labels. Een volledige calculatieblad-export →
+import-rondje via de draaiende server (met het ECHTE, vervangen
+sjabloonbestand, niet een test-fixture) bevestigde dat `kortingklant` en
+`projectPrice` correct terugkomen. Zoals bij de vorige calculatieblad-
+functies kon het resultaat hier niet in een echte Excel of werkende
+LibreOffice Calc geopend worden (zelfde sandboxbeperking als eerder
+gedocumenteerd) -- wel gecontroleerd dat elke cel-toewijzing cijfer voor
+cijfer overeenkomt met `rekenkern.bereken()` (de bestaande
+`tests/test_calculatieblad.py`-methodiek). **Net als bij de vorige
+sjabloonwijzigingen: laat het eerste nieuwe calculatieblad dat met dit
+sjabloon wordt gedownload door Lars (die wél Excel heeft) controleren
+voordat er op wordt vertrouwd voor belangrijk werk** -- met name omdat de
+rij-verschuiving dit keer het hele blad raakt, niet alleen nieuwe cellen.

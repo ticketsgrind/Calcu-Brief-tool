@@ -145,6 +145,7 @@ def nieuwe_staat() -> dict[str, Any]:
         "instellingen": {"moeilijkheid": "Standaard", "reistijd": 1,
                           "provincie": "Geen parkeerkosten",
                           "bonusklant": "Geen bonusdragende klant",
+                          "kortingklant": "Geen betalingskorting",
                           "provisieklant": "Geen provisie"},
         "installaties": [],
         "materiaal": [],
@@ -431,8 +432,10 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
                        + equipment["totaal"] + reiskosten + contingency_reserves + contingency_onderhandeling)
 
     ic = arbeid + short_trip_kosten + transfer_kosten + overige_kosten
-    lost = ic * 0.04
-    financial = ic * 0.007
+    # Percentages volgen het Excel-bedrijfssjabloon (Quotation sheet!P63/P64) --
+    # bij de sjabloonupdate van oktober 2026 zijn beide verhoogd (was 0.04/0.007).
+    lost = ic * 0.05
+    financial = ic * 0.0075
     group_fees = ic * 0.04
     full_cost = ic + lost + financial + group_fees
 
@@ -443,11 +446,19 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
     omzetbonus_provisie = gegevens["omzetbonus_provisie"]
     bonus_pct = next((b["bonus"] for b in omzetbonus_provisie["omzetbonus"]
                       if b["klant"] == staat["instellingen"]["bonusklant"]), 0)
+    # .get() i.p.v. directe indexering: een al bewaard project van vóór deze
+    # toevoeging mist dit veld nog (zie nieuwe_staat()), en moet gewoon als
+    # "geen korting" blijven werken in plaats van een KeyError te geven.
+    kortingklant = staat["instellingen"].get("kortingklant", "Geen betalingskorting")
+    korting_pct = next((k["korting"] for k in omzetbonus_provisie["korting"]
+                        if k["klant"] == kortingklant), 0)
     provisie_pct = next((p["provisie"] for p in omzetbonus_provisie["provisie"]
                          if p["klant"] == staat["instellingen"]["provisieklant"]), 0)
     omzetbonus = None if project_price is None else project_price * bonus_pct
+    betalingskorting = None if project_price is None else project_price * korting_pct
     garantie = None if project_price is None else project_price * 0.0125
-    verkoopprijs = None if project_price is None else (project_price + omzetbonus + garantie) / (1 - provisie_pct)
+    verkoopprijs = None if project_price is None else (
+        (project_price + omzetbonus + betalingskorting + garantie) / (1 - provisie_pct))
     resultaat_pct = (resultaat / verkoopprijs) if (verkoopprijs and resultaat is not None) else None
 
     return {
@@ -458,6 +469,7 @@ def marge_berekening(staat: dict[str, Any], gegevens: dict[str, Any]) -> dict[st
         "contingencyReserves": contingency_reserves, "contingencyOnderhandeling": contingency_onderhandeling,
         "overigeKosten": overige_kosten, "ic": ic, "lost": lost, "financial": financial, "groupFees": group_fees,
         "fullCost": full_cost, "projectPrice": project_price, "resultaat": resultaat, "omzetbonus": omzetbonus,
+        "betalingskorting": betalingskorting,
         "garantie": garantie, "verkoopprijs": verkoopprijs, "resultaatPct": resultaat_pct,
     }
 

@@ -97,7 +97,7 @@ let actieveOptieIndex = 0;
 function nieuweStaat() {
   return {
     meta: { qnummer: '', projectnaam: '', klantnaam: '', klantnummer: '', uitgangspunten: '', datum: new Date().toISOString().slice(0, 10) },
-    instellingen: { moeilijkheid: 'Standaard', reistijd: 1, provincie: 'Geen parkeerkosten', bonusklant: 'Geen bonusdragende klant', provisieklant: 'Geen provisie' },
+    instellingen: { moeilijkheid: 'Standaard', reistijd: 1, provincie: 'Geen parkeerkosten', bonusklant: 'Geen bonusdragende klant', kortingklant: 'Geen betalingskorting', provisieklant: 'Geen provisie' },
     installaties: [],
     materiaal: [],
     uren: {
@@ -429,6 +429,7 @@ function fillSelect(el, options, current) {
 function renderInstellingenOpties() {
   fillSelect(document.getElementById('i_provincie'), DATA.parkeertarieven.map(p => p.provincie), state.instellingen.provincie);
   fillSelect(document.getElementById('i_bonusklant'), DATA.omzetbonus.omzetbonus.map(b => b.klant), state.instellingen.bonusklant);
+  fillSelect(document.getElementById('i_kortingklant'), DATA.omzetbonus.korting.map(k => k.klant), state.instellingen.kortingklant);
   fillSelect(document.getElementById('i_provisieklant'), DATA.omzetbonus.provisie.map(p => p.klant), state.instellingen.provisieklant);
 }
 function renderMeta() {
@@ -698,6 +699,7 @@ function renderMarge(m) {
   document.getElementById('mg_resultaat_pct').textContent = pct(m.resultaatPct);
   document.getElementById('mg_resultaat_pct').classList.toggle('negatief', resultaatIsVerlies);
   document.getElementById('mg_omzetbonus').textContent = eur(m.omzetbonus);
+  document.getElementById('mg_betalingskorting').textContent = eur(m.betalingskorting);
   document.getElementById('mg_garantie').textContent = eur(m.garantie);
   document.getElementById('mg_verkoopprijs').textContent = eur(m.verkoopprijs);
   document.getElementById('tp_materiaal').textContent = eur(m.materiaal.totaal);
@@ -779,6 +781,7 @@ function renderAll(nietOpnieuwPlannen) {
   document.getElementById('i_moeilijkheid').value = state.instellingen.moeilijkheid;
   document.getElementById('i_provincie').value = state.instellingen.provincie;
   document.getElementById('i_bonusklant').value = state.instellingen.bonusklant;
+  document.getElementById('i_kortingklant').value = state.instellingen.kortingklant;
   document.getElementById('i_provisieklant').value = state.instellingen.provisieklant;
   renderInstallaties();
   renderFavorieten();
@@ -806,6 +809,7 @@ function bindMeta() {
   document.getElementById('i_reistijd').addEventListener('input', e => { state.instellingen.reistijd = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('i_provincie').addEventListener('change', e => { state.instellingen.provincie = e.target.value; renderAll(); });
   document.getElementById('i_bonusklant').addEventListener('change', e => { state.instellingen.bonusklant = e.target.value; renderAll(); });
+  document.getElementById('i_kortingklant').addEventListener('change', e => { state.instellingen.kortingklant = e.target.value; renderAll(); });
   document.getElementById('i_provisieklant').addEventListener('change', e => { state.instellingen.provisieklant = e.target.value; renderAll(); });
   document.getElementById('ov_nachten').addEventListener('input', e => { state.overig.nachten = nonNegatief(e.target.value); renderAll(); });
   document.getElementById('ov_nachtprijs').addEventListener('input', e => { state.overig.nachtprijs = nonNegatief(e.target.value); renderAll(); });
